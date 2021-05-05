@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simplifiedbpmn:Process xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:simplifiedbpmn="http://www.cpoubel.org/simplifiedbpmn" xsi:schemaLocation="http://www.cpoubel.org/simplifiedbpmn ../model/simplifiedbpmn.ecore" name="test of diverging conditions for gateways">
+  <flowElements xsi:type="simplifiedbpmn:StartEvent" outgoing="//@flowElements.1"/>
+  <flowElements xsi:type="simplifiedbpmn:SequenceFlow" targetRef="//@flowElements.2" sourceRef="//@flowElements.0"/>
+  <flowElements xsi:type="simplifiedbpmn:Task" name="A" incoming="//@flowElements.1" outgoing="//@flowElements.3"/>
+  <flowElements xsi:type="simplifiedbpmn:SequenceFlow" targetRef="//@flowElements.4" sourceRef="//@flowElements.2"/>
+  <flowElements xsi:type="simplifiedbpmn:Task" name="B" incoming="//@flowElements.3" outgoing="//@flowElements.5"/>
+  <flowElements xsi:type="simplifiedbpmn:SequenceFlow" targetRef="//@flowElements.6" sourceRef="//@flowElements.4"/>
+  <flowElements xsi:type="simplifiedbpmn:ANDGateway" incoming="//@flowElements.5" outgoing="//@flowElements.7 //@flowElements.9" gatewayDirection="Diverging"/>
+  <flowElements xsi:type="simplifiedbpmn:SequenceFlow" targetRef="//@flowElements.8" sourceRef="//@flowElements.6"/>
+  <flowElements xsi:type="simplifiedbpmn:Task" name="C" incoming="//@flowElements.7" outgoing="//@flowElements.11"/>
+  <flowElements xsi:type="simplifiedbpmn:SequenceFlow" targetRef="//@flowElements.10" sourceRef="//@flowElements.6"/>
+  <flowElements xsi:type="simplifiedbpmn:Task" name="D" incoming="//@flowElements.9" outgoing="//@flowElements.12"/>
+  <flowElements xsi:type="simplifiedbpmn:SequenceFlow" targetRef="//@flowElements.13" sourceRef="//@flowElements.8"/>
+  <flowElements xsi:type="simplifiedbpmn:SequenceFlow" targetRef="//@flowElements.13" sourceRef="//@flowElements.10"/>
+  <flowElements xsi:type="simplifiedbpmn:ANDGateway" incoming="//@flowElements.11 //@flowElements.12" outgoing="//@flowElements.14" gatewayDirection="Converging"/>
+  <flowElements xsi:type="simplifiedbpmn:SequenceFlow" targetRef="//@flowElements.15" sourceRef="//@flowElements.13"/>
+  <flowElements xsi:type="simplifiedbpmn:EndEvent" incoming="//@flowElements.14"/>
+</simplifiedbpmn:Process>
