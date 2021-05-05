@@ -107,16 +107,31 @@ reflex [f.name.normaliseString()/] when:("[f.name.normaliseString()/]" in tasks)
 
 [/template]
 
-[template public generateReflexes(f : ANDGateway)]
+[template public generateReflexes(f : Gateway)]
 [if (f.gatewayDirection = GatewayDirection::Converging)]
-reflex [f.getConvergingReflexName()/] when: ("[f.getConvergingReflexName()/]" in tasks) [for (flow : SequenceFlow | f.incoming)]and not ("[flow.sourceRef.name/]" in tasks) [/for] {
-	
+reflex [f.getConvergingReflexName()/] when: (("[f.getConvergingReflexName()/]" in tasks) [for (flow : SequenceFlow | f.incoming)]and not ("[flow.sourceRef.name.normaliseString()/]" in tasks) [/for]) {
+[let nextNode : FlowNode = f.getNextFlowNode()]
+	remove "[f.getConvergingReflexName()/]" from: tasks;
+	[if (nextNode.oclIsTypeOf(Task))]
+	add "[nextNode.name.normaliseString()/]" to: tasks;
+	[comment If the next node is a gateway, we need to act accordingly with regards to how the next tasks are added to the list
+	If the gateway is diverging, it's a "simple" case
+	If it is converging, we do nothing since it is done later in the template /]
+	[elseif (nextNode.oclIsKindOf(Gateway))]
+	[if (nextNode.oclAsType(Gateway).gatewayDirection = GatewayDirection::Diverging)]
+[generateDivergingConditions(nextNode)/]
+	[elseif (nextNode.oclAsType(Gateway).gatewayDirection = GatewayDirection::Converging)]
+	add "[getConvergingReflexName(nextNode.oclAsType(Gateway))/]" to: tasks;
+	[/if]
+	[/if]
 }
+[generateReflexes(nextNode)/]
+[/let]
+[elseif (f.gatewayDirection = GatewayDirection::Diverging)]
+	[for (flow : SequenceFlow | f.outgoing)]
+[generateReflexes(flow.targetRef)/]
+	[/for]
 [/if]
-[/template]
-
-[template public generateReflexes(f : XORGateway)]
-
 [/template]
 
 [template public generateReflexes(f : EndEvent)]
@@ -141,8 +156,8 @@ f.outgoing->any(true).targetRef
 [/template]
 
 [template public generateDivergingConditions(gateway : XORGateway)]
+//Manage your conditions so that one and only one of the following tasks will be active
 [for (flow : SequenceFlow | gateway.outgoing)]
-		//Replace true by the corresponding condition specified on the diagram
 		if(true) {
 	[generateDivergingConditions(flow.targetRef)/]
 		}
@@ -157,7 +172,7 @@ f.outgoing->any(true).targetRef
 [/template]
 
 [template public getConvergingReflexName (gateway : Gateway) ]
-merge_[for (flow : SequenceFlow | gateway.incoming)]_[flow.targetRef.name/][/for]
+merge[for (flow : SequenceFlow | gateway.incoming)]_[flow.sourceRef.name.normaliseString()/][/for]
 [/template]
 
 [template public handleNextTasks(f : FlowNode)]
