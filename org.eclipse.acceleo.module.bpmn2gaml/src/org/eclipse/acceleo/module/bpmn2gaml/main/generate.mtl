@@ -29,7 +29,7 @@ species [aResource.name.normaliseString()/] {
 	}
 		[/for]
 	[/for]
-	//DOES THIS WORK NOW ?
+
 	//This list is used to keep track of which task(s) the agent is currently doing
 	list<string> tasks <- ['['/][']'/];
 
@@ -42,6 +42,7 @@ species [aResource.name.normaliseString()/] {
 		//This is where the agent will evaluate its environment to determine which process
 		//is best suited to its current state
 	}
+
 	[comment For each process, a list of reflexes is generated, respecting tasks' order/]
 	[for (process : FlowElementContainer | aResource.processes)]
 		[let se : StartEvent = getStartEvent(process)]
@@ -62,7 +63,7 @@ species [aResource.name.normaliseString()/] {
 /]
 
 [template public normaliseString(s : String)]
-[s.toLower().substituteAll(' ', '_')/]
+[s.toLower().substituteAll(' ', '_').substituteAll('\'', '_')/]
 [/template]
 
 
@@ -72,24 +73,35 @@ species [aResource.name.normaliseString()/] {
 [/template]
 
 [template public generateReflexes(f : StartEvent)]
+//REFLEXES RELATED TO PROCESS [f.eContainer(Process).name/]
+
 [generateReflexes(f.outgoing->any(true).targetRef)/]
 [/template]
 
 [template public generateReflexes(f : Task)]
 reflex [f.name.normaliseString()/] when:("[f.name.normaliseString()/]" in tasks) {
-	//The agent does its task
+
 	bool result <- ['action_' + f.name.normaliseString()/]();
+
 [if (f.outgoing->size() = 1)]
 	[let nextNode : FlowNode = f.getNextFlowNode()]
-		[if (nextNode.oclIsTypeOf(Task))]
 	if(result) {
 		remove "[f.name.normaliseString()/]" from: tasks;
+		[if (nextNode.oclIsTypeOf(Task))]
 		add "[f.getNextFlowNode().name.normaliseString()/]" to: tasks;
-	}
+		[comment If the next node is a gateway, we need to act accordingly with regards to how the next tasks are added to the list
+		If the gateway is diverging, it's a simple case
+		If it is converging, we do nothing since it is done later in the template /]
+
+		[elseif (nextNode.oclIsTypeOf(Gateway) and nextNode.oclAsType(Gateway).gatewayDirection = 2)]
+[generateDivergingConditions(nextNode.oclAsType(Gateway))/]
 		[/if]
+	}		
+}
+[generateReflexes(nextNode)/]
 	[/let]
 [/if]
-}
+
 [/template]
 
 [template public generateReflexes(f : ANDGateway)]
@@ -100,6 +112,20 @@ reflex [f.name.normaliseString()/] when:("[f.name.normaliseString()/]" in tasks)
 
 [/template]
 
+[template public generateReflexes(f : EndEvent)]
+//END OF REFLEXES RELATED TO PROCESS [f.eContainer(Process).name/]
+[/template]
+
 [query public getNextFlowNode(f : FlowNode) : FlowNode =
 f.outgoing->any(true).targetRef
 /]
+
+[template public generateDivergingConditions (gateway : ANDGateway) ]
+[for (flow : SequenceFlow | gateway.outgoing)]
+
+[/for]
+[/template]
+
+[template public generateDivergingConditions(gateway : XORGateway)]
+
+[/template]
