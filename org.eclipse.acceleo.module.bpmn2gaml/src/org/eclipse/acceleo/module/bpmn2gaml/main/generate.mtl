@@ -93,7 +93,7 @@ reflex [f.name.normaliseString()/] when:("[f.name.normaliseString()/]" in tasks)
 		If the gateway is diverging, it's a simple case
 		If it is converging, we do nothing since it is done later in the template /]
 
-		[elseif (nextNode.oclIsTypeOf(Gateway) and nextNode.oclAsType(Gateway).gatewayDirection = 2)]
+		[elseif (nextNode.oclIsTypeOf(Gateway) and (nextNode.oclAsType(Gateway).gatewayDirection = 2))]
 [generateDivergingConditions(nextNode.oclAsType(Gateway))/]
 		[/if]
 	}		
@@ -120,12 +120,28 @@ reflex [f.name.normaliseString()/] when:("[f.name.normaliseString()/]" in tasks)
 f.outgoing->any(true).targetRef
 /]
 
-[template public generateDivergingConditions (gateway : ANDGateway) ]
-[for (flow : SequenceFlow | gateway.outgoing)]
+[template public generateDivergingConditions(f : FlowNode)]
+//TODO define template for type [f.eClass().name/]
+[/template]
 
+[template public generateDivergingConditions(gateway : ANDGateway) ]
+[for (flow : SequenceFlow | gateway.outgoing)]
+[generateDivergingConditions(flow.targetRef)/]
 [/for]
 [/template]
 
 [template public generateDivergingConditions(gateway : XORGateway)]
+[for (flow : SequenceFlow | gateway.outgoing)]
+		//Replace true by the corresponding condition specified on the diagram
+		if(true) {
+	[generateDivergingConditions(flow.targetRef)/]
+		}
+[/for]
+[/template]
 
+[template public generateDivergingConditions(task : Task)]
+		add "[task.name.normaliseString()/]" to: tasks;
+[/template]
+
+[template public generateDivergingConditions(event : EndEvent)]
 [/template]
