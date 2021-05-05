@@ -1,0 +1,105 @@
+[comment encoding = UTF-8 /]
+[module generate('http://www.cpoubel.org/simplifiedbpmn')]
+
+
+[template public generateElement(aResource : ResourceRole) post (trim())]
+[comment @main/]
+[file (aResource.name + '.gaml', false, 'Cp1252')]
+model [aResource.name.normaliseString()/]
+
+/*This model is the result of a transformation from a BPMN representation of a ResourceRole to a GAML species skeleton
+It has been automatically generated from a specification, and may not be exactly suited to your modeling needs. Feel free
+to adapt and modify this file as needed.
+*/
+
+species [aResource.name.normaliseString()/] {
+
+	/*This is a list of methods derived from the different tasks specified in this agent's BPMN representation
+	They are supposed to be called at each cycle when the agent is doing the corresponding activity
+	Each action returns a boolean indicating if the corresponding task is over
+	By default, generated actions do not take any parameter, but you are free to add some if necessary
+	*/
+
+	[comment This generates an action for each task there is in the BPMN diagram(s) /]
+	[for (process : FlowElementContainer | aResource.processes)]
+		[for (task : Task | getTasks(process))]
+	bool ['action_' + task.name.normaliseString()/] {
+		//TODO
+		return true;
+	}
+		[/for]
+	[/for]
+	//DOES THIS WORK NOW ?
+	//This list is used to keep track of which task(s) the agent is currently doing
+	list<string> tasks <- ['['/][']'/];
+
+	/*These reflexes have been generated in order to follow the BPMN diagram logic
+	At each cycle, whenever an agent is doing a task, the corresponding reflex is called
+	*/
+
+	reflex idle when: (empty(tasks)) {
+		//TODO what the agent is doing when it is not executing a process
+		//This is where the agent will evaluate its environment to determine which process
+		//is best suited to its current state
+	}
+	[comment For each process, a list of reflexes is generated, respecting tasks' order/]
+	[for (process : FlowElementContainer | aResource.processes)]
+		[let se : StartEvent = getStartEvent(process)]
+	[generateReflexes(se)/]
+		[/let]
+	[/for]
+
+}
+[/file]
+[/template]
+[comment Returns the list of tasks of a process /]
+[query public getTasks(p : FlowElementContainer) : Set(Task) =
+	p.flowElements->select(e | e.oclIsTypeOf(Task))
+/]
+
+[query public getStartEvent(p : FlowElementContainer) : StartEvent =
+	p.flowElements->any(oclIsTypeOf(StartEvent))
+/]
+
+[template public normaliseString(s : String)]
+[s.toLower().substituteAll(' ', '_')/]
+[/template]
+
+
+[comment These templates are used to generate the reflexes from tasks, events and gateways /]
+[template public generateReflexes(f : FlowNode)]
+//TODO define template for type [f.eClass().name/]
+[/template]
+
+[template public generateReflexes(f : StartEvent)]
+[generateReflexes(f.outgoing->any(true).targetRef)/]
+[/template]
+
+[template public generateReflexes(f : Task)]
+reflex [f.name.normaliseString()/] when:("[f.name.normaliseString()/]" in tasks) {
+	//The agent does its task
+	bool result <- ['action_' + f.name.normaliseString()/]();
+[if (f.outgoing->size() = 1)]
+	[let nextNode : FlowNode = f.getNextFlowNode()]
+		[if (nextNode.oclIsTypeOf(Task))]
+	if(result) {
+		remove "[f.name.normaliseString()/]" from: tasks;
+		add "[f.getNextFlowNode().name.normaliseString()/]" to: tasks;
+	}
+		[/if]
+	[/let]
+[/if]
+}
+[/template]
+
+[template public generateReflexes(f : ANDGateway)]
+
+[/template]
+
+[template public generateReflexes(f : XORGateway)]
+
+[/template]
+
+[query public getNextFlowNode(f : FlowNode) : FlowNode =
+f.outgoing->any(true).targetRef
+/]
