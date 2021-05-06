@@ -1,3 +1,5 @@
+-- @nsuri SimplifiedBPMN=http://www.cpoubel.org/simplifiedbpmn
+-- @nsuri BPMN=http://www.omg.org/spec/BPMN/20100524/MODEL
 
 module BPMN2simplifiedBPMN;
 create OUT : SimplifiedBPMN from IN : BPMN;

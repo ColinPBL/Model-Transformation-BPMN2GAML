@@ -1,48 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<simplifiedbpmn:Process
-    xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:simplifiedbpmn="http://www.cpoubel.org/simplifiedbpmn"
-    xsi:schemaLocation="http://www.cpoubel.org/simplifiedbpmn ../model/simplifiedbpmn.ecore"
-    name="DailySchedule">
-  <flowElements
-      xsi:type="simplifiedbpmn:StartEvent"
-      outgoing="//@flowElements.1"/>
-  <flowElements
-      xsi:type="simplifiedbpmn:SequenceFlow"
-      targetRef="//@flowElements.2"
-      sourceRef="//@flowElements.0"/>
-  <flowElements
-      xsi:type="simplifiedbpmn:Task"
-      name="Go to work"
-      incoming="//@flowElements.1"
-      outgoing="//@flowElements.3"/>
-  <flowElements
-      xsi:type="simplifiedbpmn:SequenceFlow"
-      targetRef="//@flowElements.4"
-      sourceRef="//@flowElements.2"/>
-  <flowElements
-      xsi:type="simplifiedbpmn:Task"
-      name="Work"
-      incoming="//@flowElements.3"
-      outgoing="//@flowElements.5"/>
-  <flowElements
-      xsi:type="simplifiedbpmn:SequenceFlow"
-      targetRef="//@flowElements.6"
-      sourceRef="//@flowElements.4"/>
-  <flowElements
-      xsi:type="simplifiedbpmn:Task"
-      name="Go home"
-      incoming="//@flowElements.5"
-      outgoing="//@flowElements.7"/>
-  <flowElements
-      xsi:type="simplifiedbpmn:SequenceFlow"
-      targetRef="//@flowElements.8"
-      sourceRef="//@flowElements.6"/>
-  <flowElements
-      xsi:type="simplifiedbpmn:EndEvent"
-      incoming="//@flowElements.7"/>
-  <resource
-      href="RoadTrafficCitizen.xmi#/"/>
+<simplifiedbpmn:Process xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:simplifiedbpmn="http://www.cpoubel.org/simplifiedbpmn" xsi:schemaLocation="http://www.cpoubel.org/simplifiedbpmn ../model/simplifiedbpmn.ecore" name="DailySchedule">
+  <flowElements xsi:type="simplifiedbpmn:StartEvent" outgoing="//@flowElements.1"/>
+  <flowElements xsi:type="simplifiedbpmn:SequenceFlow" targetRef="//@flowElements.2" sourceRef="//@flowElements.0"/>
+  <flowElements xsi:type="simplifiedbpmn:Task" name="Go to work" incoming="//@flowElements.1" outgoing="//@flowElements.3"/>
+  <flowElements xsi:type="simplifiedbpmn:SequenceFlow" targetRef="//@flowElements.4" sourceRef="//@flowElements.2"/>
+  <flowElements xsi:type="simplifiedbpmn:Task" name="Work" incoming="//@flowElements.3" outgoing="//@flowElements.5"/>
+  <flowElements xsi:type="simplifiedbpmn:SequenceFlow" targetRef="//@flowElements.6" sourceRef="//@flowElements.4"/>
+  <flowElements xsi:type="simplifiedbpmn:Task" name="Go home" incoming="//@flowElements.5" outgoing="//@flowElements.7"/>
+  <flowElements xsi:type="simplifiedbpmn:SequenceFlow" targetRef="//@flowElements.8" sourceRef="//@flowElements.6"/>
+  <flowElements xsi:type="simplifiedbpmn:EndEvent" incoming="//@flowElements.7"/>
 </simplifiedbpmn:Process>

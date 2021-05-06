@@ -7,6 +7,9 @@
     <semanticResources>../instances/ProcessEteindreIncendie.xmi</semanticResources>
     <semanticResources>../instances/testdivergingconditions.xmi</semanticResources>
     <semanticResources>../instances/testdivergingconditionsXOR.xmi</semanticResources>
+    <semanticResources>../instances/SpecialUseCasesTest.xmi</semanticResources>
+    <semanticResources>platform:/resource/BPMN2SimplifiedBPMN/citizenprocess.xmi</semanticResources>
+    <semanticResources>../instances/RoadTrafficCitizen.xmi</semanticResources>
     <ownedViews xmi:type="viewpoint:DView" uid="_O1CVcK2DEeuik45icNy_Ew">
       <viewpoint xmi:type="description:Viewpoint" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']"/>
       <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_O2vloK2DEeuik45icNy_Ew" name="simplifiedbpmn" repPath="#_O2HTgK2DEeuik45icNy_Ew" changeId="63bc97e0-aa7a-4460-90e8-750cd7c07cb2">
