@@ -48,6 +48,26 @@ species [aResource.name.normaliseString()/] {
 		[let se : StartEvent = getStartEvent(process)]
 	[generateReflexes(se)/]
 		[/let]
+		[for (gateway : Gateway | process.getGateways()->select(g | g.gatewayDirection = GatewayDirection::Converging))]
+	reflex [gateway.getConvergingReflexName()/] when: (("[gateway.getConvergingReflexName()/]" in tasks) [for (flow : SequenceFlow | gateway.incoming) separator(' ')]
+[let name : String = flow.sourceRef.name.normaliseString()]and not ("[name/]" in tasks)[/let][/for]) {
+			[let nextNode : FlowNode = gateway.getNextFlowNode()]
+		remove "[gateway.getConvergingReflexName()/]" from: tasks;
+				[if (nextNode.oclIsTypeOf(Task))]
+		add "[nextNode.name.normaliseString()/]" to: tasks;
+				[comment If the next node is a gateway, we need to act accordingly with regards to how the next tasks are added to the list
+				If the gateway is diverging, it's a "simple" case
+				If it is converging, we do nothing since it is done later in the template /]
+				[elseif (nextNode.oclIsKindOf(Gateway))]
+					[if (nextNode.oclAsType(Gateway).gatewayDirection = GatewayDirection::Diverging)]
+			[generateDivergingConditions(nextNode)/]
+				[elseif (nextNode.oclAsType(Gateway).gatewayDirection = GatewayDirection::Converging)]
+		add "[getConvergingReflexName(nextNode.oclAsType(Gateway))/]" to: tasks;
+					[/if]
+				[/if]
+	}
+			[/let]
+		[/for]
 	[/for]
 
 }
@@ -61,6 +81,11 @@ species [aResource.name.normaliseString()/] {
 [query public getStartEvent(p : FlowElementContainer) : StartEvent =
 	p.flowElements->any(oclIsTypeOf(StartEvent))
 /]
+
+[query public getGateways(p : FlowElementContainer) : Set(Gateway) =
+	p.flowElements->select(e | e.oclIsKindOf(Gateway))
+/]
+
 
 [template public normaliseString(s : String)]
 [s.toLower().substituteAll(' ', '_').substituteAll('\'', '_')/]
@@ -89,16 +114,16 @@ reflex [f.name.normaliseString()/] when:("[f.name.normaliseString()/]" in tasks)
 		remove "[f.name.normaliseString()/]" from: tasks;
 		[if (nextNode.oclIsTypeOf(Task))]
 		add "[nextNode.name.normaliseString()/]" to: tasks;
-		[comment If the next node is a gateway, we need to act accordingly with regards to how the next tasks are added to the list
+		[comment If the next node is a gateway, we need to act accordingly
 		If the gateway is diverging, it's a "simple" case
 		If it is converging, we do nothing since it is done later in the template /]
 		[elseif (nextNode.oclIsKindOf(Gateway))]
-		[if (nextNode.oclAsType(Gateway).gatewayDirection = GatewayDirection::Diverging)]
+			[if (nextNode.oclAsType(Gateway).gatewayDirection = GatewayDirection::Diverging)]
 [generateDivergingConditions(nextNode)/]
-		[elseif (nextNode.oclAsType(Gateway).gatewayDirection = GatewayDirection::Converging)]
+			[elseif (nextNode.oclAsType(Gateway).gatewayDirection = GatewayDirection::Converging)]
 		add "[getConvergingReflexName(nextNode.oclAsType(Gateway))/]" to: tasks;
+			[/if]
 		[/if]
-[/if]
 	}		
 }
 [generateReflexes(nextNode)/]
@@ -108,26 +133,7 @@ reflex [f.name.normaliseString()/] when:("[f.name.normaliseString()/]" in tasks)
 [/template]
 
 [template public generateReflexes(f : Gateway)]
-[if (f.gatewayDirection = GatewayDirection::Converging)]
-reflex [f.getConvergingReflexName()/] when: (("[f.getConvergingReflexName()/]" in tasks) [for (flow : SequenceFlow | f.incoming)]and not ("[flow.sourceRef.name.normaliseString()/]" in tasks) [/for]) {
-[let nextNode : FlowNode = f.getNextFlowNode()]
-	remove "[f.getConvergingReflexName()/]" from: tasks;
-	[if (nextNode.oclIsTypeOf(Task))]
-	add "[nextNode.name.normaliseString()/]" to: tasks;
-	[comment If the next node is a gateway, we need to act accordingly with regards to how the next tasks are added to the list
-	If the gateway is diverging, it's a "simple" case
-	If it is converging, we do nothing since it is done later in the template /]
-	[elseif (nextNode.oclIsKindOf(Gateway))]
-	[if (nextNode.oclAsType(Gateway).gatewayDirection = GatewayDirection::Diverging)]
-[generateDivergingConditions(nextNode)/]
-	[elseif (nextNode.oclAsType(Gateway).gatewayDirection = GatewayDirection::Converging)]
-	add "[getConvergingReflexName(nextNode.oclAsType(Gateway))/]" to: tasks;
-	[/if]
-	[/if]
-}
-[generateReflexes(nextNode)/]
-[/let]
-[elseif (f.gatewayDirection = GatewayDirection::Diverging)]
+[if (f.gatewayDirection = GatewayDirection::Diverging)]
 	[for (flow : SequenceFlow | f.outgoing)]
 [generateReflexes(flow.targetRef)/]
 	[/for]
