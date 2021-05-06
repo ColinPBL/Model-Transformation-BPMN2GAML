@@ -1,0 +1,81 @@
+
+module BPMN2simplifiedBPMN;
+create OUT : SimplifiedBPMN from IN : BPMN;
+
+rule Process2Process {
+	from
+		in_process: BPMN!Process (in_process.flowElements->size() > 0)
+		
+	to
+		out_process: SimplifiedBPMN!Process (
+			flowElements <- in_process.flowElements,
+			name <- in_process.id
+		)
+}
+
+rule Task2Task {
+	from
+		in_task: BPMN!Task
+	to
+		out_task: SimplifiedBPMN!Task (
+			outgoing <- in_task.outgoing,
+			incoming <- in_task.incoming,
+			name <- in_task.name
+		)
+}
+
+rule ANDGateway2ANDGateway {
+	from
+		in_gateway: BPMN!ParallelGateway
+	to
+		out_gateway: SimplifiedBPMN!ANDGateway (
+			outgoing <- in_gateway.outgoing,
+			incoming <- in_gateway.incoming,
+			name <- in_gateway.name,
+			gatewayDirection <- in_gateway.gatewayDirection
+		)
+}
+
+rule XORGateway2XORGateway {
+	from
+		in_gateway: BPMN!ExclusiveGateway
+	to
+		out_gateway: SimplifiedBPMN!XORGateway (
+			outgoing <- in_gateway.outgoing,
+			incoming <- in_gateway.incoming,
+			name <- in_gateway.name,
+			gatewayDirection <- in_gateway.gatewayDirection
+		)
+}
+
+rule SequenceFlow2SequenceFlow {
+	from
+		in_flow: BPMN!SequenceFlow
+	to
+		out_flow: SimplifiedBPMN!SequenceFlow (
+			targetRef <- in_flow.targetRef,
+			sourceRef <- in_flow.sourceRef
+		)
+}
+
+rule StartEvent2StartEvent {
+	from
+		in_start: BPMN!StartEvent
+	to
+		out_start: SimplifiedBPMN!StartEvent (
+			name <- in_start.name,
+			outgoing <- in_start.outgoing,
+			incoming <- in_start.incoming
+		)
+}
+
+rule EndEvent2EndEvent {
+	from
+		in_start: BPMN!EndEvent
+	to
+		out_start: SimplifiedBPMN!EndEvent (
+			name <- in_start.name,
+			outgoing <- in_start.outgoing,
+			incoming <- in_start.incoming
+		)
+}
