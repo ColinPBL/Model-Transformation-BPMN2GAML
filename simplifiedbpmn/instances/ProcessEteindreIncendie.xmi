@@ -7,5 +7,4 @@
   <flowElements xsi:type="simplifiedbpmn:Task" name="Eteindre l'incendie" incoming="//@flowElements.3" outgoing="//@flowElements.5"/>
   <flowElements xsi:type="simplifiedbpmn:SequenceFlow" targetRef="//@flowElements.6" sourceRef="//@flowElements.4"/>
   <flowElements xsi:type="simplifiedbpmn:EndEvent" incoming="//@flowElements.5"/>
-  <resource href="ResourceRolePompier.xmi#/"/>
 </simplifiedbpmn:Process>

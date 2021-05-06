@@ -50,7 +50,7 @@ species [aResource.name.normaliseString()/] {
 		[/let]
 		[for (gateway : Gateway | process.getGateways()->select(g | g.gatewayDirection = GatewayDirection::Converging))]
 	reflex [gateway.getConvergingReflexName()/] when: (("[gateway.getConvergingReflexName()/]" in tasks) [for (flow : SequenceFlow | gateway.incoming) separator(' ')]
-[let name : String = flow.sourceRef.name.normaliseString()]and not ("[name/]" in tasks)[/let][/for]) {
+[let name : String = flow.sourceRef.name]and not ("[name.normaliseString()/]" in tasks)[/let][/for]) {
 			[let nextNode : FlowNode = gateway.getNextFlowNode()]
 		remove "[gateway.getConvergingReflexName()/]" from: tasks;
 				[if (nextNode.oclIsTypeOf(Task))]
@@ -165,8 +165,9 @@ f.outgoing->any(true).targetRef
 //Manage your conditions so that one and only one of the following tasks will be active
 [for (flow : SequenceFlow | gateway.outgoing)]
 		if(true) {
-	[generateDivergingConditions(flow.targetRef)/]
+[generateDivergingConditions(flow.targetRef)/]
 		}
+
 [/for]
 [/template]
 
@@ -178,7 +179,7 @@ f.outgoing->any(true).targetRef
 [/template]
 
 [template public getConvergingReflexName (gateway : Gateway) ]
-merge[for (flow : SequenceFlow | gateway.incoming)]_[flow.sourceRef.name.normaliseString()/][/for]
+merge[for (flow : SequenceFlow | gateway.incoming)][if(not flow.sourceRef.name.oclIsUndefined())]_[flow.sourceRef.name.normaliseString()/][else]_gateway[/if][/for]
 [/template]
 
 [template public handleNextTasks(f : FlowNode)]
