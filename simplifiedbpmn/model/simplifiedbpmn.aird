@@ -12,7 +12,7 @@
     <semanticResources>../instances/RoadTrafficCitizen.xmi</semanticResources>
     <ownedViews xmi:type="viewpoint:DView" uid="_O1CVcK2DEeuik45icNy_Ew">
       <viewpoint xmi:type="description:Viewpoint" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']"/>
-      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_O2vloK2DEeuik45icNy_Ew" name="simplifiedbpmn" repPath="#_O2HTgK2DEeuik45icNy_Ew" changeId="63bc97e0-aa7a-4460-90e8-750cd7c07cb2">
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_O2vloK2DEeuik45icNy_Ew" name="simplifiedbpmn" repPath="#_O2HTgK2DEeuik45icNy_Ew" changeId="536a2942-f75a-47b6-bc52-5946277fd81b">
         <description xmi:type="description_1:DiagramDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']"/>
         <target xmi:type="ecore:EPackage" href="simplifiedbpmn.ecore#/"/>
       </ownedRepresentationDescriptors>
@@ -498,7 +498,7 @@
       </ownedStyle>
       <actualMapping xmi:type="description_1:ContainerMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']"/>
     </ownedDiagramElements>
-    <ownedDiagramElements xmi:type="diagram:DNodeList" uid="_T4rZAK2EEeuik45icNy_Ew" name="Gateway" tooltipText="" outgoingEdges="_T7gDhq2EEeuik45icNy_Ew" incomingEdges="_T7gqlq2EEeuik45icNy_Ew _T7hRpq2EEeuik45icNy_Ew" width="12" height="10">
+    <ownedDiagramElements xmi:type="diagram:DNodeList" uid="_T4rZAK2EEeuik45icNy_Ew" name="Gateway" tooltipText="&#xA;ERROR : The «invariant» 'simplifiedbpmn::Gateway::isJoinOrFork' is invalid: 'if self.type = 1 then&#xD;&#xA;&#x9;&#x9;&#x9;(self.outgoing->size() = 1 and self.incoming->size() > 1)&#xD;&#xA;&#x9;&#x9;else if self.type = 2 then&#xD;&#xA;&#x9;&#x9;&#x9;(self.incoming->size() = 1 and self.outgoing->size() > 1)&#xD;&#xA;&#x9;&#x9;&#x9;endif&#xD;&#xA;&#x9;&#x9;endif'&#xA;5:4: mismatched input 'endif' expecting 'else'&#xA;6:3: extraneous input 'endif' expecting EOF&#xA;ERROR : &#x9;&#x9;&#x9;(self.outgoing->size() = 1 and self.incoming->size() > 1)&#xD;&#xA;ERROR : &#x9;&#x9;else if self.type = 2 then&#xD;&#xA;ERROR : &#x9;&#x9;&#x9;(self.incoming->size() = 1 and self.outgoing->size() > 1)&#xD;&#xA;ERROR : &#x9;&#x9;&#x9;endif&#xD;&#xA;ERROR : &#x9;&#x9;endif'&#xA;ERROR : 5:4: mismatched input 'endif' expecting 'else'&#xA;ERROR : 6:3: extraneous input 'endif' expecting EOF" outgoingEdges="_T7gDhq2EEeuik45icNy_Ew" incomingEdges="_T7gqlq2EEeuik45icNy_Ew _T7hRpq2EEeuik45icNy_Ew" width="12" height="10">
       <target xmi:type="ecore:EClass" href="simplifiedbpmn.ecore#//Gateway"/>
       <semanticElements xmi:type="ecore:EClass" href="simplifiedbpmn.ecore#//Gateway"/>
       <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
