@@ -92,9 +92,6 @@ reflex [f.name.normaliseString()/] when:("[f.name.normaliseString()/]" in tasks)
 		remove "[f.name.normaliseString()/]" from: tasks;
 		[if (nextNode.oclIsTypeOf(Task))]
 		add "[nextNode.name.normaliseString()/]" to: tasks;
-		[comment If the next node is a gateway, we need to act accordingly
-		If the gateway is diverging, it's a "simple" case
-		If it is converging, we do nothing since it is done later in the template /]
 		[elseif (nextNode.oclIsKindOf(Gateway))]
 			[if (nextNode.oclAsType(Gateway).gatewayDirection = GatewayDirection::Diverging)]
 [generateDivergingConditions(nextNode)/]
