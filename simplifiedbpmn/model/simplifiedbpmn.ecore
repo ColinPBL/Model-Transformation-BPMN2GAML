@@ -42,12 +42,6 @@
         eType="#//FlowNode" eOpposite="#//FlowNode/outgoing"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Gateway" abstract="true" eSuperTypes="#//FlowNode">
-    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-      <details key="constraints" value="isJoinOrFork"/>
-    </eAnnotations>
-    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
-      <details key="isJoinOrFork" value="&#x9;&#x9;if self.type = 1 then&#xD;&#xA;&#x9;&#x9;&#x9;(self.outgoing->size() = 1 and self.incoming->size() > 1)&#xD;&#xA;&#x9;&#x9;else if self.type = 2 then&#xD;&#xA;&#x9;&#x9;&#x9;(self.incoming->size() = 1 and self.outgoing->size() > 1)&#xD;&#xA;&#x9;&#x9;&#x9;endif&#xD;&#xA;&#x9;&#x9;endif"/>
-    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="gatewayDirection" lowerBound="1"
         eType="#//GatewayDirection"/>
   </eClassifiers>
