@@ -7,14 +7,15 @@
 [file (aResource.name + '.gaml', false, 'Cp1252')]
 model [aResource.name.normaliseString()/]
 
-/*This model is the result of a transformation from a BPMN representation of a ResourceRole to a GAML species skeleton
-It has been automatically generated from a specification, and may not be exactly suited to your modeling needs. Feel free
-to adapt and modify this file as needed.
+/**
+* This model is the result of a transformation from a BPMN representation of a ResourceRole to a GAML species skeleton
+* It has been automatically generated from a specification, and may not be exactly suited to your modeling needs. Feel free
+* to adapt and modify this file as needed.
 */
 
 species [aResource.name.normaliseString()/] {
 
-	/*
+	/**
 	* This is a list of methods derived from the different tasks specified in this agent's BPMN representation
 	* They are supposed to be called at each cycle when the agent is doing the corresponding activity
 	* Each action returns a boolean indicating if the corresponding task is over
@@ -37,13 +38,13 @@ species [aResource.name.normaliseString()/] {
 	list<string> tasks <- ['['/][']'/];
 
 	reflex idle when: (current_process = nil) {
-	/*
+	/**
 	* This is where the agent will look at its environment and decide which process to use
 	* For each process, replace "true" by the corresponding condition
 	*/
 	[for (process : FlowElementContainer | aResource.processes)]
 		[let start : StartEvent = process.getStartEvent()]
-		if (true and current_process != nil) {
+		if (/*['['/]process condition[']'/]*/ and current_process = nil) {
 			current_process <- "[process.name.normaliseString()/]";
 			[start.generateTasks()/]
 		}
