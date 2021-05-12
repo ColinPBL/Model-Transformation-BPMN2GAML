@@ -64,6 +64,7 @@ species [aResource.name.normaliseString()/] {
 	[comment For each process, a reflex is generated, respecting tasks' order/]
 	[for (process : FlowElementContainer | aResource.processes)]
 	reflex [process.name.normaliseString()/] when: (current_process = "[process.name.normaliseString()/]") {
+		counter_[process.name.normaliseString()/] <- counter_[process.name.normaliseString()/] + 1;
 		[for (element : FlowNode | process.flowElements->select(e | e.oclIsKindOf(FlowNode) and not e.oclIsKindOf(Event)))]
 		[element.generateTasks()/]
 		[/for]
@@ -199,9 +200,13 @@ f.outgoing->any(true).targetRef
 [template public generateDivergingConditions(gateway : XORGateway) post(trim())]
 //Manage your conditions so that one and only one of the following tasks will be active
 [for (flow : SequenceFlow | gateway.outgoing) separator('else ')]
+[if (gateway.outgoing->size() > 1)]
 if(true) {
 	[generateDivergingConditions(flow.targetRef)/]
 }
+[else]
+[generateDivergingConditions(flow.targetRef)/]
+[/if]
 [/for]
 [/template]
 
