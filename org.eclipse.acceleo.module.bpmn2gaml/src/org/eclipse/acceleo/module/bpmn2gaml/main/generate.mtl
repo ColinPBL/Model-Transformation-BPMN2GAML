@@ -26,7 +26,7 @@ species [aResource.name.normaliseString()/] {
 		[for (task : Task | getTasks(process))]
 	bool ['action_' + task.name.normaliseString()/] {
 		//TODO
-		return true;
+		return false;
 	}
 		[/for]
 	[/for]
@@ -44,7 +44,7 @@ species [aResource.name.normaliseString()/] {
 	*/
 	[for (process : FlowElementContainer | aResource.processes)]
 		[let start : StartEvent = process.getStartEvent()]
-		if (/*['['/]process condition[']'/]*/ and current_process = nil) {
+		if (true and current_process = nil) {
 			current_process <- "[process.name.normaliseString()/]";
 			[start.generateTasks()/]
 		}
