@@ -7,17 +7,27 @@
 [file (aResource.name + '.gaml', false, 'Cp1252')]
 model [aResource.name.normaliseString()/]
 
-/*This model is the result of a transformation from a BPMN representation of a ResourceRole to a GAML species skeleton
-It has been automatically generated from a specification, and may not be exactly suited to your modeling needs. Feel free
-to adapt and modify this file as needed.
+/**
+* This model is the result of a transformation from a BPMN representation of a ResourceRole to a GAML species skeleton
+* It has been automatically generated from a specification, and may not be exactly suited to your modeling needs. Feel free
+* to adapt and modify this file as needed.
 */
 
 species [aResource.name.normaliseString()/] {
 
-	/*This is a list of methods derived from the different tasks specified in this agent's BPMN representation
-	They are supposed to be called at each cycle when the agent is doing the corresponding activity
-	Each action returns a boolean indicating if the corresponding task is over
-	By default, generated actions do not take any parameter, but you are free to add some if necessary
+	[comment This generates a counter for every process and task
+	It is intended to be used for validation of the simulation and/or the diagrams /]
+	[for (process : FlowElementContainer | aResource.processes)]
+	int counter_[process.name.normaliseString()/] <- 0;
+		[for (task : Task | getTasks(process))]
+	int counter_[task.name.normaliseString()/] <- 0;
+		[/for]
+	[/for]
+
+	/**
+	* This is a list of methods derived from the different tasks specified in this agent's BPMN representation
+	* They are supposed to be called at each cycle when the agent is doing the corresponding activity
+	* Each action returns a boolean indicating if the corresponding task is over
 	*/
 
 	[comment This generates an action for each task there is in the BPMN diagram(s) /]
@@ -25,29 +35,39 @@ species [aResource.name.normaliseString()/] {
 		[for (task : Task | getTasks(process))]
 	bool ['action_' + task.name.normaliseString()/] {
 		//TODO
-		return true;
+		return false;
 	}
 		[/for]
 	[/for]
 
+	//This string is used to determine which process the agent is currently doing
+	string current_process <- nil;
+
 	//This list is used to keep track of which task(s) the agent is currently doing
 	list<string> tasks <- ['['/][']'/];
 
-	/*These reflexes have been generated in order to follow the BPMN diagram logic
-	At each cycle, whenever an agent is doing a task, the corresponding reflex is called
+	reflex idle when: (current_process = nil) {
+	/**
+	* This is where the agent will look at its environment and decide which process to use
+	* For each process, replace "true" by the corresponding condition
 	*/
-
-	reflex idle when: (empty(tasks)) {
-		//TODO what the agent is doing when it is not executing a process
-		//This is where the agent will evaluate its environment to determine which process
-		//is best suited to its current state
+	[for (process : FlowElementContainer | aResource.processes)]
+		[let start : StartEvent = process.getStartEvent()]
+		if (true and current_process = nil) {
+			current_process <- "[process.name.normaliseString()/]";
+			[start.generateTasks()/]
+		}
+		[/let]
+	[/for]
 	}
 
-	[comment For each process, a list of reflexes is generated, respecting tasks' order/]
+	[comment For each process, a reflexe is generated, respecting tasks' order/]
 	[for (process : FlowElementContainer | aResource.processes)]
-		[for (element : FlowNode | process.flowElements->select(e | e.oclIsKindOf(FlowNode)))]
-	[generateReflexes(element)/]
+	reflex [process.name.normaliseString()/] when: (current_process = "[process.name.normaliseString()/]") {
+		[for (element : FlowNode | process.flowElements->select(e | e.oclIsKindOf(FlowNode) and not e.oclIsKindOf(Event)))]
+		[element.generateTasks()/]
 		[/for]
+	}
 	[/for]
 
 }
@@ -73,34 +93,53 @@ species [aResource.name.normaliseString()/] {
 
 
 [comment These templates are used to generate the reflexes from tasks, events and gateways /]
-[template public generateReflexes(f : FlowNode)]
+[template public generateTasks(f : FlowNode)]
 //TODO define template for type [f.eClass().name/]
 [/template]
 
-[template public generateReflexes(f : StartEvent)]
-//REFLEXES RELATED TO PROCESS [f.eContainer(Process).name/]
+[template public generateTasks(f : StartEvent) post(trim())]
+[for (flow : SequenceFlow | f.outgoing)]
+	[let nextNode : FlowNode = flow.targetRef]
+		[if (nextNode.oclIsTypeOf(Task))]
+if(not ("[nextNode.name.normaliseString()/]" in tasks)) {
+	add "[nextNode.name.normaliseString()/]" to: tasks;
+}
+		[elseif (nextNode.oclIsKindOf(Gateway))]
+			[if (nextNode.oclAsType(Gateway).gatewayDirection = GatewayDirection::Diverging)]
+[generateDivergingConditions(nextNode)/]
+			[elseif (nextNode.oclAsType(Gateway).gatewayDirection = GatewayDirection::Converging)]
+if(not ("[getConvergingReflexName(nextNode.oclAsType(Gateway))/]" in tasks)) {
+	add "[getConvergingReflexName(nextNode.oclAsType(Gateway))/]" to: tasks;
+}
+			[/if]
+		[/if]
+	[/let]
+[/for]
 [/template]
 
-[template public generateReflexes(f : Task) post(trim())]
-reflex [f.name.normaliseString()/] when:("[f.name.normaliseString()/]" in tasks) {
-
+[template public generateTasks(f : Task) post(trim())]
+if ("[f.name.normaliseString()/]" in tasks) {
 	bool result <- ['action_' + f.name.normaliseString()/]();
 
 [if (f.outgoing->size() = 1)]
 	[let nextNode : FlowNode = f.getNextFlowNode()]
 	if(result) {
 		remove "[f.name.normaliseString()/]" from: tasks;
+		counter_[f.name.normaliseString()/] <- counter_[f.name.normaliseString()/] + 1;
 		[if (nextNode.oclIsTypeOf(Task))]
-		add "[nextNode.name.normaliseString()/]" to: tasks;
-		[comment If the next node is a gateway, we need to act accordingly
-		If the gateway is diverging, it's a "simple" case
-		If it is converging, we do nothing since it is done later in the template /]
+		if(not ("[nextNode.name.normaliseString()/]" in tasks)) {
+			add "[nextNode.name.normaliseString()/]" to: tasks;
+		}
 		[elseif (nextNode.oclIsKindOf(Gateway))]
 			[if (nextNode.oclAsType(Gateway).gatewayDirection = GatewayDirection::Diverging)]
-[generateDivergingConditions(nextNode)/]
+		[generateDivergingConditions(nextNode)/]
 			[elseif (nextNode.oclAsType(Gateway).gatewayDirection = GatewayDirection::Converging)]
-		add "[getConvergingReflexName(nextNode.oclAsType(Gateway))/]" to: tasks;
+		if(not ("[getConvergingReflexName(nextNode.oclAsType(Gateway))/]" in tasks)) {
+			add "[getConvergingReflexName(nextNode.oclAsType(Gateway))/]" to: tasks;
+		}
 			[/if]
+		[elseif (nextNode.oclIsTypeOf(EndEvent))]
+		current_process <- nil;
 		[/if]
 	}		
 }
@@ -110,27 +149,33 @@ reflex [f.name.normaliseString()/] when:("[f.name.normaliseString()/]" in tasks)
 
 [/template]
 
-[template public generateReflexes(f : Gateway) post(trim())]
+[template public generateTasks(f : Gateway) post(trim())]
 [if (f.gatewayDirection = GatewayDirection::Converging)]
-reflex [f.getConvergingReflexName()/] when: (("[f.getConvergingReflexName()/]" in tasks) [for (flow : SequenceFlow | f.incoming) separator(' ')]
+if (("[f.getConvergingReflexName()/]" in tasks) [for (flow : SequenceFlow | f.incoming) separator(' ')]
 [let name : String = flow.sourceRef.name]and not ("[name.normaliseString()/]" in tasks)[/let][/for]) {
 		[let nextNode : FlowNode = f.getNextFlowNode()]
 	remove "[f.getConvergingReflexName()/]" from: tasks;
 			[if (nextNode.oclIsTypeOf(Task))]
-	add "[nextNode.name.normaliseString()/]" to: tasks;
+	if(not ("[nextNode.name.normaliseString()/]" in tasks))	{
+		add "[nextNode.name.normaliseString()/]" to: tasks;
+	}
 			[elseif (nextNode.oclIsKindOf(Gateway))]
 				[if (nextNode.oclAsType(Gateway).gatewayDirection = GatewayDirection::Diverging)]
-		[generateDivergingConditions(nextNode)/]
+	[generateDivergingConditions(nextNode)/]
 				[elseif (nextNode.oclAsType(Gateway).gatewayDirection = GatewayDirection::Converging)]
-	add "[getConvergingReflexName(nextNode.oclAsType(Gateway))/]" to: tasks;
+	if(not ("[getConvergingReflexName(nextNode.oclAsType(Gateway))/]" in tasks)) {
+		add "[getConvergingReflexName(nextNode.oclAsType(Gateway))/]" to: tasks;
+	}
 				[/if]
+			[elseif (nextNode.oclIsTypeOf(EndEvent))]
+	current_process <- nil;
 			[/if]
 }
 		[/let]
 [/if]
 [/template]
 
-[template public generateReflexes(f : EndEvent)]
+[template public generateTasks(f : EndEvent)]
 //END OF REFLEXES RELATED TO PROCESS [f.eContainer(Process).name/]
 
 [/template]
@@ -145,26 +190,23 @@ f.outgoing->any(true).targetRef
 //TODO define template for type [f.eClass().name/]
 [/template]
 
-[template public generateDivergingConditions(gateway : ANDGateway) ]
+[template public generateDivergingConditions(gateway : ANDGateway) post(trim())]
 [for (flow : SequenceFlow | gateway.outgoing)]
 [generateDivergingConditions(flow.targetRef)/]
 [/for]
 [/template]
 
-[template public generateDivergingConditions(gateway : XORGateway)]
-	
-		//Manage your conditions so that one and only one of the following tasks will be active
-
-[for (flow : SequenceFlow | gateway.outgoing)]
-		if(true) {
-[generateDivergingConditions(flow.targetRef)/]
-		}
-
+[template public generateDivergingConditions(gateway : XORGateway) post(trim())]
+//Manage your conditions so that one and only one of the following tasks will be active
+[for (flow : SequenceFlow | gateway.outgoing) separator('else ')]
+if(true) {
+	[generateDivergingConditions(flow.targetRef)/]
+}
 [/for]
 [/template]
 
-[template public generateDivergingConditions(task : Task)]
-		add "[task.name.normaliseString()/]" to: tasks;
+[template public generateDivergingConditions(task : Task) post(trim())]
+add "[task.name.normaliseString()/]" to: tasks;
 [/template]
 
 [template public generateDivergingConditions(event : EndEvent)]
