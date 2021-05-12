@@ -61,7 +61,7 @@ species [aResource.name.normaliseString()/] {
 	[/for]
 	}
 
-	[comment For each process, a reflexe is generated, respecting tasks' order/]
+	[comment For each process, a reflex is generated, respecting tasks' order/]
 	[for (process : FlowElementContainer | aResource.processes)]
 	reflex [process.name.normaliseString()/] when: (current_process = "[process.name.normaliseString()/]") {
 		[for (element : FlowNode | process.flowElements->select(e | e.oclIsKindOf(FlowNode) and not e.oclIsKindOf(Event)))]
