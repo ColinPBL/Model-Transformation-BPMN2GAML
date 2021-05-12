@@ -15,6 +15,15 @@ model [aResource.name.normaliseString()/]
 
 species [aResource.name.normaliseString()/] {
 
+	[comment This generates a counter for every process and task
+	It is intended to be used for validation of the simulation and/or the diagrams /]
+	[for (process : FlowElementContainer | aResource.processes)]
+	int counter_[process.name.normaliseString()/] <- 0;
+		[for (task : Task | getTasks(process))]
+	int counter_[task.name.normaliseString()/] <- 0;
+		[/for]
+	[/for]
+
 	/**
 	* This is a list of methods derived from the different tasks specified in this agent's BPMN representation
 	* They are supposed to be called at each cycle when the agent is doing the corresponding activity
@@ -116,6 +125,7 @@ if ("[f.name.normaliseString()/]" in tasks) {
 	[let nextNode : FlowNode = f.getNextFlowNode()]
 	if(result) {
 		remove "[f.name.normaliseString()/]" from: tasks;
+		counter_[f.name.normaliseString()/] <- counter_[f.name.normaliseString()/] + 1;
 		[if (nextNode.oclIsTypeOf(Task))]
 		if(not ("[nextNode.name.normaliseString()/]" in tasks)) {
 			add "[nextNode.name.normaliseString()/]" to: tasks;
