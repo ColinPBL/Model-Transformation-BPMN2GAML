@@ -127,6 +127,30 @@ rule SignalThrowEvent2IntermediateThrowEvent {
 		)
 }
 
+rule MessageBoundaryEvent2MessageBoundaryEvent {
+	from
+		in_event: BPMN!BoundaryEvent (in_event.eventDefinitions->size() = 1 and in_event.eventDefinitions->first().oclIsTypeOf(BPMN!MessageEventDefinition))
+	to
+		out_event: SimplifiedBPMN!BoundaryEvent (
+			name <- in_event.name,
+			eventType <- #Message,
+			cancelActivity <- in_event.cancelActivity,
+			attachedToRef <- in_event.attachedToRef
+			)
+}
+
+rule SignalBoundaryEvent2MessageBoundaryEvent {
+	from
+		in_event: BPMN!BoundaryEvent (in_event.eventDefinitions->size() = 1 and in_event.eventDefinitions->first().oclIsTypeOf(BPMN!SignalEventDefinition))
+	to
+		out_event: SimplifiedBPMN!BoundaryEvent (
+			name <- in_event.name,
+			eventType <- #Signal,
+			cancelActivity <- in_event.cancelActivity,
+			attachedToRef <- in_event.attachedToRef
+			)
+}
+
 rule EndEvent2EndEvent {
 	from
 		in_start: BPMN!EndEvent

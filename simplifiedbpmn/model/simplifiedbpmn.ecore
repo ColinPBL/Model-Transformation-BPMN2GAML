@@ -79,8 +79,10 @@
   <eClassifiers xsi:type="ecore:EClass" name="BoundaryEvent" eSuperTypes="#//CatchEvent">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="eventType" lowerBound="1"
         eType="#//IntermediateEventType"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="interrupting" lowerBound="1"
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cancelActivity" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attachedToRef" lowerBound="1"
+        eType="#//Activity"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ThrowEvent" abstract="true" eSuperTypes="#//Event"/>
   <eClassifiers xsi:type="ecore:EClass" name="EndEvent" eSuperTypes="#//ThrowEvent">
