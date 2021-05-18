@@ -4,23 +4,23 @@ package simplifiedbpmn.impl;
 
 import org.eclipse.emf.ecore.EClass;
 
-import simplifiedbpmn.EndEvent;
 import simplifiedbpmn.SimplifiedbpmnPackage;
+import simplifiedbpmn.ThrowEvent;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>End Event</b></em>'.
+ * An implementation of the model object '<em><b>Throw Event</b></em>'.
  * <!-- end-user-doc -->
  *
  * @generated
  */
-public class EndEventImpl extends ThrowEventImpl implements EndEvent {
+public abstract class ThrowEventImpl extends EventImpl implements ThrowEvent {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected EndEventImpl() {
+	protected ThrowEventImpl() {
 		super();
 	}
 
@@ -31,7 +31,7 @@ public class EndEventImpl extends ThrowEventImpl implements EndEvent {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return SimplifiedbpmnPackage.Literals.END_EVENT;
+		return SimplifiedbpmnPackage.Literals.THROW_EVENT;
 	}
 
-} //EndEventImpl
+} //ThrowEventImpl

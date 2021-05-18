@@ -13,5 +13,5 @@ package simplifiedbpmn;
  *        annotation="http://www.eclipse.org/emf/2002/Ecore/OCL noIncomingFlow='self.incoming-&gt;size() = 0'"
  * @generated
  */
-public interface StartEvent extends Event {
+public interface StartEvent extends CatchEvent {
 } // StartEvent

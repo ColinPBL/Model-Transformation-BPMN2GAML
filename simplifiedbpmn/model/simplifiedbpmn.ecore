@@ -13,6 +13,10 @@
     <eLiterals name="Diverging" value="2"/>
     <eLiterals name="Mixed" value="3"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="IntermediateEventType">
+    <eLiterals name="Message"/>
+    <eLiterals name="Signal" value="1"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FlowElement" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="FlowElementContainer" abstract="true">
     <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
@@ -59,7 +63,8 @@
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Event" abstract="true" eSuperTypes="#//FlowNode"/>
-  <eClassifiers xsi:type="ecore:EClass" name="StartEvent" eSuperTypes="#//Event">
+  <eClassifiers xsi:type="ecore:EClass" name="CatchEvent" abstract="true" eSuperTypes="#//Event"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StartEvent" eSuperTypes="#//CatchEvent">
     <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
       <details key="constraints" value="noIncomingFlow"/>
     </eAnnotations>
@@ -67,13 +72,28 @@
       <details key="noIncomingFlow" value="self.incoming->size() = 0"/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EndEvent" eSuperTypes="#//Event">
+  <eClassifiers xsi:type="ecore:EClass" name="IntermediateCatchEvent" eSuperTypes="#//CatchEvent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="eventType" lowerBound="1"
+        eType="#//IntermediateEventType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BoundaryEvent" eSuperTypes="#//CatchEvent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="eventType" lowerBound="1"
+        eType="#//IntermediateEventType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="interrupting" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ThrowEvent" abstract="true" eSuperTypes="#//Event"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EndEvent" eSuperTypes="#//ThrowEvent">
     <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
       <details key="constraints" value="noOutgoingFlow"/>
     </eAnnotations>
     <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
       <details key="noOutgoingFlow" value="self.outgoing->size() = 0"/>
     </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntermediateThrowEvent" eSuperTypes="#//ThrowEvent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="eventType" lowerBound="1"
+        eType="#//IntermediateEventType"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ResourceRole">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

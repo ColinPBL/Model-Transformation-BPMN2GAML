@@ -15,6 +15,10 @@
       <genEnumLiterals ecoreEnumLiteral="simplifiedbpmn.ecore#//GatewayDirection/Diverging"/>
       <genEnumLiterals ecoreEnumLiteral="simplifiedbpmn.ecore#//GatewayDirection/Mixed"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="simplifiedbpmn.ecore#//IntermediateEventType">
+      <genEnumLiterals ecoreEnumLiteral="simplifiedbpmn.ecore#//IntermediateEventType/Message"/>
+      <genEnumLiterals ecoreEnumLiteral="simplifiedbpmn.ecore#//IntermediateEventType/Signal"/>
+    </genEnums>
     <genClasses image="false" ecoreClass="simplifiedbpmn.ecore#//FlowElement"/>
     <genClasses image="false" ecoreClass="simplifiedbpmn.ecore#//FlowElementContainer">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference simplifiedbpmn.ecore#//FlowElementContainer/flowElements"/>
@@ -40,8 +44,19 @@
     <genClasses image="false" ecoreClass="simplifiedbpmn.ecore#//Activity"/>
     <genClasses ecoreClass="simplifiedbpmn.ecore#//Task"/>
     <genClasses image="false" ecoreClass="simplifiedbpmn.ecore#//Event"/>
+    <genClasses image="false" ecoreClass="simplifiedbpmn.ecore#//CatchEvent"/>
     <genClasses ecoreClass="simplifiedbpmn.ecore#//StartEvent"/>
+    <genClasses ecoreClass="simplifiedbpmn.ecore#//IntermediateCatchEvent">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute simplifiedbpmn.ecore#//IntermediateCatchEvent/eventType"/>
+    </genClasses>
+    <genClasses ecoreClass="simplifiedbpmn.ecore#//BoundaryEvent">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute simplifiedbpmn.ecore#//BoundaryEvent/eventType"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="simplifiedbpmn.ecore#//ThrowEvent"/>
     <genClasses ecoreClass="simplifiedbpmn.ecore#//EndEvent"/>
+    <genClasses ecoreClass="simplifiedbpmn.ecore#//IntermediateThrowEvent">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute simplifiedbpmn.ecore#//IntermediateThrowEvent/eventType"/>
+    </genClasses>
     <genClasses ecoreClass="simplifiedbpmn.ecore#//ResourceRole">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute simplifiedbpmn.ecore#//ResourceRole/name"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference simplifiedbpmn.ecore#//ResourceRole/processes"/>

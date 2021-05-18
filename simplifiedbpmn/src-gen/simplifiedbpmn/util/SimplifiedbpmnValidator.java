@@ -14,6 +14,8 @@ import org.eclipse.emf.ecore.util.EObjectValidator;
 
 import simplifiedbpmn.ANDGateway;
 import simplifiedbpmn.Activity;
+import simplifiedbpmn.BoundaryEvent;
+import simplifiedbpmn.CatchEvent;
 import simplifiedbpmn.EndEvent;
 import simplifiedbpmn.Event;
 import simplifiedbpmn.FlowElement;
@@ -21,12 +23,16 @@ import simplifiedbpmn.FlowElementContainer;
 import simplifiedbpmn.FlowNode;
 import simplifiedbpmn.Gateway;
 import simplifiedbpmn.GatewayDirection;
+import simplifiedbpmn.IntermediateCatchEvent;
+import simplifiedbpmn.IntermediateEventType;
+import simplifiedbpmn.IntermediateThrowEvent;
 import simplifiedbpmn.ORGateway;
 import simplifiedbpmn.ResourceRole;
 import simplifiedbpmn.SequenceFlow;
 import simplifiedbpmn.SimplifiedbpmnPackage;
 import simplifiedbpmn.StartEvent;
 import simplifiedbpmn.Task;
+import simplifiedbpmn.ThrowEvent;
 import simplifiedbpmn.XORGateway;
 
 /**
@@ -126,14 +132,26 @@ public class SimplifiedbpmnValidator extends EObjectValidator {
 			return validateTask((Task) value, diagnostics, context);
 		case SimplifiedbpmnPackage.EVENT:
 			return validateEvent((Event) value, diagnostics, context);
+		case SimplifiedbpmnPackage.CATCH_EVENT:
+			return validateCatchEvent((CatchEvent) value, diagnostics, context);
 		case SimplifiedbpmnPackage.START_EVENT:
 			return validateStartEvent((StartEvent) value, diagnostics, context);
+		case SimplifiedbpmnPackage.INTERMEDIATE_CATCH_EVENT:
+			return validateIntermediateCatchEvent((IntermediateCatchEvent) value, diagnostics, context);
+		case SimplifiedbpmnPackage.BOUNDARY_EVENT:
+			return validateBoundaryEvent((BoundaryEvent) value, diagnostics, context);
+		case SimplifiedbpmnPackage.THROW_EVENT:
+			return validateThrowEvent((ThrowEvent) value, diagnostics, context);
 		case SimplifiedbpmnPackage.END_EVENT:
 			return validateEndEvent((EndEvent) value, diagnostics, context);
+		case SimplifiedbpmnPackage.INTERMEDIATE_THROW_EVENT:
+			return validateIntermediateThrowEvent((IntermediateThrowEvent) value, diagnostics, context);
 		case SimplifiedbpmnPackage.RESOURCE_ROLE:
 			return validateResourceRole((ResourceRole) value, diagnostics, context);
 		case SimplifiedbpmnPackage.GATEWAY_DIRECTION:
 			return validateGatewayDirection((GatewayDirection) value, diagnostics, context);
+		case SimplifiedbpmnPackage.INTERMEDIATE_EVENT_TYPE:
+			return validateIntermediateEventType((IntermediateEventType) value, diagnostics, context);
 		default:
 			return true;
 		}
@@ -377,6 +395,15 @@ public class SimplifiedbpmnValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean validateCatchEvent(CatchEvent catchEvent, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(catchEvent, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean validateStartEvent(StartEvent startEvent, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		if (!validate_NoCircularContainment(startEvent, diagnostics, context))
 			return false;
@@ -419,6 +446,35 @@ public class SimplifiedbpmnValidator extends EObjectValidator {
 		return validate(SimplifiedbpmnPackage.Literals.START_EVENT, startEvent, diagnostics, context,
 				"http://www.eclipse.org/emf/2002/Ecore/OCL", "noIncomingFlow",
 				START_EVENT__NO_INCOMING_FLOW__EEXPRESSION, Diagnostic.ERROR, DIAGNOSTIC_SOURCE, 0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateIntermediateCatchEvent(IntermediateCatchEvent intermediateCatchEvent,
+			DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(intermediateCatchEvent, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateBoundaryEvent(BoundaryEvent boundaryEvent, DiagnosticChain diagnostics,
+			Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(boundaryEvent, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateThrowEvent(ThrowEvent throwEvent, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(throwEvent, diagnostics, context);
 	}
 
 	/**
@@ -475,6 +531,16 @@ public class SimplifiedbpmnValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean validateIntermediateThrowEvent(IntermediateThrowEvent intermediateThrowEvent,
+			DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(intermediateThrowEvent, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean validateResourceRole(ResourceRole resourceRole, DiagnosticChain diagnostics,
 			Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(resourceRole, diagnostics, context);
@@ -487,6 +553,16 @@ public class SimplifiedbpmnValidator extends EObjectValidator {
 	 */
 	public boolean validateGatewayDirection(GatewayDirection gatewayDirection, DiagnosticChain diagnostics,
 			Map<Object, Object> context) {
+		return true;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateIntermediateEventType(IntermediateEventType intermediateEventType,
+			DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return true;
 	}
 

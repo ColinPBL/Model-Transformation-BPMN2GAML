@@ -13,6 +13,8 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import simplifiedbpmn.ANDGateway;
 import simplifiedbpmn.Activity;
+import simplifiedbpmn.BoundaryEvent;
+import simplifiedbpmn.CatchEvent;
 import simplifiedbpmn.EndEvent;
 import simplifiedbpmn.Event;
 import simplifiedbpmn.FlowElement;
@@ -20,6 +22,9 @@ import simplifiedbpmn.FlowElementContainer;
 import simplifiedbpmn.FlowNode;
 import simplifiedbpmn.Gateway;
 import simplifiedbpmn.GatewayDirection;
+import simplifiedbpmn.IntermediateCatchEvent;
+import simplifiedbpmn.IntermediateEventType;
+import simplifiedbpmn.IntermediateThrowEvent;
 import simplifiedbpmn.ORGateway;
 import simplifiedbpmn.ResourceRole;
 import simplifiedbpmn.SequenceFlow;
@@ -27,6 +32,7 @@ import simplifiedbpmn.SimplifiedbpmnFactory;
 import simplifiedbpmn.SimplifiedbpmnPackage;
 import simplifiedbpmn.StartEvent;
 import simplifiedbpmn.Task;
+import simplifiedbpmn.ThrowEvent;
 import simplifiedbpmn.XORGateway;
 
 import simplifiedbpmn.util.SimplifiedbpmnValidator;
@@ -127,6 +133,13 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass catchEventEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass startEventEClass = null;
 
 	/**
@@ -134,7 +147,35 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass intermediateCatchEventEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass boundaryEventEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass throwEventEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass endEventEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass intermediateThrowEventEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -149,6 +190,13 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 	 * @generated
 	 */
 	private EEnum gatewayDirectionEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum intermediateEventTypeEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -415,6 +463,15 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getCatchEvent() {
+		return catchEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getStartEvent() {
 		return startEventEClass;
 	}
@@ -424,8 +481,71 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getIntermediateCatchEvent() {
+		return intermediateCatchEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getIntermediateCatchEvent_EventType() {
+		return (EAttribute) intermediateCatchEventEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getBoundaryEvent() {
+		return boundaryEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getBoundaryEvent_EventType() {
+		return (EAttribute) boundaryEventEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getThrowEvent() {
+		return throwEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getEndEvent() {
 		return endEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getIntermediateThrowEvent() {
+		return intermediateThrowEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getIntermediateThrowEvent_EventType() {
+		return (EAttribute) intermediateThrowEventEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -462,6 +582,15 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 	 */
 	public EEnum getGatewayDirection() {
 		return gatewayDirectionEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EEnum getIntermediateEventType() {
+		return intermediateEventTypeEEnum;
 	}
 
 	/**
@@ -526,9 +655,22 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 
 		eventEClass = createEClass(EVENT);
 
+		catchEventEClass = createEClass(CATCH_EVENT);
+
 		startEventEClass = createEClass(START_EVENT);
 
+		intermediateCatchEventEClass = createEClass(INTERMEDIATE_CATCH_EVENT);
+		createEAttribute(intermediateCatchEventEClass, INTERMEDIATE_CATCH_EVENT__EVENT_TYPE);
+
+		boundaryEventEClass = createEClass(BOUNDARY_EVENT);
+		createEAttribute(boundaryEventEClass, BOUNDARY_EVENT__EVENT_TYPE);
+
+		throwEventEClass = createEClass(THROW_EVENT);
+
 		endEventEClass = createEClass(END_EVENT);
+
+		intermediateThrowEventEClass = createEClass(INTERMEDIATE_THROW_EVENT);
+		createEAttribute(intermediateThrowEventEClass, INTERMEDIATE_THROW_EVENT__EVENT_TYPE);
 
 		resourceRoleEClass = createEClass(RESOURCE_ROLE);
 		createEAttribute(resourceRoleEClass, RESOURCE_ROLE__NAME);
@@ -536,6 +678,7 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 
 		// Create enums
 		gatewayDirectionEEnum = createEEnum(GATEWAY_DIRECTION);
+		intermediateEventTypeEEnum = createEEnum(INTERMEDIATE_EVENT_TYPE);
 	}
 
 	/**
@@ -577,8 +720,13 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 		activityEClass.getESuperTypes().add(this.getFlowNode());
 		taskEClass.getESuperTypes().add(this.getActivity());
 		eventEClass.getESuperTypes().add(this.getFlowNode());
-		startEventEClass.getESuperTypes().add(this.getEvent());
-		endEventEClass.getESuperTypes().add(this.getEvent());
+		catchEventEClass.getESuperTypes().add(this.getEvent());
+		startEventEClass.getESuperTypes().add(this.getCatchEvent());
+		intermediateCatchEventEClass.getESuperTypes().add(this.getCatchEvent());
+		boundaryEventEClass.getESuperTypes().add(this.getCatchEvent());
+		throwEventEClass.getESuperTypes().add(this.getEvent());
+		endEventEClass.getESuperTypes().add(this.getThrowEvent());
+		intermediateThrowEventEClass.getESuperTypes().add(this.getThrowEvent());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(flowElementEClass, FlowElement.class, "FlowElement", IS_ABSTRACT, !IS_INTERFACE,
@@ -638,11 +786,35 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 
 		initEClass(eventEClass, Event.class, "Event", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
+		initEClass(catchEventEClass, CatchEvent.class, "CatchEvent", IS_ABSTRACT, !IS_INTERFACE,
+				IS_GENERATED_INSTANCE_CLASS);
+
 		initEClass(startEventEClass, StartEvent.class, "StartEvent", !IS_ABSTRACT, !IS_INTERFACE,
+				IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(intermediateCatchEventEClass, IntermediateCatchEvent.class, "IntermediateCatchEvent", !IS_ABSTRACT,
+				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getIntermediateCatchEvent_EventType(), this.getIntermediateEventType(), "eventType", null, 1, 1,
+				IntermediateCatchEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(boundaryEventEClass, BoundaryEvent.class, "BoundaryEvent", !IS_ABSTRACT, !IS_INTERFACE,
+				IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getBoundaryEvent_EventType(), this.getIntermediateEventType(), "eventType", null, 1, 1,
+				BoundaryEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
+
+		initEClass(throwEventEClass, ThrowEvent.class, "ThrowEvent", IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(endEventEClass, EndEvent.class, "EndEvent", !IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(intermediateThrowEventEClass, IntermediateThrowEvent.class, "IntermediateThrowEvent", !IS_ABSTRACT,
+				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getIntermediateThrowEvent_EventType(), this.getIntermediateEventType(), "eventType", null, 1, 1,
+				IntermediateThrowEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(resourceRoleEClass, ResourceRole.class, "ResourceRole", !IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
@@ -659,6 +831,10 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 		addEEnumLiteral(gatewayDirectionEEnum, GatewayDirection.CONVERGING);
 		addEEnumLiteral(gatewayDirectionEEnum, GatewayDirection.DIVERGING);
 		addEEnumLiteral(gatewayDirectionEEnum, GatewayDirection.MIXED);
+
+		initEEnum(intermediateEventTypeEEnum, IntermediateEventType.class, "IntermediateEventType");
+		addEEnumLiteral(intermediateEventTypeEEnum, IntermediateEventType.MESSAGE);
+		addEEnumLiteral(intermediateEventTypeEEnum, IntermediateEventType.SIGNAL);
 
 		// Create resource
 		createResource(eNS_URI);

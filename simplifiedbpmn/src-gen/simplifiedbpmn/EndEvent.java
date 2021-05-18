@@ -13,5 +13,5 @@ package simplifiedbpmn;
  *        annotation="http://www.eclipse.org/emf/2002/Ecore/OCL noOutgoingFlow='self.outgoing-&gt;size() = 0'"
  * @generated
  */
-public interface EndEvent extends Event {
+public interface EndEvent extends ThrowEvent {
 } // EndEvent
