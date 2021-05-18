@@ -11,39 +11,37 @@ package simplifiedbpmn;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link simplifiedbpmn.Gateway#getType <em>Type</em>}</li>
+ *   <li>{@link simplifiedbpmn.Gateway#getGatewayDirection <em>Gateway Direction</em>}</li>
  * </ul>
  *
  * @see simplifiedbpmn.SimplifiedbpmnPackage#getGateway()
  * @model abstract="true"
- *        annotation="http://www.eclipse.org/emf/2002/Ecore constraints='isJoinOrFork'"
- *        annotation="http://www.eclipse.org/emf/2002/Ecore/OCL isJoinOrFork='\n\t\tif self.type = 1 then\n\t\t\t(self.outgoing-&gt;size() = 1 and self.incoming-&gt;size() &gt; 1)\n\t\telse\n\t\t\t(self.incoming-&gt;size() = 1 and self.outgoing-&gt;size() &gt; 1)\n\t\tendif'"
  * @generated
  */
 public interface Gateway extends FlowNode {
 	/**
-	 * Returns the value of the '<em><b>Type</b></em>' attribute.
+	 * Returns the value of the '<em><b>Gateway Direction</b></em>' attribute.
 	 * The literals are from the enumeration {@link simplifiedbpmn.GatewayDirection}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Type</em>' attribute.
+	 * @return the value of the '<em>Gateway Direction</em>' attribute.
 	 * @see simplifiedbpmn.GatewayDirection
-	 * @see #setType(GatewayDirection)
-	 * @see simplifiedbpmn.SimplifiedbpmnPackage#getGateway_Type()
+	 * @see #setGatewayDirection(GatewayDirection)
+	 * @see simplifiedbpmn.SimplifiedbpmnPackage#getGateway_GatewayDirection()
 	 * @model required="true"
 	 * @generated
 	 */
-	GatewayDirection getType();
+	GatewayDirection getGatewayDirection();
 
 	/**
-	 * Sets the value of the '{@link simplifiedbpmn.Gateway#getType <em>Type</em>}' attribute.
+	 * Sets the value of the '{@link simplifiedbpmn.Gateway#getGatewayDirection <em>Gateway Direction</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Type</em>' attribute.
+	 * @param value the new value of the '<em>Gateway Direction</em>' attribute.
 	 * @see simplifiedbpmn.GatewayDirection
-	 * @see #getType()
+	 * @see #getGatewayDirection()
 	 * @generated
 	 */
-	void setType(GatewayDirection value);
+	void setGatewayDirection(GatewayDirection value);
 
 } // Gateway

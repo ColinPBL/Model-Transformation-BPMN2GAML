@@ -20,6 +20,7 @@ import simplifiedbpmn.FlowElementContainer;
 import simplifiedbpmn.FlowNode;
 import simplifiedbpmn.Gateway;
 import simplifiedbpmn.GatewayDirection;
+import simplifiedbpmn.ORGateway;
 import simplifiedbpmn.ResourceRole;
 import simplifiedbpmn.SequenceFlow;
 import simplifiedbpmn.SimplifiedbpmnFactory;
@@ -92,6 +93,13 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 	 * @generated
 	 */
 	private EClass xorGatewayEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass orGatewayEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -344,7 +352,7 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getGateway_Type() {
+	public EAttribute getGateway_GatewayDirection() {
 		return (EAttribute) gatewayEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -364,6 +372,15 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 	 */
 	public EClass getXORGateway() {
 		return xorGatewayEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getORGateway() {
+		return orGatewayEClass;
 	}
 
 	/**
@@ -495,11 +512,13 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 		createEReference(sequenceFlowEClass, SEQUENCE_FLOW__SOURCE_REF);
 
 		gatewayEClass = createEClass(GATEWAY);
-		createEAttribute(gatewayEClass, GATEWAY__TYPE);
+		createEAttribute(gatewayEClass, GATEWAY__GATEWAY_DIRECTION);
 
 		andGatewayEClass = createEClass(AND_GATEWAY);
 
 		xorGatewayEClass = createEClass(XOR_GATEWAY);
+
+		orGatewayEClass = createEClass(OR_GATEWAY);
 
 		activityEClass = createEClass(ACTIVITY);
 
@@ -554,6 +573,7 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 		gatewayEClass.getESuperTypes().add(this.getFlowNode());
 		andGatewayEClass.getESuperTypes().add(this.getGateway());
 		xorGatewayEClass.getESuperTypes().add(this.getGateway());
+		orGatewayEClass.getESuperTypes().add(this.getGateway());
 		activityEClass.getESuperTypes().add(this.getFlowNode());
 		taskEClass.getESuperTypes().add(this.getActivity());
 		eventEClass.getESuperTypes().add(this.getFlowNode());
@@ -599,13 +619,17 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(gatewayEClass, Gateway.class, "Gateway", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getGateway_Type(), this.getGatewayDirection(), "type", null, 1, 1, Gateway.class, !IS_TRANSIENT,
-				!IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getGateway_GatewayDirection(), this.getGatewayDirection(), "gatewayDirection", null, 1, 1,
+				Gateway.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
 
 		initEClass(andGatewayEClass, ANDGateway.class, "ANDGateway", !IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(xorGatewayEClass, XORGateway.class, "XORGateway", !IS_ABSTRACT, !IS_INTERFACE,
+				IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(orGatewayEClass, ORGateway.class, "ORGateway", !IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(activityEClass, Activity.class, "Activity", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -659,7 +683,6 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 						"http://www.eclipse.org/emf/2002/Ecore/OCL", "validationDelegates",
 						"http://www.eclipse.org/emf/2002/Ecore/OCL" });
 		addAnnotation(flowElementContainerEClass, source, new String[] { "constraints", "onlyOneStartEvent" });
-		addAnnotation(gatewayEClass, source, new String[] { "constraints", "isJoinOrFork" });
 		addAnnotation(taskEClass, source, new String[] { "constraints", "oneIn oneOut" });
 		addAnnotation(startEventEClass, source, new String[] { "constraints", "noIncomingFlow" });
 		addAnnotation(endEventEClass, source, new String[] { "constraints", "noOutgoingFlow" });
@@ -675,8 +698,6 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 		String source = "http://www.eclipse.org/emf/2002/Ecore/OCL";
 		addAnnotation(flowElementContainerEClass, source, new String[] { "onlyOneStartEvent",
 				"\n\t\tself.flowElements->select(e | e.oclIsTypeOf(StartEvent) )->size() = 1" });
-		addAnnotation(gatewayEClass, source, new String[] { "isJoinOrFork",
-				"\n\t\tif self.type = 1 then\n\t\t\t(self.outgoing->size() = 1 and self.incoming->size() > 1)\n\t\telse\n\t\t\t(self.incoming->size() = 1 and self.outgoing->size() > 1)\n\t\tendif" });
 		addAnnotation(taskEClass, source,
 				new String[] { "oneIn", "self.incoming->size() = 1", "oneOut", "self.outgoing->size() = 1" });
 		addAnnotation(startEventEClass, source, new String[] { "noIncomingFlow", "self.incoming->size() = 0" });

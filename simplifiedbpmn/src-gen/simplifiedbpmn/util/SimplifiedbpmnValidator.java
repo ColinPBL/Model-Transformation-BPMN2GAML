@@ -21,6 +21,7 @@ import simplifiedbpmn.FlowElementContainer;
 import simplifiedbpmn.FlowNode;
 import simplifiedbpmn.Gateway;
 import simplifiedbpmn.GatewayDirection;
+import simplifiedbpmn.ORGateway;
 import simplifiedbpmn.ResourceRole;
 import simplifiedbpmn.SequenceFlow;
 import simplifiedbpmn.SimplifiedbpmnPackage;
@@ -117,6 +118,8 @@ public class SimplifiedbpmnValidator extends EObjectValidator {
 			return validateANDGateway((ANDGateway) value, diagnostics, context);
 		case SimplifiedbpmnPackage.XOR_GATEWAY:
 			return validateXORGateway((XORGateway) value, diagnostics, context);
+		case SimplifiedbpmnPackage.OR_GATEWAY:
+			return validateORGateway((ORGateway) value, diagnostics, context);
 		case SimplifiedbpmnPackage.ACTIVITY:
 			return validateActivity((Activity) value, diagnostics, context);
 		case SimplifiedbpmnPackage.TASK:
@@ -251,49 +254,7 @@ public class SimplifiedbpmnValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateGateway(Gateway gateway, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		if (!validate_NoCircularContainment(gateway, diagnostics, context))
-			return false;
-		boolean result = validate_EveryMultiplicityConforms(gateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validate_EveryDataValueConforms(gateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validate_EveryReferenceIsContained(gateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validate_EveryBidirectionalReferenceIsPaired(gateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validate_EveryProxyResolves(gateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validate_UniqueID(gateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validate_EveryKeyUnique(gateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validate_EveryMapEntryUnique(gateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validateGateway_isJoinOrFork(gateway, diagnostics, context);
-		return result;
-	}
-
-	/**
-	 * The cached validation expression for the isJoinOrFork constraint of '<em>Gateway</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected static final String GATEWAY__IS_JOIN_OR_FORK__EEXPRESSION = "\n" + "\t\tif self.type = 1 then\n"
-			+ "\t\t\t(self.outgoing->size() = 1 and self.incoming->size() > 1)\n" + "\t\telse\n"
-			+ "\t\t\t(self.incoming->size() = 1 and self.outgoing->size() > 1)\n" + "\t\tendif";
-
-	/**
-	 * Validates the isJoinOrFork constraint of '<em>Gateway</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateGateway_isJoinOrFork(Gateway gateway, DiagnosticChain diagnostics,
-			Map<Object, Object> context) {
-		return validate(SimplifiedbpmnPackage.Literals.GATEWAY, gateway, diagnostics, context,
-				"http://www.eclipse.org/emf/2002/Ecore/OCL", "isJoinOrFork", GATEWAY__IS_JOIN_OR_FORK__EEXPRESSION,
-				Diagnostic.ERROR, DIAGNOSTIC_SOURCE, 0);
+		return validate_EveryDefaultConstraint(gateway, diagnostics, context);
 	}
 
 	/**
@@ -302,26 +263,7 @@ public class SimplifiedbpmnValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateANDGateway(ANDGateway andGateway, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		if (!validate_NoCircularContainment(andGateway, diagnostics, context))
-			return false;
-		boolean result = validate_EveryMultiplicityConforms(andGateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validate_EveryDataValueConforms(andGateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validate_EveryReferenceIsContained(andGateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validate_EveryBidirectionalReferenceIsPaired(andGateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validate_EveryProxyResolves(andGateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validate_UniqueID(andGateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validate_EveryKeyUnique(andGateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validate_EveryMapEntryUnique(andGateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validateGateway_isJoinOrFork(andGateway, diagnostics, context);
-		return result;
+		return validate_EveryDefaultConstraint(andGateway, diagnostics, context);
 	}
 
 	/**
@@ -330,26 +272,16 @@ public class SimplifiedbpmnValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateXORGateway(XORGateway xorGateway, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		if (!validate_NoCircularContainment(xorGateway, diagnostics, context))
-			return false;
-		boolean result = validate_EveryMultiplicityConforms(xorGateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validate_EveryDataValueConforms(xorGateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validate_EveryReferenceIsContained(xorGateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validate_EveryBidirectionalReferenceIsPaired(xorGateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validate_EveryProxyResolves(xorGateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validate_UniqueID(xorGateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validate_EveryKeyUnique(xorGateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validate_EveryMapEntryUnique(xorGateway, diagnostics, context);
-		if (result || diagnostics != null)
-			result &= validateGateway_isJoinOrFork(xorGateway, diagnostics, context);
-		return result;
+		return validate_EveryDefaultConstraint(xorGateway, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateORGateway(ORGateway orGateway, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(orGateway, diagnostics, context);
 	}
 
 	/**

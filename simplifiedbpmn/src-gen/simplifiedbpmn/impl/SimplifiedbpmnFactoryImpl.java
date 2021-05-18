@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import simplifiedbpmn.ANDGateway;
 import simplifiedbpmn.EndEvent;
 import simplifiedbpmn.GatewayDirection;
+import simplifiedbpmn.ORGateway;
 import simplifiedbpmn.ResourceRole;
 import simplifiedbpmn.SequenceFlow;
 import simplifiedbpmn.SimplifiedbpmnFactory;
@@ -74,6 +75,8 @@ public class SimplifiedbpmnFactoryImpl extends EFactoryImpl implements Simplifie
 			return createANDGateway();
 		case SimplifiedbpmnPackage.XOR_GATEWAY:
 			return createXORGateway();
+		case SimplifiedbpmnPackage.OR_GATEWAY:
+			return createORGateway();
 		case SimplifiedbpmnPackage.TASK:
 			return createTask();
 		case SimplifiedbpmnPackage.START_EVENT:
@@ -155,6 +158,16 @@ public class SimplifiedbpmnFactoryImpl extends EFactoryImpl implements Simplifie
 	public XORGateway createXORGateway() {
 		XORGatewayImpl xorGateway = new XORGatewayImpl();
 		return xorGateway;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ORGateway createORGateway() {
+		ORGatewayImpl orGateway = new ORGatewayImpl();
+		return orGateway;
 	}
 
 	/**

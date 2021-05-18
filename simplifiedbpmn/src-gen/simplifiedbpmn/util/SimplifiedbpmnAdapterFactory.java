@@ -17,6 +17,7 @@ import simplifiedbpmn.FlowElement;
 import simplifiedbpmn.FlowElementContainer;
 import simplifiedbpmn.FlowNode;
 import simplifiedbpmn.Gateway;
+import simplifiedbpmn.ORGateway;
 import simplifiedbpmn.ResourceRole;
 import simplifiedbpmn.SequenceFlow;
 import simplifiedbpmn.SimplifiedbpmnPackage;
@@ -117,6 +118,11 @@ public class SimplifiedbpmnAdapterFactory extends AdapterFactoryImpl {
 		@Override
 		public Adapter caseXORGateway(XORGateway object) {
 			return createXORGatewayAdapter();
+		}
+
+		@Override
+		public Adapter caseORGateway(ORGateway object) {
+			return createORGatewayAdapter();
 		}
 
 		@Override
@@ -277,6 +283,20 @@ public class SimplifiedbpmnAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createXORGatewayAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link simplifiedbpmn.ORGateway <em>OR Gateway</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see simplifiedbpmn.ORGateway
+	 * @generated
+	 */
+	public Adapter createORGatewayAdapter() {
 		return null;
 	}
 

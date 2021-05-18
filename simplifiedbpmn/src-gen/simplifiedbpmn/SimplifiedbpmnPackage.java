@@ -335,13 +335,13 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	int GATEWAY__OUTGOING = FLOW_NODE__OUTGOING;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * The feature id for the '<em><b>Gateway Direction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GATEWAY__TYPE = FLOW_NODE_FEATURE_COUNT + 0;
+	int GATEWAY__GATEWAY_DIRECTION = FLOW_NODE_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Gateway</em>' class.
@@ -399,13 +399,13 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	int AND_GATEWAY__OUTGOING = GATEWAY__OUTGOING;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * The feature id for the '<em><b>Gateway Direction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int AND_GATEWAY__TYPE = GATEWAY__TYPE;
+	int AND_GATEWAY__GATEWAY_DIRECTION = GATEWAY__GATEWAY_DIRECTION;
 
 	/**
 	 * The number of structural features of the '<em>AND Gateway</em>' class.
@@ -463,13 +463,13 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	int XOR_GATEWAY__OUTGOING = GATEWAY__OUTGOING;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * The feature id for the '<em><b>Gateway Direction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int XOR_GATEWAY__TYPE = GATEWAY__TYPE;
+	int XOR_GATEWAY__GATEWAY_DIRECTION = GATEWAY__GATEWAY_DIRECTION;
 
 	/**
 	 * The number of structural features of the '<em>XOR Gateway</em>' class.
@@ -490,6 +490,70 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	int XOR_GATEWAY_OPERATION_COUNT = GATEWAY_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link simplifiedbpmn.impl.ORGatewayImpl <em>OR Gateway</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see simplifiedbpmn.impl.ORGatewayImpl
+	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getORGateway()
+	 * @generated
+	 */
+	int OR_GATEWAY = 8;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OR_GATEWAY__NAME = GATEWAY__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Incoming</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OR_GATEWAY__INCOMING = GATEWAY__INCOMING;
+
+	/**
+	 * The feature id for the '<em><b>Outgoing</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OR_GATEWAY__OUTGOING = GATEWAY__OUTGOING;
+
+	/**
+	 * The feature id for the '<em><b>Gateway Direction</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OR_GATEWAY__GATEWAY_DIRECTION = GATEWAY__GATEWAY_DIRECTION;
+
+	/**
+	 * The number of structural features of the '<em>OR Gateway</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OR_GATEWAY_FEATURE_COUNT = GATEWAY_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>OR Gateway</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OR_GATEWAY_OPERATION_COUNT = GATEWAY_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link simplifiedbpmn.impl.ActivityImpl <em>Activity</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -497,7 +561,7 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getActivity()
 	 * @generated
 	 */
-	int ACTIVITY = 8;
+	int ACTIVITY = 9;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -552,7 +616,7 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getTask()
 	 * @generated
 	 */
-	int TASK = 9;
+	int TASK = 10;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -607,7 +671,7 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getEvent()
 	 * @generated
 	 */
-	int EVENT = 10;
+	int EVENT = 11;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -662,7 +726,7 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getStartEvent()
 	 * @generated
 	 */
-	int START_EVENT = 11;
+	int START_EVENT = 12;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -717,7 +781,7 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getEndEvent()
 	 * @generated
 	 */
-	int END_EVENT = 12;
+	int END_EVENT = 13;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -772,7 +836,7 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getResourceRole()
 	 * @generated
 	 */
-	int RESOURCE_ROLE = 13;
+	int RESOURCE_ROLE = 14;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -818,7 +882,7 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getGatewayDirection()
 	 * @generated
 	 */
-	int GATEWAY_DIRECTION = 14;
+	int GATEWAY_DIRECTION = 15;
 
 	/**
 	 * Returns the meta object for class '{@link simplifiedbpmn.FlowElement <em>Flow Element</em>}'.
@@ -969,15 +1033,15 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	EClass getGateway();
 
 	/**
-	 * Returns the meta object for the attribute '{@link simplifiedbpmn.Gateway#getType <em>Type</em>}'.
+	 * Returns the meta object for the attribute '{@link simplifiedbpmn.Gateway#getGatewayDirection <em>Gateway Direction</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Type</em>'.
-	 * @see simplifiedbpmn.Gateway#getType()
+	 * @return the meta object for the attribute '<em>Gateway Direction</em>'.
+	 * @see simplifiedbpmn.Gateway#getGatewayDirection()
 	 * @see #getGateway()
 	 * @generated
 	 */
-	EAttribute getGateway_Type();
+	EAttribute getGateway_GatewayDirection();
 
 	/**
 	 * Returns the meta object for class '{@link simplifiedbpmn.ANDGateway <em>AND Gateway</em>}'.
@@ -998,6 +1062,16 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getXORGateway();
+
+	/**
+	 * Returns the meta object for class '{@link simplifiedbpmn.ORGateway <em>OR Gateway</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>OR Gateway</em>'.
+	 * @see simplifiedbpmn.ORGateway
+	 * @generated
+	 */
+	EClass getORGateway();
 
 	/**
 	 * Returns the meta object for class '{@link simplifiedbpmn.Activity <em>Activity</em>}'.
@@ -1239,12 +1313,12 @@ public interface SimplifiedbpmnPackage extends EPackage {
 		EClass GATEWAY = eINSTANCE.getGateway();
 
 		/**
-		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Gateway Direction</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute GATEWAY__TYPE = eINSTANCE.getGateway_Type();
+		EAttribute GATEWAY__GATEWAY_DIRECTION = eINSTANCE.getGateway_GatewayDirection();
 
 		/**
 		 * The meta object literal for the '{@link simplifiedbpmn.impl.ANDGatewayImpl <em>AND Gateway</em>}' class.
@@ -1265,6 +1339,16 @@ public interface SimplifiedbpmnPackage extends EPackage {
 		 * @generated
 		 */
 		EClass XOR_GATEWAY = eINSTANCE.getXORGateway();
+
+		/**
+		 * The meta object literal for the '{@link simplifiedbpmn.impl.ORGatewayImpl <em>OR Gateway</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see simplifiedbpmn.impl.ORGatewayImpl
+		 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getORGateway()
+		 * @generated
+		 */
+		EClass OR_GATEWAY = eINSTANCE.getORGateway();
 
 		/**
 		 * The meta object literal for the '{@link simplifiedbpmn.impl.ActivityImpl <em>Activity</em>}' class.

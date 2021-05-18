@@ -50,6 +50,18 @@ rule XORGateway2XORGateway {
 		)
 }
 
+rule ORGateway2ORGateway {
+	from 
+		in_gateway: BPMN!InclusiveGateway
+	to
+		out_gateway: SimplifiedBPMN!ORGateway (
+			outgoing <- in_gateway.outgoing,
+			incoming <- in_gateway.incoming,
+			name <- in_gateway.name,
+			gatewayDirection <- in_gateway.gatewayDirection
+		)
+}
+
 rule SequenceFlow2SequenceFlow {
 	from
 		in_flow: BPMN!SequenceFlow

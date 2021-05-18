@@ -32,10 +32,11 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference simplifiedbpmn.ecore#//SequenceFlow/sourceRef"/>
     </genClasses>
     <genClasses image="false" ecoreClass="simplifiedbpmn.ecore#//Gateway">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute simplifiedbpmn.ecore#//Gateway/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute simplifiedbpmn.ecore#//Gateway/gatewayDirection"/>
     </genClasses>
     <genClasses ecoreClass="simplifiedbpmn.ecore#//ANDGateway"/>
     <genClasses ecoreClass="simplifiedbpmn.ecore#//XORGateway"/>
+    <genClasses ecoreClass="simplifiedbpmn.ecore#//ORGateway"/>
     <genClasses image="false" ecoreClass="simplifiedbpmn.ecore#//Activity"/>
     <genClasses ecoreClass="simplifiedbpmn.ecore#//Task"/>
     <genClasses image="false" ecoreClass="simplifiedbpmn.ecore#//Event"/>

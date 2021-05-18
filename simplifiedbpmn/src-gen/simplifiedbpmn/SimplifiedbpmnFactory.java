@@ -58,6 +58,15 @@ public interface SimplifiedbpmnFactory extends EFactory {
 	XORGateway createXORGateway();
 
 	/**
+	 * Returns a new object of class '<em>OR Gateway</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>OR Gateway</em>'.
+	 * @generated
+	 */
+	ORGateway createORGateway();
+
+	/**
 	 * Returns a new object of class '<em>Task</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

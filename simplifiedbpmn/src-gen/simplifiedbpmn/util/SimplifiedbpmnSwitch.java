@@ -15,6 +15,7 @@ import simplifiedbpmn.FlowElement;
 import simplifiedbpmn.FlowElementContainer;
 import simplifiedbpmn.FlowNode;
 import simplifiedbpmn.Gateway;
+import simplifiedbpmn.ORGateway;
 import simplifiedbpmn.ResourceRole;
 import simplifiedbpmn.SequenceFlow;
 import simplifiedbpmn.SimplifiedbpmnPackage;
@@ -153,6 +154,19 @@ public class SimplifiedbpmnSwitch<T> extends Switch<T> {
 				result = caseFlowNode(xorGateway);
 			if (result == null)
 				result = caseFlowElement(xorGateway);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case SimplifiedbpmnPackage.OR_GATEWAY: {
+			ORGateway orGateway = (ORGateway) theEObject;
+			T result = caseORGateway(orGateway);
+			if (result == null)
+				result = caseGateway(orGateway);
+			if (result == null)
+				result = caseFlowNode(orGateway);
+			if (result == null)
+				result = caseFlowElement(orGateway);
 			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
@@ -347,6 +361,21 @@ public class SimplifiedbpmnSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseXORGateway(XORGateway object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>OR Gateway</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>OR Gateway</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseORGateway(ORGateway object) {
 		return null;
 	}
 
