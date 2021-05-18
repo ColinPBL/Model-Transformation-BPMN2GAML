@@ -83,6 +83,50 @@ rule StartEvent2StartEvent {
 		)
 }
 
+rule MessageCatchEvent2IntermediateCatchEvent {
+	from
+		in_event: BPMN!IntermediateCatchEvent (in_event.eventDefinitions->size() = 1 and in_event.eventDefinitions->first().oclIsTypeOf(BPMN!MessageEventDefinition))
+	to
+		out_event: SimplifiedBPMN!IntermediateCatchEvent(
+			name <- in_event.name,
+			outgoing <- in_event.outgoing,
+			eventType <- #Message
+		)
+}
+
+rule SignalCatchEvent2IntermediateCatchEvent {
+	from
+		in_event: BPMN!IntermediateCatchEvent (in_event.eventDefinitions->size() = 1 and in_event.eventDefinitions->first().oclIsTypeOf(BPMN!SignalEventDefinition))
+	to
+		out_event: SimplifiedBPMN!IntermediateCatchEvent(
+			name <- in_event.name,
+			outgoing <- in_event.outgoing,
+			eventType <- #Signal
+		)
+}
+
+rule MessageThrowEvent2IntermediateThrowEvent {
+	from
+		in_event: BPMN!IntermediateThrowEvent (in_event.eventDefinitions->size() = 1 and in_event.eventDefinitions->first().oclIsTypeOf(BPMN!MessageEventDefinition))
+	to
+		out_event: SimplifiedBPMN!IntermediateThrowEvent(
+			name <- in_event.name,
+			outgoing <- in_event.outgoing,
+			eventType <- #Message
+		)
+}
+
+rule SignalThrowEvent2IntermediateThrowEvent {
+	from
+		in_event: BPMN!IntermediateThrowEvent (in_event.eventDefinitions->size() = 1 and in_event.eventDefinitions->first().oclIsTypeOf(BPMN!SignalEventDefinition))
+	to
+		out_event: SimplifiedBPMN!IntermediateThrowEvent(
+			name <- in_event.name,
+			outgoing <- in_event.outgoing,
+			eventType <- #Signal
+		)
+}
+
 rule EndEvent2EndEvent {
 	from
 		in_start: BPMN!EndEvent
