@@ -8,5 +8,8 @@
     name="Test">
   <processes
       xsi:type="simplifiedbpmn:Process"
-      href="../../BPMN2SimplifiedBPMN/output/testOR.xmi#/"/>
+      href="../../BPMN2SimplifiedBPMN/output/testEvents.xmi#/"/>
+  <processes
+      xsi:type="simplifiedbpmn:Process"
+      href="../../BPMN2SimplifiedBPMN/output/testing_complex_use_cases.xmi#/"/>
 </simplifiedbpmn:ResourceRole>
