@@ -9,18 +9,23 @@ import org.eclipse.emf.ecore.util.Switch;
 
 import simplifiedbpmn.ANDGateway;
 import simplifiedbpmn.Activity;
+import simplifiedbpmn.BoundaryEvent;
+import simplifiedbpmn.CatchEvent;
 import simplifiedbpmn.EndEvent;
 import simplifiedbpmn.Event;
 import simplifiedbpmn.FlowElement;
 import simplifiedbpmn.FlowElementContainer;
 import simplifiedbpmn.FlowNode;
 import simplifiedbpmn.Gateway;
+import simplifiedbpmn.IntermediateCatchEvent;
+import simplifiedbpmn.IntermediateThrowEvent;
 import simplifiedbpmn.ORGateway;
 import simplifiedbpmn.ResourceRole;
 import simplifiedbpmn.SequenceFlow;
 import simplifiedbpmn.SimplifiedbpmnPackage;
 import simplifiedbpmn.StartEvent;
 import simplifiedbpmn.Task;
+import simplifiedbpmn.ThrowEvent;
 import simplifiedbpmn.XORGateway;
 
 /**
@@ -206,9 +211,24 @@ public class SimplifiedbpmnSwitch<T> extends Switch<T> {
 				result = defaultCase(theEObject);
 			return result;
 		}
+		case SimplifiedbpmnPackage.CATCH_EVENT: {
+			CatchEvent catchEvent = (CatchEvent) theEObject;
+			T result = caseCatchEvent(catchEvent);
+			if (result == null)
+				result = caseEvent(catchEvent);
+			if (result == null)
+				result = caseFlowNode(catchEvent);
+			if (result == null)
+				result = caseFlowElement(catchEvent);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
 		case SimplifiedbpmnPackage.START_EVENT: {
 			StartEvent startEvent = (StartEvent) theEObject;
 			T result = caseStartEvent(startEvent);
+			if (result == null)
+				result = caseCatchEvent(startEvent);
 			if (result == null)
 				result = caseEvent(startEvent);
 			if (result == null)
@@ -219,15 +239,75 @@ public class SimplifiedbpmnSwitch<T> extends Switch<T> {
 				result = defaultCase(theEObject);
 			return result;
 		}
+		case SimplifiedbpmnPackage.INTERMEDIATE_CATCH_EVENT: {
+			IntermediateCatchEvent intermediateCatchEvent = (IntermediateCatchEvent) theEObject;
+			T result = caseIntermediateCatchEvent(intermediateCatchEvent);
+			if (result == null)
+				result = caseCatchEvent(intermediateCatchEvent);
+			if (result == null)
+				result = caseEvent(intermediateCatchEvent);
+			if (result == null)
+				result = caseFlowNode(intermediateCatchEvent);
+			if (result == null)
+				result = caseFlowElement(intermediateCatchEvent);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case SimplifiedbpmnPackage.BOUNDARY_EVENT: {
+			BoundaryEvent boundaryEvent = (BoundaryEvent) theEObject;
+			T result = caseBoundaryEvent(boundaryEvent);
+			if (result == null)
+				result = caseCatchEvent(boundaryEvent);
+			if (result == null)
+				result = caseEvent(boundaryEvent);
+			if (result == null)
+				result = caseFlowNode(boundaryEvent);
+			if (result == null)
+				result = caseFlowElement(boundaryEvent);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case SimplifiedbpmnPackage.THROW_EVENT: {
+			ThrowEvent throwEvent = (ThrowEvent) theEObject;
+			T result = caseThrowEvent(throwEvent);
+			if (result == null)
+				result = caseEvent(throwEvent);
+			if (result == null)
+				result = caseFlowNode(throwEvent);
+			if (result == null)
+				result = caseFlowElement(throwEvent);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
 		case SimplifiedbpmnPackage.END_EVENT: {
 			EndEvent endEvent = (EndEvent) theEObject;
 			T result = caseEndEvent(endEvent);
+			if (result == null)
+				result = caseThrowEvent(endEvent);
 			if (result == null)
 				result = caseEvent(endEvent);
 			if (result == null)
 				result = caseFlowNode(endEvent);
 			if (result == null)
 				result = caseFlowElement(endEvent);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case SimplifiedbpmnPackage.INTERMEDIATE_THROW_EVENT: {
+			IntermediateThrowEvent intermediateThrowEvent = (IntermediateThrowEvent) theEObject;
+			T result = caseIntermediateThrowEvent(intermediateThrowEvent);
+			if (result == null)
+				result = caseThrowEvent(intermediateThrowEvent);
+			if (result == null)
+				result = caseEvent(intermediateThrowEvent);
+			if (result == null)
+				result = caseFlowNode(intermediateThrowEvent);
+			if (result == null)
+				result = caseFlowElement(intermediateThrowEvent);
 			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
@@ -425,6 +505,21 @@ public class SimplifiedbpmnSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Catch Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Catch Event</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCatchEvent(CatchEvent object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Start Event</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -440,6 +535,51 @@ public class SimplifiedbpmnSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Intermediate Catch Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Intermediate Catch Event</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseIntermediateCatchEvent(IntermediateCatchEvent object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Boundary Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Boundary Event</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBoundaryEvent(BoundaryEvent object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Throw Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Throw Event</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseThrowEvent(ThrowEvent object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>End Event</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -451,6 +591,21 @@ public class SimplifiedbpmnSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseEndEvent(EndEvent object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Intermediate Throw Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Intermediate Throw Event</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseIntermediateThrowEvent(IntermediateThrowEvent object) {
 		return null;
 	}
 

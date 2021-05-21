@@ -14,7 +14,7 @@ import simplifiedbpmn.StartEvent;
  *
  * @generated
  */
-public class StartEventImpl extends EventImpl implements StartEvent {
+public class StartEventImpl extends CatchEventImpl implements StartEvent {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

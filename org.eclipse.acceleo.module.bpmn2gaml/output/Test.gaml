@@ -6,12 +6,17 @@ model test
 * to adapt and modify this file as needed.
 */
 
-species test {
-
-	int counter_testor <- 0;
+species test skills : [messaging] {
+	int counter_testevents <- 0;
 	int counter_a <- 0;
 	int counter_b <- 0;
-
+	int counter_c <- 0;
+	int counter_d <- 0;
+	int counter_b_bis <- 0;
+	int counter_a_bis <- 0;
+			
+	bool flag_intermediate_catch_event_2 <- false;
+			
 	/**
 	* This is a list of methods derived from the different tasks specified in this agent's BPMN representation
 	* They are supposed to be called at each cycle when the agent is doing the corresponding activity
@@ -26,6 +31,22 @@ species test {
 		//TODO
 		return false;
 	}
+	bool action_c {
+		//TODO
+		return false;
+	}
+	bool action_d {
+		//TODO
+		return false;
+	}
+	bool action_b_bis {
+		//TODO
+		return false;
+	}
+	bool action_a_bis {
+		//TODO
+		return false;
+	}
 
 	//This string is used to determine which process the agent is currently doing
 	string current_process <- nil;
@@ -34,49 +55,117 @@ species test {
 	list<string> tasks <- [];
 
 	reflex idle when: (current_process = nil) {
-	/**
-	* This is where the agent will look at its environment and decide which process to use
-	* For each process, replace "true" by the corresponding condition
-	*/
+		/**
+		* This is where the agent will look at its environment and decide which process to use
+		* For each process, replace "true" by the corresponding condition
+		*/
 		if (true and current_process = nil) {
-			current_process <- "testor";
+			current_process <- "testevents";
+			//Generated from an exclusive gateway
 			if(true) {
-				add "a" to: tasks;
+				if(not ("a" in tasks)) {
+					add "a" to: tasks;
+				}
 			}
-			
-			if(true) {
-				add "b" to: tasks;
+			else if(true) {
+				if(not ("b" in tasks)) {
+					add "b" to: tasks;
+				}
 			}
 		}
 	}
 
-	reflex testor when: (current_process = "testor") {
-		counter_testor <- counter_testor + 1;
+	reflex testevents when: (current_process = "testevents") {
+		counter_testevents <- counter_testevents + 1;
 		
 		if ("a" in tasks) {
+			if(true) {
+				if(not ("a_bis" in tasks)) {
+					add "a_bis" to: tasks;
+				}
+			}
 			bool result <- action_a();
-		
 			if(result) {
 				remove "a" from: tasks;
 				counter_a <- counter_a + 1;
 				if(not ("merge_a_b" in tasks)) {
 					add "merge_a_b" to: tasks;
 				}
-			}		
+			}
 		}
 		if ("b" in tasks) {
-			bool result <- action_b();
-		
-			if(result) {
-				remove "b" from: tasks;
-				counter_b <- counter_b + 1;
-				if(not ("merge_a_b" in tasks)) {
-					add "merge_a_b" to: tasks;
+			bool is_interrupted <- false;
+			if("message" in mailbox) {
+				is_interrupted <- true;
+				if(not ("b_bis" in tasks)) {
+					add "b_bis" to: tasks;
 				}
-			}		
+			}
+			if(not is_interrupted) {
+				bool result <- action_b();
+				if(result) {
+					remove "b" from: tasks;
+					counter_b <- counter_b + 1;
+					if(not ("merge_a_b" in tasks)) {
+						add "merge_a_b" to: tasks;
+					}
+				}
+			}
 		}
 		if (("merge_a_b" in tasks) and not ("a" in tasks) and not ("b" in tasks)) {
 			remove "merge_a_b" from: tasks;
+			
+		}
+		
+		if("intermediate_catch_event_1" in mailbox) {
+			if(not ("c" in tasks)) {
+				add "c" to: tasks;
+			}
+		}
+		if(flag_intermediate_catch_event_2) {
+			if(not ("d" in tasks)) {
+				add "d" to: tasks;
+			}
+		}
+		if ("c" in tasks) {
+			bool result <- action_c();
+			if(result) {
+				remove "c" from: tasks;
+				counter_c <- counter_c + 1;
+				
+			}
+		}
+		if ("d" in tasks) {
+			bool result <- action_d();
+			if(result) {
+				remove "d" from: tasks;
+				counter_d <- counter_d + 1;
+				
+			}
+		}
+		
+		
+		
+		
+		if ("b_bis" in tasks) {
+			bool result <- action_b_bis();
+			if(result) {
+				remove "b_bis" from: tasks;
+				counter_b_bis <- counter_b_bis + 1;
+				
+			}
+		}
+		if ("a_bis" in tasks) {
+			bool result <- action_a_bis();
+			if(result) {
+				remove "a_bis" from: tasks;
+				counter_a_bis <- counter_a_bis + 1;
+				
+			}
+		}
+		
+		
+		if(empty(tasks)) {
 			current_process <- nil;
 		}
 	}
