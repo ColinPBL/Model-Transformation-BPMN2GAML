@@ -13,8 +13,7 @@ model [aResource.name.normaliseString()/]
 * to adapt and modify this file as needed.
 */
 
-species [aResource.name.normaliseString()/] {
-
+species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] skills : ['['/]messaging[']'/][/if] {
 	[comment This generates a counter for every process and task
 	It is intended to be used for validation of the simulation and/or the diagrams /]
 	[for (process : FlowElementContainer | aResource.processes)]
@@ -47,10 +46,10 @@ species [aResource.name.normaliseString()/] {
 	list<string> tasks <- ['['/][']'/];
 
 	reflex idle when: (current_process = nil) {
-	/**
-	* This is where the agent will look at its environment and decide which process to use
-	* For each process, replace "true" by the corresponding condition
-	*/
+		/**
+		* This is where the agent will look at its environment and decide which process to use
+		* For each process, replace "true" by the corresponding condition
+		*/
 	[for (process : FlowElementContainer | aResource.processes)]
 		[let start : StartEvent = process.getStartEvent()]
 		if (true and current_process = nil) {
@@ -65,7 +64,8 @@ species [aResource.name.normaliseString()/] {
 	[for (process : FlowElementContainer | aResource.processes)]
 	reflex [process.name.normaliseString()/] when: (current_process = "[process.name.normaliseString()/]") {
 		counter_[process.name.normaliseString()/] <- counter_[process.name.normaliseString()/] + 1;
-		[for (element : FlowNode | process.flowElements->select(e | e.oclIsKindOf(FlowNode) and not e.oclIsKindOf(Event)))]
+		[comment We can ignore the warning since the selection only returns FlowNodes/]
+		[for (element : FlowNode | process.flowElements->select(e | e.oclIsKindOf(FlowNode) and not e.oclIsTypeOf(StartEvent)))]
 		[element.generateTasks()/]
 		[/for]
 		if(empty(tasks)) {
@@ -89,6 +89,15 @@ species [aResource.name.normaliseString()/] {
 [query public getGateways(p : FlowElementContainer) : Set(Gateway) =
 	p.flowElements->select(e | e.oclIsKindOf(Gateway))
 /]
+[comment This query returns true if the resource has at least one process with a message event /]
+[query public hasMessageEvent(resource : ResourceRole) : Boolean =
+	resource.processes->select(p | p.flowElements->select(e | (e.oclIsKindOf(Event) and e.oclAsType(Event).isMessageEvent()))->notEmpty())->notEmpty()
+/]
+
+[query public isMessageEvent(e : Event) : Boolean =
+	(e.oclIsTypeOf(IntermediateThrowEvent) and e.oclAsType(IntermediateThrowEvent).eventType = IntermediateEventType::Message) or (e.oclIsTypeOf(IntermediateCatchEvent) and e.oclAsType(IntermediateCatchEvent).eventType = IntermediateEventType::Message)
+/]
+
 
 
 [template public normaliseString(s : String)]
@@ -104,19 +113,7 @@ species [aResource.name.normaliseString()/] {
 [template public generateTasks(f : StartEvent) post(trim())]
 [for (flow : SequenceFlow | f.outgoing)]
 	[let nextNode : FlowNode = flow.targetRef]
-		[if (nextNode.oclIsTypeOf(Task))]
-if(not ("[nextNode.name.normaliseString()/]" in tasks)) {
-	add "[nextNode.name.normaliseString()/]" to: tasks;
-}
-		[elseif (nextNode.oclIsKindOf(Gateway))]
-			[if (nextNode.oclAsType(Gateway).gatewayDirection = GatewayDirection::Diverging)]
-[generateDivergingConditions(nextNode)/]
-			[elseif (nextNode.oclAsType(Gateway).gatewayDirection = GatewayDirection::Converging)]
-if(not ("[getConvergingReflexName(nextNode.oclAsType(Gateway))/]" in tasks)) {
-	add "[getConvergingReflexName(nextNode.oclAsType(Gateway))/]" to: tasks;
-}
-			[/if]
-		[/if]
+[handleNextNode(nextNode)/]
 	[/let]
 [/for]
 [/template]
@@ -124,54 +121,51 @@ if(not ("[getConvergingReflexName(nextNode.oclAsType(Gateway))/]" in tasks)) {
 [template public generateTasks(f : Task) post(trim())]
 if ("[f.name.normaliseString()/]" in tasks) {
 	bool result <- ['action_' + f.name.normaliseString()/]();
-[let nextNode : FlowNode = f.getNextFlowNode()]
+	[let nextNode : FlowNode = f.getNextFlowNode()]
 	if(result) {
 		remove "[f.name.normaliseString()/]" from: tasks;
 		counter_[f.name.normaliseString()/] <- counter_[f.name.normaliseString()/] + 1;
 		[handleNextNode(nextNode)/]
 	}
 }
-
 	[/let]
-
 [/template]
 
 [template public generateTasks(f : Gateway) post(trim())]
 [if (f.gatewayDirection = GatewayDirection::Converging)]
 if (("[f.getConvergingReflexName()/]" in tasks) [for (flow : SequenceFlow | f.incoming) separator(' ')]
 [if(not (flow.sourceRef.oclIsKindOf(Gateway) and flow.sourceRef.oclAsType(Gateway).gatewayDirection = GatewayDirection::Diverging))][let name : String = flow.sourceRef.name]and not ("[name.normaliseString()/]" in tasks)[/let][/if][/for]) {
-	[let nextNode : FlowNode = f.getNextFlowNode()]
 	remove "[f.getConvergingReflexName()/]" from: tasks;
-		[if (nextNode.oclIsTypeOf(Task))]
-	if(not ("[nextNode.name.normaliseString()/]" in tasks))	{
-		add "[nextNode.name.normaliseString()/]" to: tasks;
-	}
-		[elseif (nextNode.oclIsKindOf(Gateway))]
-			[if (nextNode.oclAsType(Gateway).gatewayDirection = GatewayDirection::Diverging)]
-	[generateDivergingConditions(nextNode)/]
-			[elseif (nextNode.oclAsType(Gateway).gatewayDirection = GatewayDirection::Converging)]
-	if(not ("[getConvergingReflexName(nextNode.oclAsType(Gateway))/]" in tasks)) {
-		add "[getConvergingReflexName(nextNode.oclAsType(Gateway))/]" to: tasks;
-	}
-			[/if]
-		[/if]
+	[for (flow : SequenceFlow | f.outgoing)]
+	[handleNextNode(flow.targetRef)/]
+	[/for]
 }
-		[/let]
 [/if]
 [/template]
 
+[comment These elements do not directly generate code in a reflex, their template is therefore empty/]
 [template public generateTasks(f : EndEvent)]
 [/template]
 
 [template public generateTasks(f : IntermediateThrowEvent)]
-//This is created by a throw event, replace self by an agent you want to send something to
-	[if (f.eventType = IntermediateEventType::Message)]
-send "message" to: self;
-	[elseif (f.eventType = IntermediateEventType::Signal)]
-ask self {
-//TODO
+[/template]
+
+[comment In the case of a catch event, we need to start a new branch in the process,
+so we have to check for the condition/]
+[template public generateTasks(f : IntermediateCatchEvent) post(trim())]
+[if (f.eventType = IntermediateEventType::Message)]
+if("message" in mailbox) {
+	[let nextNode : FlowNode = f.getNextFlowNode()]
+	[handleNextNode(nextNode)/]
+	[/let]
 }
-	[/if]
+[elseif (f.eventType = IntermediateEventType::Signal)]
+if(true) {
+	[let nextNode : FlowNode = f.getNextFlowNode()]
+	[handleNextNode(nextNode)/]
+	[/let]
+}
+[/if]
 [/template]
 
 [comment If a node only has one outgoing sequence flow (e.g. tasks or events) we can get the next flow node using first() /]
@@ -188,6 +182,7 @@ f.outgoing->first().targetRef
 [template public generateDivergingConditions(gateway : ANDGateway) post(trim())]
 [comment For an AND gateway, all outgoing elements are added to the tasks list in parallel,
 so we only have to recursively generate the conditions for each element/]
+//Generated from a parallel gateway
 [for (flow : SequenceFlow | gateway.outgoing)]
 [handleNextNode(flow.targetRef)/]
 [/for]
@@ -196,7 +191,7 @@ so we only have to recursively generate the conditions for each element/]
 [template public generateDivergingConditions(gateway : XORGateway) post(trim())]
 [comment For a XOR gateway, one and only one of the following elements is to be added to the tasks list,
 so we need an 'if else if' chain to ensure that /]
-//Manage your conditions so that one and only one of the following tasks will be active
+//Generated from an exclusive gateway
 [for (flow : SequenceFlow | gateway.outgoing) separator('else ')]
 [if (gateway.outgoing->size() > 1)]
 if(true) {
@@ -211,6 +206,7 @@ if(true) {
 [template public generateDivergingConditions(gateway : ORGateway) post(trim())]
 [comment For an OR gateway, from one to all elements can be added to the tasks list,
 so an 'if' chain is sufficient/]
+//Generate from an inclusive gateway
 [for (flow : SequenceFlow | gateway.outgoing) separator('\n')]
 [if (gateway.outgoing->size() > 1)]
 if(true) {
@@ -252,7 +248,7 @@ As a result however, we have to define empty templates for elements that do not 
 [comment If the next node is a task, then we have to add this task to the list if it is not already /]
 [let name : String = f.name]
 if(not ("[name.normaliseString()/]" in tasks)) {
-		add "[name.normaliseString()/]" to: tasks;
+	add "[name.normaliseString()/]" to: tasks;
 }
 [/let]
 [/template]

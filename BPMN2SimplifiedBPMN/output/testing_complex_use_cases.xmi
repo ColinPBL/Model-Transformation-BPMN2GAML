@@ -33,5 +33,4 @@
   <flowElements xsi:type="simplifiedbpmn:SequenceFlow" targetRef="//@flowElements.28" sourceRef="//@flowElements.13"/>
   <flowElements xsi:type="simplifiedbpmn:SequenceFlow" targetRef="//@flowElements.28" sourceRef="//@flowElements.26"/>
   <flowElements xsi:type="simplifiedbpmn:SequenceFlow" targetRef="//@flowElements.1" sourceRef="//@flowElements.28"/>
-  <resource href="../../simplifiedbpmn/instances/TestResourceRole.xmi#/"/>
 </simplifiedbpmn:Process>
