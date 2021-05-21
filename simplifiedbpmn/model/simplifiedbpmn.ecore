@@ -52,7 +52,10 @@
   <eClassifiers xsi:type="ecore:EClass" name="ANDGateway" eSuperTypes="#//Gateway"/>
   <eClassifiers xsi:type="ecore:EClass" name="XORGateway" eSuperTypes="#//Gateway"/>
   <eClassifiers xsi:type="ecore:EClass" name="ORGateway" eSuperTypes="#//Gateway"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Activity" abstract="true" eSuperTypes="#//FlowNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Activity" abstract="true" eSuperTypes="#//FlowNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="boundaryEventRefs" upperBound="-1"
+        eType="#//BoundaryEvent" eOpposite="#//BoundaryEvent/attachedToRef"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Task" eSuperTypes="#//Activity">
     <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
       <details key="constraints" value="oneIn oneOut"/>
@@ -82,7 +85,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cancelActivity" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="attachedToRef" lowerBound="1"
-        eType="#//Activity"/>
+        eType="#//Activity" eOpposite="#//Activity/boundaryEventRefs"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ThrowEvent" abstract="true" eSuperTypes="#//Event"/>
   <eClassifiers xsi:type="ecore:EClass" name="EndEvent" eSuperTypes="#//ThrowEvent">

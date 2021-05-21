@@ -22,6 +22,7 @@ rule Task2Task {
 		out_task: SimplifiedBPMN!Task (
 			outgoing <- in_task.outgoing,
 			incoming <- in_task.incoming,
+			boundaryEventRefs <- in_task.boundaryEventRefs,
 			name <- in_task.name
 		)
 }

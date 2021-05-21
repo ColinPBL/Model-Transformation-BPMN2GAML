@@ -21,8 +21,14 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 		[for (task : Task | getTasks(process))]
 	int counter_[task.name.normaliseString()/] <- 0;
 		[/for]
+	[comment This generates a boolean for every catch event that is a signal event to be used as a flag /]
+		[for (event : Event | getSignalEvents(process))]
+			
+			[if event.name.size() > 0]
+	bool ['flag_' + event.name.normaliseString()/] <- false;
+			[/if]
+		[/for]
 	[/for]
-
 	/**
 	* This is a list of methods derived from the different tasks specified in this agent's BPMN representation
 	* They are supposed to be called at each cycle when the agent is doing the corresponding activity
@@ -77,28 +83,38 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 }
 [/file]
 [/template]
-[comment Returns the list of tasks of a process /]
+[comment Returns the set of tasks of a process /]
 [query public getTasks(p : FlowElementContainer) : Set(Task) =
 	p.flowElements->select(e | e.oclIsTypeOf(Task))
 /]
-
+[comment Returns the start event of the process/]
 [query public getStartEvent(p : FlowElementContainer) : StartEvent =
 	p.flowElements->any(oclIsTypeOf(StartEvent))
 /]
-
+[comment Returns the set of gateways of a process/]
 [query public getGateways(p : FlowElementContainer) : Set(Gateway) =
 	p.flowElements->select(e | e.oclIsKindOf(Gateway))
 /]
-[comment This query returns true if the resource has at least one process with a message event /]
+[comment Returns the set of signal events of a process/]
+[query public getSignalEvents(p : FlowElementContainer) : Set(Event) =  
+	p.flowElements->select(e | (e.oclIsTypeOf(IntermediateCatchEvent) and e.oclAsType(IntermediateCatchEvent).eventType = IntermediateEventType::Signal) or (e.oclIsTypeOf(BoundaryEvent) and e.oclAsType(BoundaryEvent).eventType = IntermediateEventType::Signal))
+/]
+[comment Returns true if the resource has at least one process with a message event /]
 [query public hasMessageEvent(resource : ResourceRole) : Boolean =
 	resource.processes->select(p | p.flowElements->select(e | (e.oclIsKindOf(Event) and e.oclAsType(Event).isMessageEvent()))->notEmpty())->notEmpty()
 /]
-
+[comment Returns true if an event (throw or catch) is a message event/]
 [query public isMessageEvent(e : Event) : Boolean =
 	(e.oclIsTypeOf(IntermediateThrowEvent) and e.oclAsType(IntermediateThrowEvent).eventType = IntermediateEventType::Message) or (e.oclIsTypeOf(IntermediateCatchEvent) and e.oclAsType(IntermediateCatchEvent).eventType = IntermediateEventType::Message)
 /]
-
-
+[comment Returns true if an activity has at least one boundary event/]
+[query public hasBoundaryEvent(a : Activity) : Boolean = 
+	a.boundaryEventRefs->notEmpty()
+/]
+[comment Returns true if an activity has at least one interrupting event/]
+[query public hasInterruptingEvent(a : Activity) : Boolean =
+	a.boundaryEventRefs->select(e | e.cancelActivity)->notEmpty()
+/]
 
 [template public normaliseString(s : String)]
 [s.toLower().substituteAll(' ', '_').substituteAll('\'', '_')/]
@@ -113,20 +129,41 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 [template public generateTasks(f : StartEvent) post(trim())]
 [for (flow : SequenceFlow | f.outgoing)]
 	[let nextNode : FlowNode = flow.targetRef]
-[handleNextNode(nextNode)/]
+[handleNode(nextNode)/]
 	[/let]
 [/for]
 [/template]
 
 [template public generateTasks(f : Task) post(trim())]
 if ("[f.name.normaliseString()/]" in tasks) {
-	bool result <- ['action_' + f.name.normaliseString()/]();
-	[let nextNode : FlowNode = f.getNextFlowNode()]
-	if(result) {
-		remove "[f.name.normaliseString()/]" from: tasks;
-		counter_[f.name.normaliseString()/] <- counter_[f.name.normaliseString()/] + 1;
-		[handleNextNode(nextNode)/]
+[comment Before executing a task, we need to check if an event has occurred, as it can cancel the task /]
+[if (f.hasBoundaryEvent())]
+	[if (f.hasInterruptingEvent())]
+	bool is_interrupted <- false;
+	[/if]
+	[for (event : BoundaryEvent | f.boundaryEventRefs)]
+	[handleNode(event)/]
+	[/for]
+	[if (f.hasInterruptingEvent())]
+	if(not is_interrupted) {
+		[taskBehaviour(f)/]
 	}
+	[else]
+	[taskBehaviour(f)/]
+	[/if]
+[else]
+	[taskBehaviour(f)/]
+[/if]
+}
+[/template]
+
+[template public taskBehaviour(task : Task) post(trim())]
+bool result <- ['action_' + task.name.normaliseString()/]();
+	[let nextNode : FlowNode = task.getNextFlowNode()]
+if(result) {
+	remove "[task.name.normaliseString()/]" from: tasks;
+	counter_[task.name.normaliseString()/] <- counter_[task.name.normaliseString()/] + 1;
+	[handleNode(nextNode)/]
 }
 	[/let]
 [/template]
@@ -137,32 +174,40 @@ if (("[f.getConvergingReflexName()/]" in tasks) [for (flow : SequenceFlow | f.in
 [if(not (flow.sourceRef.oclIsKindOf(Gateway) and flow.sourceRef.oclAsType(Gateway).gatewayDirection = GatewayDirection::Diverging))][let name : String = flow.sourceRef.name]and not ("[name.normaliseString()/]" in tasks)[/let][/if][/for]) {
 	remove "[f.getConvergingReflexName()/]" from: tasks;
 	[for (flow : SequenceFlow | f.outgoing)]
-	[handleNextNode(flow.targetRef)/]
+	[handleNode(flow.targetRef)/]
 	[/for]
 }
 [/if]
 [/template]
 
 [comment These elements do not directly generate code in a reflex, their template is therefore empty/]
-[template public generateTasks(f : EndEvent)]
-[/template]
+[template public generateTasks(f : EndEvent)][/template]
 
-[template public generateTasks(f : IntermediateThrowEvent)]
-[/template]
+[template public generateTasks(f : IntermediateThrowEvent)][/template]
+
+[template public generateTasks(f : BoundaryEvent)][/template]
 
 [comment In the case of a catch event, we need to start a new branch in the process,
 so we have to check for the condition/]
 [template public generateTasks(f : IntermediateCatchEvent) post(trim())]
 [if (f.eventType = IntermediateEventType::Message)]
+	[if (f.name.size() > 0)]
+if("[f.name.normaliseString()/]" in mailbox) {
+	[else]
 if("message" in mailbox) {
+	[/if]
 	[let nextNode : FlowNode = f.getNextFlowNode()]
-	[handleNextNode(nextNode)/]
+	[handleNode(nextNode)/]
 	[/let]
 }
 [elseif (f.eventType = IntermediateEventType::Signal)]
+	[if (f.name.size() > 0)]
+if(flag_[f.name.normaliseString()/]) {
+	[else]
 if(true) {
+	[/if]
 	[let nextNode : FlowNode = f.getNextFlowNode()]
-	[handleNextNode(nextNode)/]
+	[handleNode(nextNode)/]
 	[/let]
 }
 [/if]
@@ -184,7 +229,7 @@ f.outgoing->first().targetRef
 so we only have to recursively generate the conditions for each element/]
 //Generated from a parallel gateway
 [for (flow : SequenceFlow | gateway.outgoing)]
-[handleNextNode(flow.targetRef)/]
+[handleNode(flow.targetRef)/]
 [/for]
 [/template]
 
@@ -195,10 +240,10 @@ so we need an 'if else if' chain to ensure that /]
 [for (flow : SequenceFlow | gateway.outgoing) separator('else ')]
 [if (gateway.outgoing->size() > 1)]
 if(true) {
-	[handleNextNode(flow.targetRef)/]
+	[handleNode(flow.targetRef)/]
 }
 [else]
-[handleNextNode(flow.targetRef)/]
+[handleNode(flow.targetRef)/]
 [/if]
 [/for]
 [/template]
@@ -210,10 +255,10 @@ so an 'if' chain is sufficient/]
 [for (flow : SequenceFlow | gateway.outgoing) separator('\n')]
 [if (gateway.outgoing->size() > 1)]
 if(true) {
-	[handleNextNode(flow.targetRef)/]
+	[handleNode(flow.targetRef)/]
 }
 [else]
-[handleNextNode(flow.targetRef)/]
+[handleNode(flow.targetRef)/]
 [/if]
 [/for]
 [/template]
@@ -237,14 +282,14 @@ merge[for (flow : SequenceFlow | gateway.incoming)][if(not flow.sourceRef.name.o
 
 [comment These templates are used to create the relevant code snippets based on a node's successor(s) type(s)/]
 
-[template public handleNextNode(f : FlowNode)]
+[template public handleNode(f : FlowNode)]
 [comment This template is here to allow polymorphism, and only prints this comment if no template
 is defined for a certain type. This is to ensure adding a new type to the metamodel without defining the relevant mapping does not happen
 As a result however, we have to define empty templates for elements that do not generate anything/]
-//TODO define handleNextNode for type [f.eClass().name/]
+//TODO define handleNode for type [f.eClass().name/]
 [/template]
 
-[template public handleNextNode(f : Task) post(trim())]
+[template public handleNode(f : Task) post(trim())]
 [comment If the next node is a task, then we have to add this task to the list if it is not already /]
 [let name : String = f.name]
 if(not ("[name.normaliseString()/]" in tasks)) {
@@ -253,7 +298,7 @@ if(not ("[name.normaliseString()/]" in tasks)) {
 [/let]
 [/template]
 
-[template public handleNextNode(f : Gateway) post(trim())]
+[template public handleNode(f : Gateway) post(trim())]
 [comment If the next node is a gateway, we need to check if it is diverging or converging
 If it is diverging, we use the relevant template
 If it is converging, we add the relevant task to the list/]
@@ -266,7 +311,7 @@ if(not ("[getConvergingReflexName(f)/]" in tasks)) {
 [/if]
 [/template]
 
-[template public handleNextNode(f : IntermediateThrowEvent) post(trim())]
+[template public handleNode(f : IntermediateThrowEvent) post(trim())]
 [comment In the case of a throw event, we do not want to create a task block and have a task in the list for the event 
 Instead, we "absorb" the event in the previous node, and then attach the next node/]
 //This is created by a throw event, replace self by an agent you want to send something to
@@ -278,10 +323,42 @@ ask self {
 }
 	[/if]
 [let nextNode : FlowNode = f.getNextFlowNode()]
-[handleNextNode(nextNode)/]
+[handleNode(nextNode)/]
 [/let]
 [/template]
 
-[template public handleNextNode(f : EndEvent) post(trim())]
+[template public handleNode(f : BoundaryEvent) post(trim())]
+[comment A boundary event behaves roughly the same as a catch event, however it is bound to an activity
+It can only be triggered during this activity, and may interrupt it/]
+[if (f.eventType = IntermediateEventType::Message)]
+	[if (f.name.size() > 0)]
+if("[f.name.normaliseString()/]" in mailbox) {
+	[else]
+if("message" in mailbox) {
+	[/if]
+	[if (f.cancelActivity)]
+	is_interrupted <- true;
+	[/if]
+	[let nextNode : FlowNode = f.getNextFlowNode()]
+	[handleNode(nextNode)/]
+	[/let]
+}
+[elseif (f.eventType = IntermediateEventType::Signal)]
+	[if (f.name.size() > 0)]
+if(flag_[f.name.normaliseString()/]) {
+	[else]
+if(true) {
+	[/if]
+	[if (f.cancelActivity)]
+	is_interrupted <- true;
+	[/if]
+	[let nextNode : FlowNode = f.getNextFlowNode()]
+	[handleNode(nextNode)/]
+	[/let]
+}
+[/if]
+[/template]
+
+[template public handleNode(f : EndEvent) post(trim())]
 [comment If the next node is an end event, we do not do anything since it is the end of the branch /]
 [/template]
