@@ -24,6 +24,7 @@ import simplifiedbpmn.ResourceRole;
 import simplifiedbpmn.SequenceFlow;
 import simplifiedbpmn.SimplifiedbpmnPackage;
 import simplifiedbpmn.StartEvent;
+import simplifiedbpmn.Subprocess;
 import simplifiedbpmn.Task;
 import simplifiedbpmn.ThrowEvent;
 import simplifiedbpmn.XORGateway;
@@ -315,6 +316,19 @@ public class SimplifiedbpmnSwitch<T> extends Switch<T> {
 		case SimplifiedbpmnPackage.RESOURCE_ROLE: {
 			ResourceRole resourceRole = (ResourceRole) theEObject;
 			T result = caseResourceRole(resourceRole);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case SimplifiedbpmnPackage.SUBPROCESS: {
+			Subprocess subprocess = (Subprocess) theEObject;
+			T result = caseSubprocess(subprocess);
+			if (result == null)
+				result = caseActivity(subprocess);
+			if (result == null)
+				result = caseFlowNode(subprocess);
+			if (result == null)
+				result = caseFlowElement(subprocess);
 			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
@@ -621,6 +635,21 @@ public class SimplifiedbpmnSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseResourceRole(ResourceRole object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Subprocess</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Subprocess</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSubprocess(Subprocess object) {
 		return null;
 	}
 

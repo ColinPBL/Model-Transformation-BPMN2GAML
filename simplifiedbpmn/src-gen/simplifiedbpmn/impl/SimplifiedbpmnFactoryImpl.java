@@ -24,6 +24,7 @@ import simplifiedbpmn.SequenceFlow;
 import simplifiedbpmn.SimplifiedbpmnFactory;
 import simplifiedbpmn.SimplifiedbpmnPackage;
 import simplifiedbpmn.StartEvent;
+import simplifiedbpmn.Subprocess;
 import simplifiedbpmn.Task;
 import simplifiedbpmn.XORGateway;
 
@@ -95,6 +96,8 @@ public class SimplifiedbpmnFactoryImpl extends EFactoryImpl implements Simplifie
 			return createIntermediateThrowEvent();
 		case SimplifiedbpmnPackage.RESOURCE_ROLE:
 			return createResourceRole();
+		case SimplifiedbpmnPackage.SUBPROCESS:
+			return createSubprocess();
 		default:
 			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -252,6 +255,16 @@ public class SimplifiedbpmnFactoryImpl extends EFactoryImpl implements Simplifie
 	public ResourceRole createResourceRole() {
 		ResourceRoleImpl resourceRole = new ResourceRoleImpl();
 		return resourceRole;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Subprocess createSubprocess() {
+		SubprocessImpl subprocess = new SubprocessImpl();
+		return subprocess;
 	}
 
 	/**

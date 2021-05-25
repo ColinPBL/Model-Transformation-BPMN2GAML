@@ -105,4 +105,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="processes" upperBound="-1"
         eType="#//FlowElementContainer" eOpposite="#//FlowElementContainer/resource"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Subprocess" eSuperTypes="#//Activity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processRef" lowerBound="1"
+        eType="#//Process"/>
+  </eClassifiers>
 </ecore:EPackage>

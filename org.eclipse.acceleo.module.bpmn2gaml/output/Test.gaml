@@ -17,6 +17,7 @@ species test skills : [messaging] {
 			
 	bool flag_intermediate_catch_event_2 <- false;
 			
+	bool flag_do_a_bis <- false;
 	/**
 	* This is a list of methods derived from the different tasks specified in this agent's BPMN representation
 	* They are supposed to be called at each cycle when the agent is doing the corresponding activity
@@ -79,7 +80,7 @@ species test skills : [messaging] {
 		counter_testevents <- counter_testevents + 1;
 		
 		if ("a" in tasks) {
-			if(true) {
+			if(flag_do_a_bis) {
 				if(not ("a_bis" in tasks)) {
 					add "a_bis" to: tasks;
 				}
@@ -132,7 +133,10 @@ species test skills : [messaging] {
 			if(result) {
 				remove "c" from: tasks;
 				counter_c <- counter_c + 1;
-				
+				//This is created by a throw event, replace self by an agent you want to send something to
+				ask self {
+				//TODO
+				}
 			}
 		}
 		if ("d" in tasks) {
@@ -140,7 +144,8 @@ species test skills : [messaging] {
 			if(result) {
 				remove "d" from: tasks;
 				counter_d <- counter_d + 1;
-				
+				//This is created by a throw event, replace self by an agent you want to send something to
+				do send to: self contents: "message";
 			}
 		}
 		
@@ -163,6 +168,8 @@ species test skills : [messaging] {
 				
 			}
 		}
+		
+		
 		
 		
 		if(empty(tasks)) {

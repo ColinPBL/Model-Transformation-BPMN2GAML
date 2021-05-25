@@ -591,13 +591,22 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	int ACTIVITY__OUTGOING = FLOW_NODE__OUTGOING;
 
 	/**
+	 * The feature id for the '<em><b>Boundary Event Refs</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__BOUNDARY_EVENT_REFS = FLOW_NODE_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Activity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY_FEATURE_COUNT = FLOW_NODE_FEATURE_COUNT + 0;
+	int ACTIVITY_FEATURE_COUNT = FLOW_NODE_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Activity</em>' class.
@@ -644,6 +653,15 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @ordered
 	 */
 	int TASK__OUTGOING = ACTIVITY__OUTGOING;
+
+	/**
+	 * The feature id for the '<em><b>Boundary Event Refs</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK__BOUNDARY_EVENT_REFS = ACTIVITY__BOUNDARY_EVENT_REFS;
 
 	/**
 	 * The number of structural features of the '<em>Task</em>' class.
@@ -939,13 +957,31 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	int BOUNDARY_EVENT__EVENT_TYPE = CATCH_EVENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Cancel Activity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOUNDARY_EVENT__CANCEL_ACTIVITY = CATCH_EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Attached To Ref</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOUNDARY_EVENT__ATTACHED_TO_REF = CATCH_EVENT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Boundary Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BOUNDARY_EVENT_FEATURE_COUNT = CATCH_EVENT_FEATURE_COUNT + 1;
+	int BOUNDARY_EVENT_FEATURE_COUNT = CATCH_EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Boundary Event</em>' class.
@@ -1177,6 +1213,79 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	int RESOURCE_ROLE_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link simplifiedbpmn.impl.SubprocessImpl <em>Subprocess</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see simplifiedbpmn.impl.SubprocessImpl
+	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getSubprocess()
+	 * @generated
+	 */
+	int SUBPROCESS = 20;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBPROCESS__NAME = ACTIVITY__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Incoming</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBPROCESS__INCOMING = ACTIVITY__INCOMING;
+
+	/**
+	 * The feature id for the '<em><b>Outgoing</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBPROCESS__OUTGOING = ACTIVITY__OUTGOING;
+
+	/**
+	 * The feature id for the '<em><b>Boundary Event Refs</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBPROCESS__BOUNDARY_EVENT_REFS = ACTIVITY__BOUNDARY_EVENT_REFS;
+
+	/**
+	 * The feature id for the '<em><b>Process Ref</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBPROCESS__PROCESS_REF = ACTIVITY_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Subprocess</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBPROCESS_FEATURE_COUNT = ACTIVITY_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Subprocess</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBPROCESS_OPERATION_COUNT = ACTIVITY_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link simplifiedbpmn.GatewayDirection <em>Gateway Direction</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1184,7 +1293,7 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getGatewayDirection()
 	 * @generated
 	 */
-	int GATEWAY_DIRECTION = 20;
+	int GATEWAY_DIRECTION = 21;
 
 	/**
 	 * The meta object id for the '{@link simplifiedbpmn.IntermediateEventType <em>Intermediate Event Type</em>}' enum.
@@ -1194,7 +1303,7 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getIntermediateEventType()
 	 * @generated
 	 */
-	int INTERMEDIATE_EVENT_TYPE = 21;
+	int INTERMEDIATE_EVENT_TYPE = 22;
 
 	/**
 	 * Returns the meta object for class '{@link simplifiedbpmn.FlowElement <em>Flow Element</em>}'.
@@ -1396,6 +1505,17 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	EClass getActivity();
 
 	/**
+	 * Returns the meta object for the reference list '{@link simplifiedbpmn.Activity#getBoundaryEventRefs <em>Boundary Event Refs</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Boundary Event Refs</em>'.
+	 * @see simplifiedbpmn.Activity#getBoundaryEventRefs()
+	 * @see #getActivity()
+	 * @generated
+	 */
+	EReference getActivity_BoundaryEventRefs();
+
+	/**
 	 * Returns the meta object for class '{@link simplifiedbpmn.Task <em>Task</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1478,6 +1598,28 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	EAttribute getBoundaryEvent_EventType();
 
 	/**
+	 * Returns the meta object for the attribute '{@link simplifiedbpmn.BoundaryEvent#isCancelActivity <em>Cancel Activity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cancel Activity</em>'.
+	 * @see simplifiedbpmn.BoundaryEvent#isCancelActivity()
+	 * @see #getBoundaryEvent()
+	 * @generated
+	 */
+	EAttribute getBoundaryEvent_CancelActivity();
+
+	/**
+	 * Returns the meta object for the reference '{@link simplifiedbpmn.BoundaryEvent#getAttachedToRef <em>Attached To Ref</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Attached To Ref</em>'.
+	 * @see simplifiedbpmn.BoundaryEvent#getAttachedToRef()
+	 * @see #getBoundaryEvent()
+	 * @generated
+	 */
+	EReference getBoundaryEvent_AttachedToRef();
+
+	/**
 	 * Returns the meta object for class '{@link simplifiedbpmn.ThrowEvent <em>Throw Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1549,6 +1691,27 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getResourceRole_Processes();
+
+	/**
+	 * Returns the meta object for class '{@link simplifiedbpmn.Subprocess <em>Subprocess</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Subprocess</em>'.
+	 * @see simplifiedbpmn.Subprocess
+	 * @generated
+	 */
+	EClass getSubprocess();
+
+	/**
+	 * Returns the meta object for the reference '{@link simplifiedbpmn.Subprocess#getProcessRef <em>Process Ref</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Process Ref</em>'.
+	 * @see simplifiedbpmn.Subprocess#getProcessRef()
+	 * @see #getSubprocess()
+	 * @generated
+	 */
+	EReference getSubprocess_ProcessRef();
 
 	/**
 	 * Returns the meta object for enum '{@link simplifiedbpmn.GatewayDirection <em>Gateway Direction</em>}'.
@@ -1766,6 +1929,14 @@ public interface SimplifiedbpmnPackage extends EPackage {
 		EClass ACTIVITY = eINSTANCE.getActivity();
 
 		/**
+		 * The meta object literal for the '<em><b>Boundary Event Refs</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ACTIVITY__BOUNDARY_EVENT_REFS = eINSTANCE.getActivity_BoundaryEventRefs();
+
+		/**
 		 * The meta object literal for the '{@link simplifiedbpmn.impl.TaskImpl <em>Task</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1842,6 +2013,22 @@ public interface SimplifiedbpmnPackage extends EPackage {
 		EAttribute BOUNDARY_EVENT__EVENT_TYPE = eINSTANCE.getBoundaryEvent_EventType();
 
 		/**
+		 * The meta object literal for the '<em><b>Cancel Activity</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BOUNDARY_EVENT__CANCEL_ACTIVITY = eINSTANCE.getBoundaryEvent_CancelActivity();
+
+		/**
+		 * The meta object literal for the '<em><b>Attached To Ref</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BOUNDARY_EVENT__ATTACHED_TO_REF = eINSTANCE.getBoundaryEvent_AttachedToRef();
+
+		/**
 		 * The meta object literal for the '{@link simplifiedbpmn.impl.ThrowEventImpl <em>Throw Event</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1904,6 +2091,24 @@ public interface SimplifiedbpmnPackage extends EPackage {
 		 * @generated
 		 */
 		EReference RESOURCE_ROLE__PROCESSES = eINSTANCE.getResourceRole_Processes();
+
+		/**
+		 * The meta object literal for the '{@link simplifiedbpmn.impl.SubprocessImpl <em>Subprocess</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see simplifiedbpmn.impl.SubprocessImpl
+		 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getSubprocess()
+		 * @generated
+		 */
+		EClass SUBPROCESS = eINSTANCE.getSubprocess();
+
+		/**
+		 * The meta object literal for the '<em><b>Process Ref</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SUBPROCESS__PROCESS_REF = eINSTANCE.getSubprocess_ProcessRef();
 
 		/**
 		 * The meta object literal for the '{@link simplifiedbpmn.GatewayDirection <em>Gateway Direction</em>}' enum.

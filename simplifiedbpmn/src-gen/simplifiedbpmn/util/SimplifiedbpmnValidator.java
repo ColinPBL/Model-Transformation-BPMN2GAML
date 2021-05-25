@@ -31,6 +31,7 @@ import simplifiedbpmn.ResourceRole;
 import simplifiedbpmn.SequenceFlow;
 import simplifiedbpmn.SimplifiedbpmnPackage;
 import simplifiedbpmn.StartEvent;
+import simplifiedbpmn.Subprocess;
 import simplifiedbpmn.Task;
 import simplifiedbpmn.ThrowEvent;
 import simplifiedbpmn.XORGateway;
@@ -148,6 +149,8 @@ public class SimplifiedbpmnValidator extends EObjectValidator {
 			return validateIntermediateThrowEvent((IntermediateThrowEvent) value, diagnostics, context);
 		case SimplifiedbpmnPackage.RESOURCE_ROLE:
 			return validateResourceRole((ResourceRole) value, diagnostics, context);
+		case SimplifiedbpmnPackage.SUBPROCESS:
+			return validateSubprocess((Subprocess) value, diagnostics, context);
 		case SimplifiedbpmnPackage.GATEWAY_DIRECTION:
 			return validateGatewayDirection((GatewayDirection) value, diagnostics, context);
 		case SimplifiedbpmnPackage.INTERMEDIATE_EVENT_TYPE:
@@ -544,6 +547,15 @@ public class SimplifiedbpmnValidator extends EObjectValidator {
 	public boolean validateResourceRole(ResourceRole resourceRole, DiagnosticChain diagnostics,
 			Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(resourceRole, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateSubprocess(Subprocess subprocess, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(subprocess, diagnostics, context);
 	}
 
 	/**

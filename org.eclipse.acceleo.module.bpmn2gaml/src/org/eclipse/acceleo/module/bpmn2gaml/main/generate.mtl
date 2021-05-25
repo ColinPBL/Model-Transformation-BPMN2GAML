@@ -4,7 +4,7 @@
 
 [template public generateElement(aResource : ResourceRole) post (trim())]
 [comment @main/]
-[file (aResource.name + '.gaml', false, 'Cp1252')]
+[file (aResource.name.normaliseString() + '.gaml', false, 'Cp1252')]
 model [aResource.name.normaliseString()/]
 
 /**
@@ -22,20 +22,39 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 	int counter_[task.name.normaliseString()/] <- 0;
 		[/for]
 	[comment This generates a boolean for every catch event that is a signal event to be used as a flag /]
+	//These flags are generated for each signal event and are supposed to be used by other agents to trigger these events
 		[for (event : Event | getSignalEvents(process))]
-			
 			[if event.name.size() > 0]
 	bool ['flag_' + event.name.normaliseString()/] <- false;
 			[/if]
 		[/for]
 	[/for]
+
+		[comment If the ResourceRole has a subroutine, we need a flag to differentiate it from its subroutines/]
+	[if (aResource.hasSubroutine())]
+	bool is_subroutine <- false;
+	
+	/**
+	* This list is used to keep track of currently active subroutines. Whenever a subroutine finishes its execution, it removes itself
+	* from the list automatically
+	*/
+	list<agent> active_subroutines <- nil;
+	[/if]
+	[comment If the ResourceRole has a subprocess, we need a list to keep track of the active subprocesses/]
+	[if (aResource.hasSubprocess())]
+	/**
+	* This list is used to keep track of every agent that is currently executing a subprocess when asked by this agent
+	* The agent remains in the list while its subprocess is active
+	*/
+	list<agent> active_agents <- nil update: active_agents where (each.current_process != nil);
+	[/if]
 	/**
 	* This is a list of methods derived from the different tasks specified in this agent's BPMN representation
 	* They are supposed to be called at each cycle when the agent is doing the corresponding activity
-	* Each action returns a boolean indicating if the corresponding task is over
+	* Each action returns a boolean indicating if the corresponding task has been completed
 	*/
 
-	[comment This generates an action for each task there is in the BPMN diagram(s) /]
+	[comment This generates an action for each task in the BPMN diagram(s) /]
 	[for (process : FlowElementContainer | aResource.processes)]
 		[for (task : Task | getTasks(process))]
 	bool ['action_' + task.name.normaliseString()/] {
@@ -50,8 +69,10 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 
 	//This list is used to keep track of which task(s) the agent is currently doing
 	list<string> tasks <- ['['/][']'/];
-
-	reflex idle when: (current_process = nil) {
+	[comment The idle reflex is called when an agent has no active process, and is used to start new processes
+	Additionally, if this ResourceRole has a subroutine, we do not want subroutines to keep creating processes
+	after they finished theirs, so we add a condition/]
+	reflex idle when: (current_process = nil)[if aResource.hasSubroutine()] and not is_subroutine[/if] {
 		/**
 		* This is where the agent will look at its environment and decide which process to use
 		* For each process, replace "true" by the corresponding condition
@@ -79,8 +100,15 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 		}
 	}
 	[/for]
-
 }
+
+	[comment If a ResourceRole has a subroutine, we need to create a subspecies that will be used to execute it/]
+	[if (aResource.hasSubroutine())]
+species subroutine_[aResource.name.normaliseString()/] parent: [aResource.name.normaliseString()/]{
+	bool is_subroutine <- true;
+	agent calling_agent <- nil;
+}
+	[/if]
 [/file]
 [/template]
 [comment Returns the set of tasks of a process /]
@@ -99,6 +127,17 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 [query public getSignalEvents(p : FlowElementContainer) : Set(Event) =  
 	p.flowElements->select(e | (e.oclIsTypeOf(IntermediateCatchEvent) and e.oclAsType(IntermediateCatchEvent).eventType = IntermediateEventType::Signal) or (e.oclIsTypeOf(BoundaryEvent) and e.oclAsType(BoundaryEvent).eventType = IntermediateEventType::Signal))
 /]
+
+[comment Returns the set of subprocesses that are internal to this resource/]
+[query public getSubroutines(p : FlowElementContainer) : Set(Subprocess) =
+	p.flowElements->select(e | e.oclIsTypeOf(Subprocess) and e.oclAsType(Subprocess).processRef.resource = p.resource)
+/]
+
+[comment Returns the set of subprocesses that are referring to another agent's process/]
+[query public getSubprocesses(p : FlowElementContainer) : Set(Subprocess) =
+	p.flowElements->select(e | e.oclIsTypeOf(Subprocess) and e.oclAsType(Subprocess).processRef.resource <> p.resource)
+/]
+
 [comment Returns true if the resource has at least one process with a message event /]
 [query public hasMessageEvent(resource : ResourceRole) : Boolean =
 	resource.processes->select(p | p.flowElements->select(e | (e.oclIsKindOf(Event) and e.oclAsType(Event).isMessageEvent()))->notEmpty())->notEmpty()
@@ -115,6 +154,19 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 [query public hasInterruptingEvent(a : Activity) : Boolean =
 	a.boundaryEventRefs->select(e | e.cancelActivity)->notEmpty()
 /]
+
+[comment Returns true if there is at least one subprocess in this ResourceRole's processes linked to an internal process/]
+[query public hasSubroutine(r : ResourceRole) : Boolean =
+	r.processes->select(p | p.getSubroutines()->notEmpty())->notEmpty()
+/]
+
+[comment Returns true if there is at least one subprocess in this ResourceRole's processes linked to another ResourceRole's process/]
+[query public hasSubprocess(r : ResourceRole) : Boolean = 
+	r.processes->select(p | p.getSubprocesses()->notEmpty())->notEmpty()
+/]
+
+
+
 
 [template public normaliseString(s : String)]
 [s.toLower().substituteAll(' ', '_').substituteAll('\'', '_')/]
@@ -178,6 +230,30 @@ if (("[f.getConvergingReflexName()/]" in tasks) [for (flow : SequenceFlow | f.in
 	[/for]
 }
 [/if]
+[/template]
+
+[template public generateTasks(subprocess : Subprocess, resourceRole : ResourceRole)]
+[comment First, we check if the subprocess refers to another agent's process or if it is internal/]
+if ("[subprocess.name.normaliseString()/]" in tasks) {
+[if (subprocess.processRef.resource <> resourceRole)]
+	ask any([subprocess.processRef.resource.name.normaliseString()/] where(each.current_process = nil)) {
+		current_process <- "[subprocess.processRef.name.normaliseString()/]";
+		add self to: myself.active_agents;
+	}
+	if(empty(active_agents where (each.process = "[subprocess.name.normaliseString()/]"))) {
+		remove "[subprocess.name.normaliseString()/]" from: tasks;
+[else]
+	/**
+	* A subroutine species inheriting from this species is created to handle the subprocess execution
+	* However, you must specify which variables it should keep by using with: ['['/]attribute_in_subspecies::attribute_in_species[']'/]
+	*/
+	create subroutine_[resourceRole.name.normaliseString()/] number: 1 with: ['[]'/] {
+		add self to: myself.active_subroutines;
+		calling_agent <- myself;
+	}
+[/if]
+	}
+}
 [/template]
 
 [comment These elements do not directly generate code in a reflex, their template is therefore empty/]
