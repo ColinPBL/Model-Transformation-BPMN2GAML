@@ -231,7 +231,7 @@ if (("[f.getConvergingBlockName()/]" in tasks) [for (flow : SequenceFlow | f.inc
 }
 [/if]
 [if (f.gatewayDirection = GatewayDirection::Mixed)]
-if (("[f.getMixedBlockName()/]" in tasks) {
+if (("[f.getMixedBlockName()/]" in tasks)) {
 	remove "[f.getMixedBlockName()/]" from: tasks;
 	[generateDivergingConditions(f)/]
 }
@@ -417,7 +417,7 @@ if(not ("[getConvergingBlockName(f)/]" in tasks)) {
 }
 [/if]
 [if (f.gatewayDirection = GatewayDirection::Mixed)]
-if (not ("[getMixedBlockName(f)/]" in tasks) {
+if (not ("[getMixedBlockName(f)/]" in tasks)) {
 	add "[getMixedBlockName(f)/]" to: tasks;
 }
 [/if]

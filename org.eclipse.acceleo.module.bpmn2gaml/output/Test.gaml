@@ -49,7 +49,7 @@ species test {
 		*/
 		if (true and current_process = nil) {
 			current_process <- "testmixedgateway";
-			if (not ("mixed_exclusive_gateway_1" in tasks) {
+			if (not ("mixed_exclusive_gateway_1" in tasks)) {
 				add "mixed_exclusive_gateway_1" to: tasks;
 			}
 		}
@@ -58,7 +58,7 @@ species test {
 	reflex testmixedgateway when: (current_process = "testmixedgateway") {
 		counter_testmixedgateway <- counter_testmixedgateway + 1;
 		
-		if (("mixed_exclusive_gateway_1" in tasks) {
+		if (("mixed_exclusive_gateway_1" in tasks)) {
 			remove "mixed_exclusive_gateway_1" from: tasks;
 			//Generated from an exclusive gateway
 			if(true) {
@@ -77,7 +77,7 @@ species test {
 			if(result) {
 				remove "a" from: tasks;
 				counter_a <- counter_a + 1;
-				if (not ("mixed_exclusive_gateway_2" in tasks) {
+				if (not ("mixed_exclusive_gateway_2" in tasks)) {
 					add "mixed_exclusive_gateway_2" to: tasks;
 				}
 			}
@@ -87,16 +87,16 @@ species test {
 			if(result) {
 				remove "b" from: tasks;
 				counter_b <- counter_b + 1;
-				if (not ("mixed_exclusive_gateway_2" in tasks) {
+				if (not ("mixed_exclusive_gateway_2" in tasks)) {
 					add "mixed_exclusive_gateway_2" to: tasks;
 				}
 			}
 		}
-		if (("mixed_exclusive_gateway_2" in tasks) {
+		if (("mixed_exclusive_gateway_2" in tasks)) {
 			remove "mixed_exclusive_gateway_2" from: tasks;
 			//Generated from an exclusive gateway
 			if(true) {
-				if (not ("mixed_exclusive_gateway_1" in tasks) {
+				if (not ("mixed_exclusive_gateway_1" in tasks)) {
 					add "mixed_exclusive_gateway_1" to: tasks;
 				}
 			}
@@ -126,7 +126,7 @@ species test {
 					
 				}
 				else if(true) {
-					if (not ("mixed_exclusive_gateway_1" in tasks) {
+					if (not ("mixed_exclusive_gateway_1" in tasks)) {
 						add "mixed_exclusive_gateway_1" to: tasks;
 					}
 				}
