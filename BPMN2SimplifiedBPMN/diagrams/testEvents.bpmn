@@ -255,9 +255,9 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_EndEvent_6" bpmnElement="EndEvent_6">
-        <dc:Bounds height="36.0" width="36.0" x="544.0" y="673.0"/>
+        <dc:Bounds height="36.0" width="36.0" x="563.0" y="673.0"/>
         <bpmndi:BPMNLabel id="BPMNLabel_42" labelStyle="BPMNLabelStyle_1">
-          <dc:Bounds height="15.0" width="65.0" x="530.0" y="709.0"/>
+          <dc:Bounds height="15.0" width="65.0" x="549.0" y="709.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_2" bpmnElement="SequenceFlow_2" sourceElement="BPMNShape_1" targetElement="BPMNShape_ExclusiveGateway_1">
@@ -370,8 +370,8 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_19" bpmnElement="SequenceFlow_19" sourceElement="BPMNShape_IntermediateCatchEvent_4" targetElement="BPMNShape_EndEvent_6">
         <di:waypoint xsi:type="dc:Point" x="476.0" y="691.0"/>
-        <di:waypoint xsi:type="dc:Point" x="510.0" y="691.0"/>
-        <di:waypoint xsi:type="dc:Point" x="544.0" y="691.0"/>
+        <di:waypoint xsi:type="dc:Point" x="519.0" y="691.0"/>
+        <di:waypoint xsi:type="dc:Point" x="563.0" y="691.0"/>
         <bpmndi:BPMNLabel id="BPMNLabel_43"/>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

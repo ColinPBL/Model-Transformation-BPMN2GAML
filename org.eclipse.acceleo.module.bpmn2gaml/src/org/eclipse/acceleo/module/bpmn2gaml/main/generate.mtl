@@ -2,7 +2,7 @@
 [module generate('http://www.cpoubel.org/simplifiedbpmn')]
 
 
-[template public generateElement(aResource : ResourceRole) post (trim())]
+[template public generateElement(aResource : ResourceRole) post(trim())]
 [comment @main/]
 [file (aResource.name.normaliseString() + '.gaml', false, 'Cp1252')]
 model [aResource.name.normaliseString()/]
@@ -42,11 +42,14 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 	[comment If the ResourceRole has a subprocess, we need a list to keep track of the active subprocesses/]
 	[if (aResource.hasSubprocess())]
 	/**
-	* This list is used to keep track of every agent that is currently executing a subprocess when asked by this agent
+	* This list is used to keep track of every agent that is currently executing a subprocess asked by this agent
 	* The agent remains in the list while its subprocess is active
 	*/
 	list<agent> active_agents <- nil update: active_agents where (each.current_process != nil);
 	[/if]
+	[for (subprocess : Subprocess | aResource.processes.getSubprocesses()->union(aResource.processes.getSubroutines()))]
+	bool started_subprocess_[subprocess.name.normaliseString()/] <- false;
+	[/for]
 	/**
 	* This is a list of methods derived from the different tasks specified in this agent's BPMN representation
 	* They are supposed to be called at each cycle when the agent is doing the corresponding activity
@@ -107,6 +110,13 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 species subroutine_[aResource.name.normaliseString()/] parent: [aResource.name.normaliseString()/]{
 	bool is_subroutine <- true;
 	agent calling_agent <- nil;
+	
+	reflex die when: current_process = nil {
+		ask calling_agent {
+			remove myself from: self.active_subroutines;
+		}
+		do die;
+	}
 }
 	[/if]
 [/file]
@@ -167,13 +177,13 @@ species subroutine_[aResource.name.normaliseString()/] parent: [aResource.name.n
 
 
 
-
+[comment Strings are usually formated in snake_case as a naming convention/]
 [template public normaliseString(s : String)]
 [s.toLower().substituteAll(' ', '_').substituteAll('\'', '_').substituteAll('_?', '')/]
 [/template]
 
 
-[comment These templates are used to generate the reflexes from tasks, events and gateways /]
+[comment These templates are used to generate the reflexes from relevant BPMN elements/]
 [template public generateTasks(f : FlowNode)]
 //TODO define generateTasks for type [f.eClass().name/]
 [/template]
@@ -241,23 +251,31 @@ if (("[f.getMixedBlockName()/]" in tasks)) {
 [template public generateTasks(subprocess : Subprocess, resourceRole : ResourceRole)]
 [comment First, we check if the subprocess refers to another agent's process or if it is internal/]
 if ("[subprocess.name.normaliseString()/]" in tasks) {
+	if(not started_subprocess_[subprocess.name.normaliseString()/]) {
 [if (subprocess.processRef.resource <> resourceRole)]
-	ask any([subprocess.processRef.resource.name.normaliseString()/] where(each.current_process = nil)) {
+		ask any([subprocess.processRef.resource.name.normaliseString()/] where(each.current_process = nil)) {
 		current_process <- "[subprocess.processRef.name.normaliseString()/]";
 		add self to: myself.active_agents;
+		}
+		started_subprocess_[subprocess.name.normaliseString()/] <- true;
 	}
-	if(empty(active_agents where (each.process = "[subprocess.name.normaliseString()/]"))) {
+	if(empty(active_agents where (each.current_process = "[subprocess.name.normaliseString()/]"))) {
 		remove "[subprocess.name.normaliseString()/]" from: tasks;
 [else]
-	/**
-	* A subroutine species inheriting from this species is created to handle the subprocess execution
-	* However, you must specify which variables it should keep by using with: ['['/]attribute_in_subspecies::attribute_in_species[']'/]
-	*/
-	create subroutine_[resourceRole.name.normaliseString()/] number: 1 with: ['[]'/] {
-		add self to: myself.active_subroutines;
-		calling_agent <- myself;
+		/**
+		* A subroutine species inheriting from this species is created to handle the subprocess execution
+		* However, you must specify which relevant variables should be copied by using with: ['['/]attribute_in_subspecies::attribute_in_species[']'/]
+		*/
+		create subroutine_[resourceRole.name.normaliseString()/] number: 1 with: ['[]'/] {
+			add self to: myself.active_subroutines;
+			calling_agent <- myself;
+		}
+		started_subprocess_[subprocess.name.normaliseString()/] <- true;
 	}
+	if(empty(active_subroutines where (each.current_process = "[subprocess.name.normaliseString()/]"))) {
+		remove "[subprocess.name.normaliseString()/]" from: tasks;
 [/if]
+		started_subprocess_[subprocess.name.normaliseString()/] <- false;
 	}
 }
 [/template]
