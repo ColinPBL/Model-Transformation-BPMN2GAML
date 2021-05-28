@@ -169,7 +169,7 @@ species subroutine_[aResource.name.normaliseString()/] parent: [aResource.name.n
 
 
 [template public normaliseString(s : String)]
-[s.toLower().substituteAll(' ', '_').substituteAll('\'', '_').substituteAll(' ?', '')/]
+[s.toLower().substituteAll(' ', '_').substituteAll('\'', '_').substituteAll('_?', '')/]
 [/template]
 
 
@@ -223,7 +223,7 @@ if(result) {
 [template public generateTasks(f : Gateway) post(trim())]
 [if (f.gatewayDirection = GatewayDirection::Converging)]
 if (("[f.getConvergingBlockName()/]" in tasks) [for (flow : SequenceFlow | f.incoming) separator(' ')]
-[if(not (flow.sourceRef.oclIsKindOf(Gateway) and flow.sourceRef.oclAsType(Gateway).gatewayDirection = GatewayDirection::Diverging))][let name : String = flow.sourceRef.name]and not ("[name.normaliseString()/]" in tasks)[/let][/if][/for]) {
+[if(not (flow.sourceRef.oclIsKindOf(Gateway) and flow.sourceRef.oclAsType(Gateway).gatewayDirection = GatewayDirection::Diverging) and not flow.sourceRef.oclIsTypeOf(StartEvent))][let name : String = flow.sourceRef.name]and not ("[name.normaliseString()/]" in tasks)[/let][/if][/for]) {
 	remove "[f.getConvergingBlockName()/]" from: tasks;
 	[for (flow : SequenceFlow | f.outgoing)]
 	[handleNode(flow.targetRef)/]
@@ -287,6 +287,16 @@ if("[f.name.normaliseString()/]" in tasks) {
 [comment In the case of a catch event, we need to start a new branch in the process,
 so we have to check for the condition/]
 [template public generateTasks(f : IntermediateCatchEvent) post(trim())]
+[if (f.incoming->size() > 0)]
+if("[f.name.normaliseString()/]" in tasks) {
+	[catchEventBehaviour(f)/]
+}
+[else]
+[catchEventBehaviour(f)/]
+[/if]
+[/template]
+
+[template public catchEventBehaviour(f : IntermediateCatchEvent) post(trim())]
 [if (f.eventType = IntermediateEventType::Message)]
 	[if (f.name.size() > 0)]
 if("[f.name.normaliseString()/]" in mailbox) {
@@ -309,7 +319,6 @@ if(true) {
 }
 [/if]
 [/template]
-
 [comment If a node only has one outgoing sequence flow (e.g. tasks or events) we can get the next flow node using first() /]
 [query public getNextFlowNode(f : FlowNode) : FlowNode =
 f.outgoing->first().targetRef
@@ -324,7 +333,11 @@ f.outgoing->first().targetRef
 [template public generateDivergingConditions(gateway : ANDGateway) post(trim())]
 [comment For an AND gateway, all outgoing elements are added to the tasks list in parallel,
 so we only have to recursively generate the conditions for each element/]
+[if (gateway.name->size() > 0)]
+//Generated from [gateway.name.normaliseString()/]
+[else]
 //Generated from a parallel gateway
+[/if]
 [for (flow : SequenceFlow | gateway.outgoing)]
 [handleNode(flow.targetRef)/]
 [/for]
@@ -333,7 +346,11 @@ so we only have to recursively generate the conditions for each element/]
 [template public generateDivergingConditions(gateway : XORGateway) post(trim())]
 [comment For a XOR gateway, one and only one of the following elements is to be added to the tasks list,
 so we need an 'if else if' chain to ensure that /]
+[if (gateway.name->size() > 0)]
+//Generated from [gateway.name.normaliseString()/]
+[else]
 //Generated from an exclusive gateway
+[/if]
 [for (flow : SequenceFlow | gateway.outgoing) separator('else ')]
 [if (gateway.outgoing->size() > 1)]
 if(true) {
@@ -348,7 +365,11 @@ if(true) {
 [template public generateDivergingConditions(gateway : ORGateway) post(trim())]
 [comment For an OR gateway, from one to all elements can be added to the tasks list,
 so an 'if' chain is sufficient/]
-//Generate from an inclusive gateway
+[if (gateway.name->size() > 0)]
+//Generated from [gateway.name.normaliseString()/]
+[else]
+//Generated from an inclusive gateway
+[/if]
 [for (flow : SequenceFlow | gateway.outgoing) separator('\n')]
 [if (gateway.outgoing->size() > 1)]
 if(true) {
@@ -367,18 +388,26 @@ if not ("[task.name.normaliseString()/]" in tasks) {
 }
 [/template]
 
-[template public generateDivergingConditions(event : EndEvent)]
+[template public generateDivergingConditions(event : EndEvent) post(trim())]
 [comment With an end event, there is nothing to add since it is the end of a branch/]
 [/template]
 
 [comment This template is used to generate a name for a converging gateway.
 The name is generated using merge_ followed by the name of each task that is converging to this gateway/]
-[template public getConvergingBlockName (gateway : Gateway) ]
+[template public getConvergingBlockName (gateway : Gateway) post(trim())]
+[if (gateway.name->size() > 0)]
+[gateway.name.normaliseString()/]
+[else]
 merge[for (flow : SequenceFlow | gateway.incoming)][if(not flow.sourceRef.name.oclIsUndefined())]_[flow.sourceRef.name.normaliseString()/][else]_gateway[/if][/for]
+[/if]
 [/template]
 
 [template public getMixedBlockName(gateway : Gateway)]
-mixed_[if(gateway.name->size() > 0)][gateway.name.normaliseString()/][else]gateway[/if]
+[if (gateway.name->size() > 0)]
+[gateway.name.normaliseString()/]
+[else]
+mixed_gateway
+[/if]
 [/template]
 
 [template public getMixedBlockConditions(gateway : Gateway)]
@@ -428,6 +457,16 @@ if (not ("[getMixedBlockName(f)/]" in tasks)) {
 if(not ("[f.name.normaliseString()/]" in tasks)) {
 	add "[f.name.normaliseString()/]" to: tasks;
 }
+[/template]
+
+[template public handleNode(f : IntermediateCatchEvent) post(trim())]
+[comment In the case of a catch event, we have to add the event's name to the list of tasks/]
+[if (f.incoming->size() > 0)]
+if(not ("[f.name.normaliseString()/]" in tasks)) {
+	add "[f.name.normaliseString()/]" to: tasks;
+}
+[else]
+[/if]
 [/template]
 
 [template public handleNode(f : BoundaryEvent) post(trim())]

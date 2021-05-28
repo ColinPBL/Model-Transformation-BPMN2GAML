@@ -6,12 +6,18 @@ model test
 * to adapt and modify this file as needed.
 */
 
-species test {
-	int counter_testmixedgateway <- 0;
+species test skills: [messaging] {
+	int counter_testevents <- 0;
 	int counter_a <- 0;
 	int counter_b <- 0;
 	int counter_c <- 0;
 	int counter_d <- 0;
+	int counter_b_bis <- 0;
+	int counter_a_bis <- 0;
+	int counter_e <- 0;
+	bool flag_intermediate_catch_event_2 <- false;
+	bool flag_do_a_bis <- false;
+	bool flag_intermediate_catch_event_3 <- false;
 
 	/**
 	* This is a list of methods derived from the different tasks specified in this agent's BPMN representation
@@ -35,6 +41,18 @@ species test {
 		//TODO
 		return false;
 	}
+	bool action_b_bis {
+		//TODO
+		return false;
+	}
+	bool action_a_bis {
+		//TODO
+		return false;
+	}
+	bool action_e {
+		//TODO
+		return false;
+	}
 
 	//This string is used to determine which process the agent is currently doing
 	string current_process <- nil;
@@ -48,19 +66,8 @@ species test {
 		* For each process, replace "true" by the corresponding condition
 		*/
 		if (true and current_process = nil) {
-			current_process <- "testmixedgateway";
-			if (not ("mixed_exclusive_gateway_1" in tasks)) {
-				add "mixed_exclusive_gateway_1" to: tasks;
-			}
-		}
-	}
-
-	reflex testmixedgateway when: (current_process = "testmixedgateway") {
-		counter_testmixedgateway <- counter_testmixedgateway + 1;
-		
-		if (("mixed_exclusive_gateway_1" in tasks)) {
-			remove "mixed_exclusive_gateway_1" from: tasks;
-			//Generated from an exclusive gateway
+			current_process <- "testevents";
+			//Generated from exclusive_gateway_1
 			if(true) {
 				if(not ("a" in tasks)) {
 					add "a" to: tasks;
@@ -72,38 +79,58 @@ species test {
 				}
 			}
 		}
+	}
+
+	reflex testevents when: (current_process = "testevents") {
+		counter_testevents <- counter_testevents + 1;
+		
 		if ("a" in tasks) {
+			if(flag_do_a_bis) {
+				if(not ("a_bis" in tasks)) {
+					add "a_bis" to: tasks;
+				}
+			}
 			bool result <- action_a();
 			if(result) {
 				remove "a" from: tasks;
 				counter_a <- counter_a + 1;
-				if (not ("mixed_exclusive_gateway_2" in tasks)) {
-					add "mixed_exclusive_gateway_2" to: tasks;
+				if(not ("exclusive_gateway_2" in tasks)) {
+					add "exclusive_gateway_2" to: tasks;
 				}
 			}
 		}
 		if ("b" in tasks) {
-			bool result <- action_b();
-			if(result) {
-				remove "b" from: tasks;
-				counter_b <- counter_b + 1;
-				if (not ("mixed_exclusive_gateway_2" in tasks)) {
-					add "mixed_exclusive_gateway_2" to: tasks;
+			bool is_interrupted <- false;
+			if("message" in mailbox) {
+				is_interrupted <- true;
+				if(not ("b_bis" in tasks)) {
+					add "b_bis" to: tasks;
+				}
+			}
+			if(not is_interrupted) {
+				bool result <- action_b();
+				if(result) {
+					remove "b" from: tasks;
+					counter_b <- counter_b + 1;
+					if(not ("exclusive_gateway_2" in tasks)) {
+						add "exclusive_gateway_2" to: tasks;
+					}
 				}
 			}
 		}
-		if (("mixed_exclusive_gateway_2" in tasks)) {
-			remove "mixed_exclusive_gateway_2" from: tasks;
-			//Generated from an exclusive gateway
-			if(true) {
-				if (not ("mixed_exclusive_gateway_1" in tasks)) {
-					add "mixed_exclusive_gateway_1" to: tasks;
-				}
+		if (("exclusive_gateway_2" in tasks) and not ("a" in tasks) and not ("b" in tasks)) {
+			remove "exclusive_gateway_2" from: tasks;
+			
+		}
+		
+		if("intermediate_catch_event_1" in mailbox) {
+			if(not ("c" in tasks)) {
+				add "c" to: tasks;
 			}
-			else if(true) {
-				if(not ("c" in tasks)) {
-					add "c" to: tasks;
-				}
+		}
+		if(flag_intermediate_catch_event_2) {
+			if(not ("d" in tasks)) {
+				add "d" to: tasks;
 			}
 		}
 		if ("c" in tasks) {
@@ -111,8 +138,8 @@ species test {
 			if(result) {
 				remove "c" from: tasks;
 				counter_c <- counter_c + 1;
-				if(not ("d" in tasks)) {
-					add "d" to: tasks;
+				if(not ("intermediate_throw_event_1" in tasks)) {
+					add "intermediate_throw_event_1" to: tasks;
 				}
 			}
 		}
@@ -121,15 +148,64 @@ species test {
 			if(result) {
 				remove "d" from: tasks;
 				counter_d <- counter_d + 1;
-				//Generated from an exclusive gateway
-				if(true) {
-					
+				if(not ("intermediate_throw_event_2" in tasks)) {
+					add "intermediate_throw_event_2" to: tasks;
 				}
-				else if(true) {
-					if (not ("mixed_exclusive_gateway_1" in tasks)) {
-						add "mixed_exclusive_gateway_1" to: tasks;
-					}
+			}
+		}
+		
+		
+		
+		
+		if ("b_bis" in tasks) {
+			bool result <- action_b_bis();
+			if(result) {
+				remove "b_bis" from: tasks;
+				counter_b_bis <- counter_b_bis + 1;
+				
+			}
+		}
+		if ("a_bis" in tasks) {
+			bool result <- action_a_bis();
+			if(result) {
+				remove "a_bis" from: tasks;
+				counter_a_bis <- counter_a_bis + 1;
+				
+			}
+		}
+		
+		
+		if("intermediate_throw_event_1" in tasks) {
+			//Generated from a throw event, replace self by the relevant agent
+			ask self {
+				flag_intermediate_throw_event_1 <- true;
+			}
+			
+		}
+		if("intermediate_throw_event_2" in tasks) {
+			//Generated from a throw event, replace self by the relevant agent
+			do send to: self content: "message";
+			remove "intermediate_throw_event_2" from: tasks;
+			
+		}
+		if(flag_intermediate_catch_event_3) {
+			if(not ("e" in tasks)) {
+				add "e" to: tasks;
+			}
+		}
+		if ("e" in tasks) {
+			bool result <- action_e();
+			if(result) {
+				remove "e" from: tasks;
+				counter_e <- counter_e + 1;
+				if(not ("intermediate_catch_event_4" in tasks)) {
+					add "intermediate_catch_event_4" to: tasks;
 				}
+			}
+		}
+		if("intermediate_catch_event_4" in tasks) {
+			if("intermediate_catch_event_4" in mailbox) {
+				
 			}
 		}
 		

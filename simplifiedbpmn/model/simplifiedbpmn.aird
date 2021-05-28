@@ -9,6 +9,8 @@
     <semanticResources>../instances/testdivergingconditionsXOR.xmi</semanticResources>
     <semanticResources>../instances/SpecialUseCasesTest.xmi</semanticResources>
     <semanticResources>../instances/RoadTrafficCitizen.xmi</semanticResources>
+    <semanticResources>../instances/BoatRescuerResourceRole.xmi</semanticResources>
+    <semanticResources>platform:/resource/BPMN2SimplifiedBPMN/output/boat_rescue.xmi</semanticResources>
     <ownedViews xmi:type="viewpoint:DView" uid="_O1CVcK2DEeuik45icNy_Ew">
       <viewpoint xmi:type="description:Viewpoint" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']"/>
       <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_ySXjQL32Eeu0urhs-gd2iA" name="simplifiedbpmn class diagram" repPath="#_ySVuEL32Eeu0urhs-gd2iA" changeId="9c388800-eac5-4096-97dc-26e6acc4c753">
