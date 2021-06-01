@@ -165,18 +165,9 @@ rule EndEvent2EndEvent {
 
 rule CallActivity2Subprocess {
 	from
-		in_call_activity: BPMN!CallActivity(not in_call_activity.calledElementRef.oclIsUndefined)
+		in_call_activity: BPMN!CallActivity
 	to
 		out_subprocess: SimplifiedBPMN!Subprocess (
-			processRef <- in_call_activity.calledElementRef
-		)
-}
-
-rule CallActivity2Subroutine {
-	from
-		in_call_activity: BPMN!CallActivity (in_call_activity.calledElementRef.oclIsUndefined)
-	to
-		out_subprocess: SimplifiedBPMN!Subprocess (
-			processRef <- in_call_activity.refImmediateComposite()
+			name <- in_call_activity.name
 		)
 }

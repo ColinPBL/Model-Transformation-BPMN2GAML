@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- origin at X=0.0 Y=0.0 -->
-<bpmn2:definitions xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:ext="http://org.eclipse.bpmn2/ext" xmlns:ns="http://org.eclipse.bpmn2/default/process" id="Definitions_1" exporter="org.eclipse.bpmn2.modeler.core" exporterVersion="1.5.2.SNAPSHOT-v20200602-1600-B1" expressionLanguage="http://www.java.com/java" targetNamespace="http://org.eclipse.bpmn2/default/process">
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:ext="http://org.eclipse.bpmn2/ext" xmlns:ns="http://org.eclipse.bpmn2/default/process" xmlns:xs="http://www.w3.org/2001/XMLSchema" id="Definitions_1" exporter="org.eclipse.bpmn2.modeler.core" exporterVersion="1.5.2.SNAPSHOT-v20200602-1600-B1" expressionLanguage="http://www.java.com/java" targetNamespace="http://org.eclipse.bpmn2/default/process">
   <bpmn2:import importType="http://www.omg.org/spec/BPMN/20100524/MODEL" location="platform:/resource/BPMN2SimplifiedBPMN/diagrams/testOR.bpmn" namespace="http://org.eclipse.bpmn2/default/process"/>
   <bpmn2:import importType="http://www.omg.org/spec/BPMN/20100524/MODEL" location="platform:/resource/BPMN2SimplifiedBPMN/diagrams/testEvents.bpmn" namespace="http://org.eclipse.bpmn2/default/process"/>
   <bpmn2:process id="testSubprocess" name="TestingSubprocess" isExecutable="false">
@@ -17,12 +17,12 @@
       <bpmn2:outgoing>SequenceFlow_10</bpmn2:outgoing>
     </bpmn2:exclusiveGateway>
     <bpmn2:sequenceFlow id="SequenceFlow_3" sourceRef="StartEvent_1" targetRef="ExclusiveGateway_1"/>
-    <bpmn2:task id="Task_1" name="Task 1">
+    <bpmn2:task id="Task_1" name="A">
       <bpmn2:incoming>SequenceFlow_5</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_7</bpmn2:outgoing>
     </bpmn2:task>
     <bpmn2:sequenceFlow id="SequenceFlow_5" sourceRef="ExclusiveGateway_1" targetRef="Task_1"/>
-    <bpmn2:callActivity id="CallActivity_1" name="Call Activity 1" calledElement="testOR.bpmn#testOR">
+    <bpmn2:callActivity id="CallActivity_1" name="OR Process" calledElement="testOR.bpmn#testOR">
       <bpmn2:incoming>SequenceFlow_6</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_8</bpmn2:outgoing>
     </bpmn2:callActivity>
@@ -36,7 +36,7 @@
     <bpmn2:sequenceFlow id="SequenceFlow_7" sourceRef="Task_1" targetRef="ExclusiveGateway_2"/>
     <bpmn2:sequenceFlow id="SequenceFlow_8" sourceRef="CallActivity_1" targetRef="ExclusiveGateway_2"/>
     <bpmn2:sequenceFlow id="SequenceFlow_9" sourceRef="ExclusiveGateway_2" targetRef="EndEvent_1"/>
-    <bpmn2:callActivity id="CallActivity_2" name="Call Activity 2" calledElement="testEvents.bpmn#testEvents">
+    <bpmn2:callActivity id="CallActivity_2" name="Test Events" calledElement="testEvents.bpmn#testEvents">
       <bpmn2:incoming>SequenceFlow_10</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_11</bpmn2:outgoing>
     </bpmn2:callActivity>
@@ -66,13 +66,13 @@
       <bpmndi:BPMNShape id="BPMNShape_Task_1" bpmnElement="Task_1" isExpanded="true">
         <dc:Bounds height="50.0" width="110.0" x="366.0" y="93.0"/>
         <bpmndi:BPMNLabel id="BPMNLabel_5" labelStyle="BPMNLabelStyle_1">
-          <dc:Bounds height="15.0" width="37.0" x="402.0" y="110.0"/>
+          <dc:Bounds height="15.0" width="7.0" x="417.0" y="110.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_CallActivity_1" bpmnElement="CallActivity_1" isExpanded="true">
         <dc:Bounds height="50.0" width="110.0" x="366.0" y="193.0"/>
         <bpmndi:BPMNLabel id="BPMNLabel_7" labelStyle="BPMNLabelStyle_1">
-          <dc:Bounds height="15.0" width="70.0" x="386.0" y="210.0"/>
+          <dc:Bounds height="15.0" width="67.0" x="387.0" y="210.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_ExclusiveGateway_2" bpmnElement="ExclusiveGateway_2" isMarkerVisible="true">
@@ -84,7 +84,7 @@
       <bpmndi:BPMNShape id="BPMNShape_CallActivity_2" bpmnElement="CallActivity_2" isExpanded="true">
         <dc:Bounds height="50.0" width="110.0" x="366.0" y="0.0"/>
         <bpmndi:BPMNLabel id="BPMNLabel_13" labelStyle="BPMNLabelStyle_1">
-          <dc:Bounds height="15.0" width="70.0" x="386.0" y="17.0"/>
+          <dc:Bounds height="15.0" width="64.0" x="389.0" y="17.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_3" bpmnElement="SequenceFlow_3" sourceElement="BPMNShape_1" targetElement="BPMNShape_ExclusiveGateway_1">

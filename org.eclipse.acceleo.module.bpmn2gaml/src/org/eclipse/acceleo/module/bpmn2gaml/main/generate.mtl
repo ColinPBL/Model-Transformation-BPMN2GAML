@@ -21,7 +21,10 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 		[for (task : Task | getTasks(process))]
 	int counter_[task.name.normaliseString()/] <- 0;
 		[/for]
-	[comment This generates a boolean for every catch event that is a signal event to be used as a flag /]
+		[for (subprocess : Subprocess | getSubprocesses(process)->union(getSubroutines(process)))]
+	int counter_[subprocess.name.normaliseString()/] <- 0;
+		[/for]
+	[comment This generates a boolean for every signal catch event/]
 		[for (event : Event | getSignalEvents(process))]
 			[if event.name.size() > 0]
 	bool ['flag_' + event.name.normaliseString()/] <- false;
@@ -38,6 +41,7 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 	* from the list automatically
 	*/
 	list<agent> active_subroutines <- nil;
+
 	[/if]
 	[comment If the ResourceRole has a subprocess, we need a list to keep track of the active subprocesses/]
 	[if (aResource.hasSubprocess())]
@@ -45,11 +49,13 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 	* This list is used to keep track of every agent that is currently executing a subprocess asked by this agent
 	* The agent remains in the list while its subprocess is active
 	*/
-	list<agent> active_agents <- nil update: active_agents where (each.current_process != nil);
+	list<agent> active_agents <- nil;
+
 	[/if]
 	[for (subprocess : Subprocess | aResource.processes.getSubprocesses()->union(aResource.processes.getSubroutines()))]
 	bool started_subprocess_[subprocess.name.normaliseString()/] <- false;
 	[/for]
+
 	/**
 	* This is a list of methods derived from the different tasks specified in this agent's BPMN representation
 	* They are supposed to be called at each cycle when the agent is doing the corresponding activity
@@ -96,7 +102,11 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 		counter_[process.name.normaliseString()/] <- counter_[process.name.normaliseString()/] + 1;
 		[comment We can ignore the warning since the selection only returns FlowNodes/]
 		[for (element : FlowNode | process.flowElements->select(e | e.oclIsKindOf(FlowNode) and not e.oclIsTypeOf(StartEvent)))]
+		[if (element.oclIsTypeOf(Subprocess))]
+		[element.oclAsType(Subprocess).generateTasks(aResource)/]
+		[else]
 		[element.generateTasks()/]
+		[/if]
 		[/for]
 		if(empty(tasks)) {
 			current_process <- nil;
@@ -112,7 +122,7 @@ species subroutine_[aResource.name.normaliseString()/] parent: [aResource.name.n
 	agent calling_agent <- nil;
 	
 	reflex die when: current_process = nil {
-		ask calling_agent {
+		ask [aResource.name.normaliseString()/](calling_agent) {
 			remove myself from: self.active_subroutines;
 		}
 		do die;
@@ -259,12 +269,14 @@ if ("[subprocess.name.normaliseString()/]" in tasks) {
 		}
 		started_subprocess_[subprocess.name.normaliseString()/] <- true;
 	}
-	if(empty(active_agents where (each.current_process = "[subprocess.name.normaliseString()/]"))) {
+	if(empty(active_agents of_species [subprocess.processRef.resource.name.normaliseString()/] where (each.current_process = "[subprocess.name.normaliseString()/]"))) {
 		remove "[subprocess.name.normaliseString()/]" from: tasks;
+		counter_[subprocess.name.normaliseString()/] <- counter_[subprocess.name.normaliseString()/] + 1;
+		[handleNode(subprocess.getNextFlowNode())/]
 [else]
 		/**
 		* A subroutine species inheriting from this species is created to handle the subprocess execution
-		* However, you must specify which relevant variables should be copied by using with: ['['/]attribute_in_subspecies::attribute_in_species[']'/]
+		* However, you have to specify which relevant variables should be copied by using with: ['['/]attribute_in_subspecies::attribute_in_species[']'/]
 		*/
 		create subroutine_[resourceRole.name.normaliseString()/] number: 1 with: ['[]'/] {
 			add self to: myself.active_subroutines;
@@ -272,8 +284,10 @@ if ("[subprocess.name.normaliseString()/]" in tasks) {
 		}
 		started_subprocess_[subprocess.name.normaliseString()/] <- true;
 	}
-	if(empty(active_subroutines where (each.current_process = "[subprocess.name.normaliseString()/]"))) {
+	if(empty(active_subroutines of_species subroutine_[resourceRole.name.normaliseString()/] where (each.current_process = "[subprocess.name.normaliseString()/]"))) {
 		remove "[subprocess.name.normaliseString()/]" from: tasks;
+		counter_[subprocess.name.normaliseString()/] <- counter_[subprocess.name.normaliseString()/] + 1;
+		[handleNode(subprocess.getNextFlowNode())/]
 [/if]
 		started_subprocess_[subprocess.name.normaliseString()/] <- false;
 	}
@@ -287,7 +301,7 @@ if ("[subprocess.name.normaliseString()/]" in tasks) {
 if("[f.name.normaliseString()/]" in tasks) {
 	//Generated from a throw event, replace self by the relevant agent
 [if (f.eventType = IntermediateEventType::Message)]
-	do send to: self content: "message";
+	do send to: self contents: "message";
 	remove "[f.name.normaliseString()/]" from: tasks;
 [elseif (f.eventType = IntermediateEventType::Signal)]
 	ask self {
@@ -468,6 +482,13 @@ if (not ("[getMixedBlockName(f)/]" in tasks)) {
 	add "[getMixedBlockName(f)/]" to: tasks;
 }
 [/if]
+[/template]
+
+[template public handleNode(f : Subprocess)]
+[comment A subprocess is handled like a normal task, we add its name to the list/]
+if(not ("[f.name.normaliseString()/]" in tasks)) {
+	add "[f.name.normaliseString()/]" to: tasks;
+}
 [/template]
 
 [template public handleNode(f : IntermediateThrowEvent) post(trim())]
