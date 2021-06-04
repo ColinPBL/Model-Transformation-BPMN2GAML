@@ -13,17 +13,18 @@ model [aResource.name.normaliseString()/]
 * to adapt and modify this file as needed.
 */
 
+//Here we create a log file for the agent for later process mining
+global {
+	init {
+		save ['['/]'agent', 'case_id', 'activity', 'cycle'[']'/] to:"test.csv" type: csv rewrite:true header:false;
+	}
+}
+
 species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] skills: ['['/]messaging[']'/][/if] {
-	[comment This generates a counter for every process and task
-	It is intended to be used for validation of the simulation and/or the diagrams /]
+	[comment This variable is used to differentiate two executions of the same process /]
+	int case_id <- 0;
+
 	[for (process : FlowElementContainer | aResource.processes)]
-	int counter_[process.name.normaliseString()/] <- 0;
-		[for (task : Task | getTasks(process))]
-	int counter_[task.name.normaliseString()/] <- 0;
-		[/for]
-		[for (subprocess : Subprocess | getSubprocesses(process)->union(getSubroutines(process)))]
-	int counter_[subprocess.name.normaliseString()/] <- 0;
-		[/for]
 	[comment This generates a boolean for every signal catch event/]
 		[for (event : Event | getSignalEvents(process))]
 			[if event.name.size() > 0]
@@ -40,16 +41,13 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 	* This list is used to keep track of currently active subroutines. Whenever a subroutine finishes its execution, it removes itself
 	* from the list automatically
 	*/
-	list<agent> active_subroutines <- nil;
+	list<agent> active_subroutines <- ['[]'/];
 
 	[/if]
 	[comment If the ResourceRole has a subprocess, we need a list to keep track of the active subprocesses/]
 	[if (aResource.hasSubprocess())]
-	/**
-	* This list is used to keep track of every agent that is currently executing a subprocess asked by this agent
-	* The agent remains in the list while its subprocess is active
-	*/
-	list<agent> active_agents <- nil;
+	//This map is used to keep track of every agent that is currently executing a subprocess
+	map<string, list<agent>> active_agents <- ['[]'/];
 
 	[/if]
 	[for (subprocess : Subprocess | aResource.processes.getSubprocesses()->union(aResource.processes.getSubroutines()))]
@@ -234,7 +232,8 @@ bool result <- ['action_' + task.name.normaliseString()/]();
 	[let nextNode : FlowNode = task.getNextFlowNode()]
 if(result) {
 	remove "[task.name.normaliseString()/]" from: tasks;
-	counter_[task.name.normaliseString()/] <- counter_[task.name.normaliseString()/] + 1;
+	//Writing activity execution to log
+	save ['['/]name, case_id, "[task.name/]", cycle[']'/] to: "test.csv" type: csv rewrite: false;
 	[handleNode(nextNode)/]
 }
 	[/let]
@@ -245,6 +244,8 @@ if(result) {
 if (("[f.getConvergingBlockName()/]" in tasks) [for (flow : SequenceFlow | f.incoming) separator(' ')]
 [if(not (flow.sourceRef.oclIsKindOf(Gateway) and flow.sourceRef.oclAsType(Gateway).gatewayDirection = GatewayDirection::Diverging) and not flow.sourceRef.oclIsTypeOf(StartEvent))][let name : String = flow.sourceRef.name]and not ("[name.normaliseString()/]" in tasks)[/let][/if][/for]) {
 	remove "[f.getConvergingBlockName()/]" from: tasks;
+	//Writing activity execution to log
+	save ['['/]name, case_id, "[f.name/]", cycle[']'/] to: "test.csv" type: csv rewrite: false;
 	[for (flow : SequenceFlow | f.outgoing)]
 	[handleNode(flow.targetRef)/]
 	[/for]
@@ -265,11 +266,11 @@ if ("[subprocess.name.normaliseString()/]" in tasks) {
 [if (subprocess.processRef.resource <> resourceRole)]
 		ask any([subprocess.processRef.resource.name.normaliseString()/] where(each.current_process = nil)) {
 		current_process <- "[subprocess.processRef.name.normaliseString()/]";
-		add self to: myself.active_agents;
+		add self at: "[subprocess.name.normaliseString()/]" to: myself.active_agents;
 		}
 		started_subprocess_[subprocess.name.normaliseString()/] <- true;
 	}
-	if(empty(active_agents of_species [subprocess.processRef.resource.name.normaliseString()/] where (each.current_process = "[subprocess.name.normaliseString()/]"))) {
+	if() {
 		remove "[subprocess.name.normaliseString()/]" from: tasks;
 		counter_[subprocess.name.normaliseString()/] <- counter_[subprocess.name.normaliseString()/] + 1;
 		[handleNode(subprocess.getNextFlowNode())/]
@@ -286,7 +287,8 @@ if ("[subprocess.name.normaliseString()/]" in tasks) {
 	}
 	if(empty(active_subroutines of_species subroutine_[resourceRole.name.normaliseString()/] where (each.current_process = "[subprocess.name.normaliseString()/]"))) {
 		remove "[subprocess.name.normaliseString()/]" from: tasks;
-		counter_[subprocess.name.normaliseString()/] <- counter_[subprocess.name.normaliseString()/] + 1;
+		//Writing activity execution to log
+		save ['['/]name, case_id, "[subprocess.name/]", cycle[']'/] to: "test.csv" type: csv rewrite: false;
 		[handleNode(subprocess.getNextFlowNode())/]
 [/if]
 		started_subprocess_[subprocess.name.normaliseString()/] <- false;
@@ -303,6 +305,8 @@ if("[f.name.normaliseString()/]" in tasks) {
 [if (f.eventType = IntermediateEventType::Message)]
 	do send to: self contents: "message";
 	remove "[f.name.normaliseString()/]" from: tasks;
+	//Writing activity execution to log
+	save ['['/]name, case_id, "[f.name/]", cycle[']'/] to: "test.csv" type: csv rewrite: false;
 [elseif (f.eventType = IntermediateEventType::Signal)]
 	ask self {
 		flag_[f.name.normaliseString()/] <- true;
@@ -355,7 +359,6 @@ if(true) {
 [query public getNextFlowNode(f : FlowNode) : FlowNode =
 f.outgoing->first().targetRef
 /]
-
 
 [comment These templates are used to generate the relevant code when a diverging gateway is encountered/]
 [template public generateDivergingConditions(f : FlowNode)]
