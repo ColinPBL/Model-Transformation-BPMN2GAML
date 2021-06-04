@@ -16,14 +16,13 @@ model [aResource.name.normaliseString()/]
 //Here we create a log file for the agent for later process mining
 global {
 	init {
-		save ['['/]'agent', 'case_id', 'activity', 'cycle'[']'/] to:"test.csv" type: csv rewrite:true header:false;
+		save ['['/]'agent', 'case_id', 'activity', 'cycle'[']'/] to:"[aResource.name.normaliseString()/].csv" type: csv rewrite:true header:false;
 	}
 }
 
 species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] skills: ['['/]messaging[']'/][/if] {
 	[comment This variable is used to differentiate two executions of the same process /]
 	int case_id <- 0;
-
 	[for (process : FlowElementContainer | aResource.processes)]
 	[comment This generates a boolean for every signal catch event/]
 		[for (event : Event | getSignalEvents(process))]
@@ -88,7 +87,7 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 		[let start : StartEvent = process.getStartEvent()]
 		if (true and current_process = nil) {
 			current_process <- "[process.name.normaliseString()/]";
-			[start.generateTasks()/]
+			[start.generateTasks(aResource)/]
 		}
 		[/let]
 	[/for]
@@ -100,11 +99,7 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 		counter_[process.name.normaliseString()/] <- counter_[process.name.normaliseString()/] + 1;
 		[comment We can ignore the warning since the selection only returns FlowNodes/]
 		[for (element : FlowNode | process.flowElements->select(e | e.oclIsKindOf(FlowNode) and not e.oclIsTypeOf(StartEvent)))]
-		[if (element.oclIsTypeOf(Subprocess))]
-		[element.oclAsType(Subprocess).generateTasks(aResource)/]
-		[else]
-		[element.generateTasks()/]
-		[/if]
+		[element.generateTasks(aResource)/]
 		[/for]
 		if(empty(tasks)) {
 			current_process <- nil;
@@ -192,11 +187,11 @@ species subroutine_[aResource.name.normaliseString()/] parent: [aResource.name.n
 
 
 [comment These templates are used to generate the reflexes from relevant BPMN elements/]
-[template public generateTasks(f : FlowNode)]
+[template public generateTasks(f : FlowNode, resourceRole : ResourceRole)]
 //TODO define generateTasks for type [f.eClass().name/]
 [/template]
 
-[template public generateTasks(f : StartEvent) post(trim())]
+[template public generateTasks(f : StartEvent, resourceRole : ResourceRole) post(trim())]
 [for (flow : SequenceFlow | f.outgoing)]
 	[let nextNode : FlowNode = flow.targetRef]
 [handleNode(nextNode)/]
@@ -204,7 +199,7 @@ species subroutine_[aResource.name.normaliseString()/] parent: [aResource.name.n
 [/for]
 [/template]
 
-[template public generateTasks(f : Task) post(trim())]
+[template public generateTasks(f : Task, resourceRole : ResourceRole) post(trim())]
 if ("[f.name.normaliseString()/]" in tasks) {
 [comment Before executing a task, we need to check if an event has occurred, as it can cancel the task /]
 [if (f.hasBoundaryEvent())]
@@ -216,36 +211,36 @@ if ("[f.name.normaliseString()/]" in tasks) {
 	[/for]
 	[if (f.hasInterruptingEvent())]
 	if(not is_interrupted) {
-		[taskBehaviour(f)/]
+		[taskBehaviour(f, resourceRole)/]
 	}
 	[else]
-	[taskBehaviour(f)/]
+	[taskBehaviour(f, resourceRole)/]
 	[/if]
 [else]
-	[taskBehaviour(f)/]
+	[taskBehaviour(f, resourceRole)/]
 [/if]
 }
 [/template]
 
-[template public taskBehaviour(task : Task) post(trim())]
+[template public taskBehaviour(task : Task, resourceRole : ResourceRole) post(trim())]
 bool result <- ['action_' + task.name.normaliseString()/]();
 	[let nextNode : FlowNode = task.getNextFlowNode()]
 if(result) {
 	remove "[task.name.normaliseString()/]" from: tasks;
 	//Writing activity execution to log
-	save ['['/]name, case_id, "[task.name/]", cycle[']'/] to: "test.csv" type: csv rewrite: false;
+	save ['['/]name, case_id, "[task.name/]", cycle[']'/] to: "[resourceRole.name.normaliseString()/].csv" type: csv rewrite: false;
 	[handleNode(nextNode)/]
 }
 	[/let]
 [/template]
 
-[template public generateTasks(f : Gateway) post(trim())]
+[template public generateTasks(f : Gateway, resourceRole : ResourceRole) post(trim())]
 [if (f.gatewayDirection = GatewayDirection::Converging)]
 if (("[f.getConvergingBlockName()/]" in tasks) [for (flow : SequenceFlow | f.incoming) separator(' ')]
 [if(not (flow.sourceRef.oclIsKindOf(Gateway) and flow.sourceRef.oclAsType(Gateway).gatewayDirection = GatewayDirection::Diverging) and not flow.sourceRef.oclIsTypeOf(StartEvent))][let name : String = flow.sourceRef.name]and not ("[name.normaliseString()/]" in tasks)[/let][/if][/for]) {
 	remove "[f.getConvergingBlockName()/]" from: tasks;
 	//Writing activity execution to log
-	save ['['/]name, case_id, "[f.name/]", cycle[']'/] to: "test.csv" type: csv rewrite: false;
+	save ['['/]name, case_id, "[f.name/]", cycle[']'/] to: "[resourceRole.name.normaliseString()/].csv" type: csv rewrite: false;
 	[for (flow : SequenceFlow | f.outgoing)]
 	[handleNode(flow.targetRef)/]
 	[/for]
@@ -270,7 +265,8 @@ if ("[subprocess.name.normaliseString()/]" in tasks) {
 		}
 		started_subprocess_[subprocess.name.normaliseString()/] <- true;
 	}
-	if() {
+	list<agent> agents_for_subprocess <- active_agents['['/]"[subprocess.name.normaliseString()/]"[']'/];
+	if(empty agents_for_subprocess) {
 		remove "[subprocess.name.normaliseString()/]" from: tasks;
 		counter_[subprocess.name.normaliseString()/] <- counter_[subprocess.name.normaliseString()/] + 1;
 		[handleNode(subprocess.getNextFlowNode())/]
@@ -288,7 +284,7 @@ if ("[subprocess.name.normaliseString()/]" in tasks) {
 	if(empty(active_subroutines of_species subroutine_[resourceRole.name.normaliseString()/] where (each.current_process = "[subprocess.name.normaliseString()/]"))) {
 		remove "[subprocess.name.normaliseString()/]" from: tasks;
 		//Writing activity execution to log
-		save ['['/]name, case_id, "[subprocess.name/]", cycle[']'/] to: "test.csv" type: csv rewrite: false;
+		save ['['/]name, case_id, "[subprocess.name/]", cycle[']'/] to: "[resourceRole.name.normaliseString()/].csv" type: csv rewrite: false;
 		[handleNode(subprocess.getNextFlowNode())/]
 [/if]
 		started_subprocess_[subprocess.name.normaliseString()/] <- false;
@@ -297,16 +293,16 @@ if ("[subprocess.name.normaliseString()/]" in tasks) {
 [/template]
 
 [comment These elements do not directly generate code in a reflex, their template is therefore empty/]
-[template public generateTasks(f : EndEvent)][/template]
+[template public generateTasks(f : EndEvent, resourceRole : ResourceRole)][/template]
 
-[template public generateTasks(f : IntermediateThrowEvent) post(trim())]
+[template public generateTasks(f : IntermediateThrowEvent, resourceRole : ResourceRole) post(trim())]
 if("[f.name.normaliseString()/]" in tasks) {
 	//Generated from a throw event, replace self by the relevant agent
 [if (f.eventType = IntermediateEventType::Message)]
 	do send to: self contents: "message";
 	remove "[f.name.normaliseString()/]" from: tasks;
 	//Writing activity execution to log
-	save ['['/]name, case_id, "[f.name/]", cycle[']'/] to: "test.csv" type: csv rewrite: false;
+	save ['['/]name, case_id, "[f.name/]", cycle[']'/] to: "[resourceRole.name.normaliseString()/].csv" type: csv rewrite: false;
 [elseif (f.eventType = IntermediateEventType::Signal)]
 	ask self {
 		flag_[f.name.normaliseString()/] <- true;
@@ -318,11 +314,11 @@ if("[f.name.normaliseString()/]" in tasks) {
 }
 [/template]
 
-[template public generateTasks(f : BoundaryEvent)][/template]
+[template public generateTasks(f : BoundaryEvent, resourceRole : ResourceRole)][/template]
 
 [comment In the case of a catch event, we need to start a new branch in the process,
 so we have to check for the condition/]
-[template public generateTasks(f : IntermediateCatchEvent) post(trim())]
+[template public generateTasks(f : IntermediateCatchEvent, resourceRole : ResourceRole) post(trim())]
 [if (f.incoming->size() > 0)]
 if("[f.name.normaliseString()/]" in tasks) {
 	[catchEventBehaviour(f)/]

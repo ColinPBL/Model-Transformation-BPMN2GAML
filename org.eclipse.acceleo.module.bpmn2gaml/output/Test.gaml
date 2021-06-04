@@ -17,7 +17,6 @@ species test {
 	int case_id <- 0;
 
 
-
 	/**
 	* This is a list of methods derived from the different tasks specified in this agent's BPMN representation
 	* They are supposed to be called at each cycle when the agent is doing the corresponding activity
