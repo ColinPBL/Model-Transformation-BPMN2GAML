@@ -6,10 +6,10 @@ model test
 * to adapt and modify this file as needed.
 */
 
-//Here we create a log file for the agent for later process mining
+//Here we create a log file for later process mining
 global {
 	init {
-		save ['agent', 'case_id', 'activity', 'cycle'] to:"test.csv" type: csv rewrite:true header:false;
+		save ['agent', 'case_id', 'activity', 'process'] to:"event_log.csv" type: csv rewrite:true header:false;
 	}
 }
 
@@ -60,6 +60,7 @@ species test {
 		* For each process, replace "true" by the corresponding condition
 		*/
 		if (true and current_process = nil) {
+			case_id <- case_id + 1;
 			current_process <- "testingtraces";
 			if(not ("a" in tasks)) {
 				add "a" to: tasks;
@@ -68,23 +69,23 @@ species test {
 	}
 
 	reflex testingtraces when: (current_process = "testingtraces") {
-		counter_testingtraces <- counter_testingtraces + 1;
+		list<string> next_tasks <- [];
 		
 		if ("a" in tasks) {
 			bool result <- action_a();
 			if(result) {
 				remove "a" from: tasks;
 				//Writing activity execution to log
-				save [name, case_id, "A", cycle] to: "test.csv" type: csv rewrite: false;
+				save [name, case_id, "A", current_process] to: "event_log.csv" type: csv rewrite: false;
 				//Generated from b_or_c
 				if(true) {
-					if(not ("b" in tasks)) {
-						add "b" to: tasks;
+					if(not ("b" in tasks) and not ("b" in next_tasks)) {
+						add "b" to: next_tasks;
 					}
 				}
 				else if(true) {
-					if(not ("c" in tasks)) {
-						add "c" to: tasks;
+					if(not ("c" in tasks) and not ("c" in next_tasks)) {
+						add "c" to: next_tasks;
 					}
 				}
 			}
@@ -95,9 +96,9 @@ species test {
 			if(result) {
 				remove "b" from: tasks;
 				//Writing activity execution to log
-				save [name, case_id, "B", cycle] to: "test.csv" type: csv rewrite: false;
-				if(not ("merge_b_or_c" in tasks)) {
-					add "merge_b_or_c" to: tasks;
+				save [name, case_id, "B", current_process] to: "event_log.csv" type: csv rewrite: false;
+				if(not ("merge_b_or_c" in tasks)  and not ("merge_b_or_c" in next_tasks)) {
+					add "merge_b_or_c" to: next_tasks;
 				}
 			}
 		}
@@ -106,30 +107,28 @@ species test {
 			if(result) {
 				remove "c" from: tasks;
 				//Writing activity execution to log
-				save [name, case_id, "C", cycle] to: "test.csv" type: csv rewrite: false;
-				if(not ("merge_b_or_c" in tasks)) {
-					add "merge_b_or_c" to: tasks;
+				save [name, case_id, "C", current_process] to: "event_log.csv" type: csv rewrite: false;
+				if(not ("merge_b_or_c" in tasks)  and not ("merge_b_or_c" in next_tasks)) {
+					add "merge_b_or_c" to: next_tasks;
 				}
 			}
 		}
 		if (("merge_b_or_c" in tasks) and not ("b" in tasks) and not ("c" in tasks)) {
 			remove "merge_b_or_c" from: tasks;
-			//Writing activity execution to log
-			save [name, case_id, "Merge B or C", cycle] to: "test.csv" type: csv rewrite: false;
 			//Generated from d_and_e_xor_f
 			//Generated from e_or_f
 			if(true) {
-				if(not ("e" in tasks)) {
-					add "e" to: tasks;
+				if(not ("e" in tasks) and not ("e" in next_tasks)) {
+					add "e" to: next_tasks;
 				}
 			}
 			else if(true) {
-				if(not ("f" in tasks)) {
-					add "f" to: tasks;
+				if(not ("f" in tasks) and not ("f" in next_tasks)) {
+					add "f" to: next_tasks;
 				}
 			}
-			if(not ("d" in tasks)) {
-				add "d" to: tasks;
+			if(not ("d" in tasks) and not ("d" in next_tasks)) {
+				add "d" to: next_tasks;
 			}
 		}
 		
@@ -138,9 +137,9 @@ species test {
 			if(result) {
 				remove "d" from: tasks;
 				//Writing activity execution to log
-				save [name, case_id, "D", cycle] to: "test.csv" type: csv rewrite: false;
-				if(not ("merge_parallel" in tasks)) {
-					add "merge_parallel" to: tasks;
+				save [name, case_id, "D", current_process] to: "event_log.csv" type: csv rewrite: false;
+				if(not ("merge_parallel" in tasks)  and not ("merge_parallel" in next_tasks)) {
+					add "merge_parallel" to: next_tasks;
 				}
 			}
 		}
@@ -150,9 +149,9 @@ species test {
 			if(result) {
 				remove "e" from: tasks;
 				//Writing activity execution to log
-				save [name, case_id, "E", cycle] to: "test.csv" type: csv rewrite: false;
-				if(not ("merge_e_or_f" in tasks)) {
-					add "merge_e_or_f" to: tasks;
+				save [name, case_id, "E", current_process] to: "event_log.csv" type: csv rewrite: false;
+				if(not ("merge_e_or_f" in tasks)  and not ("merge_e_or_f" in next_tasks)) {
+					add "merge_e_or_f" to: next_tasks;
 				}
 			}
 		}
@@ -161,26 +160,23 @@ species test {
 			if(result) {
 				remove "f" from: tasks;
 				//Writing activity execution to log
-				save [name, case_id, "F", cycle] to: "test.csv" type: csv rewrite: false;
-				if(not ("merge_e_or_f" in tasks)) {
-					add "merge_e_or_f" to: tasks;
+				save [name, case_id, "F", current_process] to: "event_log.csv" type: csv rewrite: false;
+				if(not ("merge_e_or_f" in tasks)  and not ("merge_e_or_f" in next_tasks)) {
+					add "merge_e_or_f" to: next_tasks;
 				}
 			}
 		}
 		if (("merge_e_or_f" in tasks) and not ("e" in tasks) and not ("f" in tasks)) {
 			remove "merge_e_or_f" from: tasks;
-			//Writing activity execution to log
-			save [name, case_id, "Merge E or F", cycle] to: "test.csv" type: csv rewrite: false;
-			if(not ("merge_parallel" in tasks)) {
-				add "merge_parallel" to: tasks;
+			if(not ("merge_parallel" in tasks)  and not ("merge_parallel" in next_tasks)) {
+				add "merge_parallel" to: next_tasks;
 			}
 		}
 		if (("merge_parallel" in tasks) and not ("d" in tasks) and not ("merge_e_or_f" in tasks)) {
 			remove "merge_parallel" from: tasks;
-			//Writing activity execution to log
-			save [name, case_id, "Merge parallel", cycle] to: "test.csv" type: csv rewrite: false;
 			
 		}
+		tasks <- tasks + next_tasks;
 		if(empty(tasks)) {
 			current_process <- nil;
 		}

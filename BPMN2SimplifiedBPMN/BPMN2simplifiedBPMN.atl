@@ -11,7 +11,7 @@ rule Process2Process {
 	to
 		out_process: SimplifiedBPMN!Process (
 			flowElements <- in_process.flowElements,
-			name <- in_process.id
+			name <- in_process.name
 		)
 }
 

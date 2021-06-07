@@ -13,10 +13,10 @@ model [aResource.name.normaliseString()/]
 * to adapt and modify this file as needed.
 */
 
-//Here we create a log file for the agent for later process mining
+//Here we create a log file for later process mining
 global {
 	init {
-		save ['['/]'agent', 'case_id', 'activity', 'cycle'[']'/] to:"[aResource.name.normaliseString()/].csv" type: csv rewrite:true header:false;
+		save ['['/]'resource', 'case_id', 'activity', 'process'[']'/] to:"event_log.csv" type: csv rewrite:true header:false;
 	}
 }
 
@@ -74,7 +74,6 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 
 	//This list is used to keep track of which task(s) the agent is currently doing
 	list<string> tasks <- ['['/][']'/];
-
 	[comment The idle reflex is called when an agent has no active process, and is used to start new processes
 	Additionally, if this ResourceRole has a subroutine, we do not want subroutines to keep creating processes
 	after they finished theirs, so we add a condition/]
@@ -86,6 +85,7 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 	[for (process : FlowElementContainer | aResource.processes)]
 		[let start : StartEvent = process.getStartEvent()]
 		if (true and current_process = nil) {
+			case_id <- case_id + 1;
 			current_process <- "[process.name.normaliseString()/]";
 			[start.generateTasks(aResource)/]
 		}
@@ -96,11 +96,12 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 	[comment For each process, a reflex is generated, respecting tasks' order/]
 	[for (process : FlowElementContainer | aResource.processes)]
 	reflex [process.name.normaliseString()/] when: (current_process = "[process.name.normaliseString()/]") {
-		counter_[process.name.normaliseString()/] <- counter_[process.name.normaliseString()/] + 1;
+		list<string> next_tasks <- ['['/][']'/];
 		[comment We can ignore the warning since the selection only returns FlowNodes/]
 		[for (element : FlowNode | process.flowElements->select(e | e.oclIsKindOf(FlowNode) and not e.oclIsTypeOf(StartEvent)))]
 		[element.generateTasks(aResource)/]
 		[/for]
+		tasks <- tasks + next_tasks;
 		if(empty(tasks)) {
 			current_process <- nil;
 		}
@@ -194,7 +195,7 @@ species subroutine_[aResource.name.normaliseString()/] parent: [aResource.name.n
 [template public generateTasks(f : StartEvent, resourceRole : ResourceRole) post(trim())]
 [for (flow : SequenceFlow | f.outgoing)]
 	[let nextNode : FlowNode = flow.targetRef]
-[handleNode(nextNode)/]
+[handleNode(nextNode, true)/]
 	[/let]
 [/for]
 [/template]
@@ -207,7 +208,7 @@ if ("[f.name.normaliseString()/]" in tasks) {
 	bool is_interrupted <- false;
 	[/if]
 	[for (event : BoundaryEvent | f.boundaryEventRefs)]
-	[handleNode(event)/]
+	[handleNode(event, false)/]
 	[/for]
 	[if (f.hasInterruptingEvent())]
 	if(not is_interrupted) {
@@ -228,8 +229,8 @@ bool result <- ['action_' + task.name.normaliseString()/]();
 if(result) {
 	remove "[task.name.normaliseString()/]" from: tasks;
 	//Writing activity execution to log
-	save ['['/]name, case_id, "[task.name/]", cycle[']'/] to: "[resourceRole.name.normaliseString()/].csv" type: csv rewrite: false;
-	[handleNode(nextNode)/]
+	save ['['/]"[resourceRole.name.normaliseString()/]", case_id, "[task.name/]", current_process[']'/] to: "event_log.csv" type: csv rewrite: false;
+	[handleNode(nextNode, false)/]
 }
 	[/let]
 [/template]
@@ -239,17 +240,15 @@ if(result) {
 if (("[f.getConvergingBlockName()/]" in tasks) [for (flow : SequenceFlow | f.incoming) separator(' ')]
 [if(not (flow.sourceRef.oclIsKindOf(Gateway) and flow.sourceRef.oclAsType(Gateway).gatewayDirection = GatewayDirection::Diverging) and not flow.sourceRef.oclIsTypeOf(StartEvent))][let name : String = flow.sourceRef.name]and not ("[name.normaliseString()/]" in tasks)[/let][/if][/for]) {
 	remove "[f.getConvergingBlockName()/]" from: tasks;
-	//Writing activity execution to log
-	save ['['/]name, case_id, "[f.name/]", cycle[']'/] to: "[resourceRole.name.normaliseString()/].csv" type: csv rewrite: false;
 	[for (flow : SequenceFlow | f.outgoing)]
-	[handleNode(flow.targetRef)/]
+	[handleNode(flow.targetRef, false)/]
 	[/for]
 }
 [/if]
 [if (f.gatewayDirection = GatewayDirection::Mixed)]
 if (("[f.getMixedBlockName()/]" in tasks)) {
 	remove "[f.getMixedBlockName()/]" from: tasks;
-	[generateDivergingConditions(f)/]
+	[generateDivergingConditions(f, false)/]
 }
 [/if]
 [/template]
@@ -260,32 +259,34 @@ if ("[subprocess.name.normaliseString()/]" in tasks) {
 	if(not started_subprocess_[subprocess.name.normaliseString()/]) {
 [if (subprocess.processRef.resource <> resourceRole)]
 		ask any([subprocess.processRef.resource.name.normaliseString()/] where(each.current_process = nil)) {
+		case_id <- case_id + 1;
 		current_process <- "[subprocess.processRef.name.normaliseString()/]";
-		add self at: "[subprocess.name.normaliseString()/]" to: myself.active_agents;
+		[subprocess.processRef.getStartEvent().generateTasks(subprocess.processRef.resource)/]
+		add self at: "[subprocess.processRef.name.normaliseString()/]" to: myself.active_agents;
 		}
 		started_subprocess_[subprocess.name.normaliseString()/] <- true;
 	}
-	list<agent> agents_for_subprocess <- active_agents['['/]"[subprocess.name.normaliseString()/]"[']'/];
-	if(empty agents_for_subprocess) {
+	list<agent> agents_for_subprocess <- active_agents['['/]"[subprocess.name.normaliseString()/]"[']'/] where ([subprocess.processRef.resource.name.normaliseString()/](each).current_process = "[subprocess.processRef.name.normaliseString()/]");
+	active_agents['['/]"[subprocess.processRef.name.normaliseString()/]"[']'/] <- agents_for_subprocess;
+	if(empty (agents_for_subprocess)) {
 		remove "[subprocess.name.normaliseString()/]" from: tasks;
-		counter_[subprocess.name.normaliseString()/] <- counter_[subprocess.name.normaliseString()/] + 1;
-		[handleNode(subprocess.getNextFlowNode())/]
+		[handleNode(subprocess.getNextFlowNode(), false)/]
 [else]
 		/**
 		* A subroutine species inheriting from this species is created to handle the subprocess execution
 		* However, you have to specify which relevant variables should be copied by using with: ['['/]attribute_in_subspecies::attribute_in_species[']'/]
 		*/
-		create subroutine_[resourceRole.name.normaliseString()/] number: 1 with: ['[]'/] {
+		create subroutine_[resourceRole.name.normaliseString()/] number: 1 with: ['['/]case_id::case_id, name::name[']'/] {
 			add self to: myself.active_subroutines;
 			calling_agent <- myself;
+			current_process <- "[subprocess.processRef.name.normaliseString()/]";
+			[subprocess.processRef.getStartEvent().generateTasks(subprocess.processRef.resource)/]
 		}
 		started_subprocess_[subprocess.name.normaliseString()/] <- true;
 	}
 	if(empty(active_subroutines of_species subroutine_[resourceRole.name.normaliseString()/] where (each.current_process = "[subprocess.name.normaliseString()/]"))) {
 		remove "[subprocess.name.normaliseString()/]" from: tasks;
-		//Writing activity execution to log
-		save ['['/]name, case_id, "[subprocess.name/]", cycle[']'/] to: "[resourceRole.name.normaliseString()/].csv" type: csv rewrite: false;
-		[handleNode(subprocess.getNextFlowNode())/]
+		[handleNode(subprocess.getNextFlowNode(), false)/]
 [/if]
 		started_subprocess_[subprocess.name.normaliseString()/] <- false;
 	}
@@ -302,14 +303,14 @@ if("[f.name.normaliseString()/]" in tasks) {
 	do send to: self contents: "message";
 	remove "[f.name.normaliseString()/]" from: tasks;
 	//Writing activity execution to log
-	save ['['/]name, case_id, "[f.name/]", cycle[']'/] to: "[resourceRole.name.normaliseString()/].csv" type: csv rewrite: false;
+	//save ['['/]"[resourceRole.name.normaliseString()/]", case_id, "[f.name/]", current_process[']'/] to: "event_log.csv" type: csv rewrite: false;
 [elseif (f.eventType = IntermediateEventType::Signal)]
 	ask self {
 		flag_[f.name.normaliseString()/] <- true;
 	}
 [/if]
 [let nextNode : FlowNode = f.getNextFlowNode()]
-	[handleNode(nextNode)/]
+	[handleNode(nextNode, false)/]
 [/let]
 }
 [/template]
@@ -336,7 +337,7 @@ if("[f.name.normaliseString()/]" in mailbox) {
 if("message" in mailbox) {
 	[/if]
 	[let nextNode : FlowNode = f.getNextFlowNode()]
-	[handleNode(nextNode)/]
+	[handleNode(nextNode, false)/]
 	[/let]
 }
 [elseif (f.eventType = IntermediateEventType::Signal)]
@@ -346,7 +347,7 @@ if(flag_[f.name.normaliseString()/]) {
 if(true) {
 	[/if]
 	[let nextNode : FlowNode = f.getNextFlowNode()]
-	[handleNode(nextNode)/]
+	[handleNode(nextNode, false)/]
 	[/let]
 }
 [/if]
@@ -357,11 +358,11 @@ f.outgoing->first().targetRef
 /]
 
 [comment These templates are used to generate the relevant code when a diverging gateway is encountered/]
-[template public generateDivergingConditions(f : FlowNode)]
+[template public generateDivergingConditions(f : FlowNode, from_start_event : Boolean)]
 //TODO define generateDivergingConditions for type [f.eClass().name/]
 [/template]
 
-[template public generateDivergingConditions(gateway : ANDGateway) post(trim())]
+[template public generateDivergingConditions(gateway : ANDGateway, from_start_event : Boolean) post(trim())]
 [comment For an AND gateway, all outgoing elements are added to the tasks list in parallel,
 so we only have to recursively generate the conditions for each element/]
 [if (gateway.name->size() > 0)]
@@ -370,11 +371,11 @@ so we only have to recursively generate the conditions for each element/]
 //Generated from a parallel gateway
 [/if]
 [for (flow : SequenceFlow | gateway.outgoing)]
-[handleNode(flow.targetRef)/]
+[handleNode(flow.targetRef, from_start_event)/]
 [/for]
 [/template]
 
-[template public generateDivergingConditions(gateway : XORGateway) post(trim())]
+[template public generateDivergingConditions(gateway : XORGateway, from_start_event : Boolean) post(trim())]
 [comment For a XOR gateway, one and only one of the following elements is to be added to the tasks list,
 so we need an 'if else if' chain to ensure that /]
 [if (gateway.name->size() > 0)]
@@ -385,15 +386,15 @@ so we need an 'if else if' chain to ensure that /]
 [for (flow : SequenceFlow | gateway.outgoing) separator('else ')]
 [if (gateway.outgoing->size() > 1)]
 if(true) {
-	[handleNode(flow.targetRef)/]
+	[handleNode(flow.targetRef, from_start_event)/]
 }
 [else]
-[handleNode(flow.targetRef)/]
+[handleNode(flow.targetRef, from_start_event)/]
 [/if]
 [/for]
 [/template]
 
-[template public generateDivergingConditions(gateway : ORGateway) post(trim())]
+[template public generateDivergingConditions(gateway : ORGateway, from_start_event : Boolean) post(trim())]
 [comment For an OR gateway, from one to all elements can be added to the tasks list,
 so an 'if' chain is sufficient/]
 [if (gateway.name->size() > 0)]
@@ -404,22 +405,22 @@ so an 'if' chain is sufficient/]
 [for (flow : SequenceFlow | gateway.outgoing) separator('\n')]
 [if (gateway.outgoing->size() > 1)]
 if(true) {
-	[handleNode(flow.targetRef)/]
+	[handleNode(flow.targetRef, from_start_event)/]
 }
 [else]
-[handleNode(flow.targetRef)/]
+[handleNode(flow.targetRef, from_start_event)/]
 [/if]
 [/for]
 [/template]
 
-[template public generateDivergingConditions(task : Task) post(trim())]
+[template public generateDivergingConditions(task : Task, from_start_event : Boolean) post(trim())]
 [comment For a task, we only need to add it to the list, ending the recursive call/]
-if not ("[task.name.normaliseString()/]" in tasks) {
-	add "[task.name.normaliseString()/]" to: tasks;
+if not ("[task.name.normaliseString()/]" in tasks[if (not from_start_event)]and not ("[task.name.normaliseString()/]" in next_tasks)[/if]) {
+	add "[task.name.normaliseString()/]" to: [if (not from_start_event)]next_[/if]tasks;
 }
 [/template]
 
-[template public generateDivergingConditions(event : EndEvent) post(trim())]
+[template public generateDivergingConditions(event : EndEvent, from_start_event : Boolean) post(trim())]
 [comment With an end event, there is nothing to add since it is the end of a branch/]
 [/template]
 
@@ -447,67 +448,67 @@ mixed_gateway
 
 [comment These templates are used to create the relevant code snippets based on a node's successor(s) type(s)/]
 
-[template public handleNode(f : FlowNode)]
+[template public handleNode(f : FlowNode, from_start_event : Boolean)]
 [comment This template is here to allow polymorphism, and only prints this comment if no template
 is defined for a certain type. This is to ensure adding a new type to the metamodel without defining the relevant mapping does not happen
 As a result however, we have to define empty templates for elements that do not generate anything/]
 //TODO define handleNode for type [f.eClass().name/]
 [/template]
 
-[template public handleNode(f : Task) post(trim())]
+[template public handleNode(f : Task, from_start_event : Boolean) post(trim())]
 [comment If the next node is a task, then we have to add this task to the list if it is not already /]
 [let name : String = f.name]
-if(not ("[name.normaliseString()/]" in tasks)) {
-	add "[name.normaliseString()/]" to: tasks;
+if(not ("[name.normaliseString()/]" in tasks)[if not from_start_event] and not ("[name.normaliseString()/]" in next_tasks)[/if]) {
+	add "[name.normaliseString()/]" to: [if not from_start_event]next_[/if]tasks;
 }
 [/let]
 [/template]
 
-[template public handleNode(f : Gateway) post(trim())]
+[template public handleNode(f : Gateway, from_start_event : Boolean) post(trim())]
 [comment If the next node is a gateway, we need to check if it is diverging or converging
 If it is diverging, we use the relevant template
 If it is converging, we add the relevant task to the list
 If it is a mixed gateway, we do both/]
 [if (f.gatewayDirection = GatewayDirection::Diverging)]
-[generateDivergingConditions(f)/]
+[generateDivergingConditions(f, from_start_event)/]
 [/if]
 [if (f.gatewayDirection = GatewayDirection::Converging)]
-if(not ("[getConvergingBlockName(f)/]" in tasks)) {
-	add "[getConvergingBlockName(f)/]" to: tasks;
+if(not ("[getConvergingBlockName(f)/]" in tasks) [if not from_start_event] and not ("[getConvergingBlockName(f)/]" in next_tasks)[/if]) {
+	add "[getConvergingBlockName(f)/]" to: [if not from_start_event]next_[/if]tasks;
 }
 [/if]
 [if (f.gatewayDirection = GatewayDirection::Mixed)]
-if (not ("[getMixedBlockName(f)/]" in tasks)) {
-	add "[getMixedBlockName(f)/]" to: tasks;
+if (not ("[getMixedBlockName(f)/]" in tasks)[if not from_start_event] and not ("[getMixedBlockName(f)/]" in next_tasks)[/if]) {
+	add "[getMixedBlockName(f)/]" to: [if not from_start_event]next_[/if]tasks;
 }
 [/if]
 [/template]
 
-[template public handleNode(f : Subprocess)]
+[template public handleNode(f : Subprocess, from_start_event : Boolean)]
 [comment A subprocess is handled like a normal task, we add its name to the list/]
-if(not ("[f.name.normaliseString()/]" in tasks)) {
-	add "[f.name.normaliseString()/]" to: tasks;
+if(not ("[f.name.normaliseString()/]" in tasks)[if not from_start_event] and not ("[f.name.normaliseString()/]" in next_tasks)[/if]) {
+	add "[f.name.normaliseString()/]" to: [if not from_start_event]next_[/if]tasks;
 }
 [/template]
 
-[template public handleNode(f : IntermediateThrowEvent) post(trim())]
+[template public handleNode(f : IntermediateThrowEvent, from_start_event : Boolean) post(trim())]
 [comment In the case of a throw event, we have to add the event's name to the list of tasks/]
-if(not ("[f.name.normaliseString()/]" in tasks)) {
-	add "[f.name.normaliseString()/]" to: tasks;
+if(not ("[f.name.normaliseString()/]" in tasks)[if not from_start_event] and not ("[f.name.normaliseString()/]" in next_tasks)[/if]) {
+	add "[f.name.normaliseString()/]" to: [if not from_start_event]next_[/if]tasks;
 }
 [/template]
 
-[template public handleNode(f : IntermediateCatchEvent) post(trim())]
+[template public handleNode(f : IntermediateCatchEvent, from_start_event : Boolean) post(trim())]
 [comment In the case of a catch event, we have to add the event's name to the list of tasks/]
 [if (f.incoming->size() > 0)]
-if(not ("[f.name.normaliseString()/]" in tasks)) {
-	add "[f.name.normaliseString()/]" to: tasks;
+if(not ("[f.name.normaliseString()/]" in tasks)[if not from_start_event] and not ("[f.name.normaliseString()/]" in next_tasks)[/if]) {
+	add "[f.name.normaliseString()/]" to: [if not from_start_event]next_[/if]tasks;
 }
 [else]
 [/if]
 [/template]
 
-[template public handleNode(f : BoundaryEvent) post(trim())]
+[template public handleNode(f : BoundaryEvent, from_start_event : Boolean) post(trim())]
 [comment A boundary event behaves roughly the same as a catch event, however it is bound to an activity
 It can only be triggered during this activity, and may interrupt it/]
 [if (f.eventType = IntermediateEventType::Message)]
@@ -520,7 +521,7 @@ if("message" in mailbox) {
 	is_interrupted <- true;
 	[/if]
 	[let nextNode : FlowNode = f.getNextFlowNode()]
-	[handleNode(nextNode)/]
+	[handleNode(nextNode, false)/]
 	[/let]
 }
 [elseif (f.eventType = IntermediateEventType::Signal)]
@@ -533,12 +534,12 @@ if(true) {
 	is_interrupted <- true;
 	[/if]
 	[let nextNode : FlowNode = f.getNextFlowNode()]
-	[handleNode(nextNode)/]
+	[handleNode(nextNode, false)/]
 	[/let]
 }
 [/if]
 [/template]
 
-[template public handleNode(f : EndEvent) post(trim())]
+[template public handleNode(f : EndEvent, from_start_event : Boolean) post(trim())]
 [comment If the next node is an end event, we do not do anything since it is the end of the branch /]
 [/template]
