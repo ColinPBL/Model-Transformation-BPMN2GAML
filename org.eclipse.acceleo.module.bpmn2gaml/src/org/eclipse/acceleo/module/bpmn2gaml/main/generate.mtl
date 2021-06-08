@@ -13,16 +13,18 @@ model [aResource.name.normaliseString()/]
 * to adapt and modify this file as needed.
 */
 
-//Here we create a log file for later process mining
 global {
+	//This global variable is used in logs and should not be modified
+	int case_id <- 0;
 	init {
-		save ['['/]'resource', 'case_id', 'activity', 'process'[']'/] to:"event_log.csv" type: csv rewrite:true header:false;
+		//Here we create a log file for later process mining
+		save ['['/]'resource', 'case_id', 'activity', 'process', 'agent_id'[']'/] to:"event_log.csv" type: csv rewrite:true header:false;
 	}
 }
 
 species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] skills: ['['/]messaging[']'/][/if] {
-	[comment This variable is used to differentiate two executions of the same process /]
-	int case_id <- 0;
+	[comment This variable is used to keep track of the case_id currently being executed /]
+	int self_case_id <- 0;
 	[for (process : FlowElementContainer | aResource.processes)]
 	[comment This generates a boolean for every signal catch event/]
 		[for (event : Event | getSignalEvents(process))]
@@ -85,6 +87,7 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 	[for (process : FlowElementContainer | aResource.processes)]
 		[let start : StartEvent = process.getStartEvent()]
 		if (true and current_process = nil) {
+			self_case_id <- case_id;
 			case_id <- case_id + 1;
 			current_process <- "[process.name.normaliseString()/]";
 			[start.generateTasks(aResource)/]
@@ -229,7 +232,7 @@ bool result <- ['action_' + task.name.normaliseString()/]();
 if(result) {
 	remove "[task.name.normaliseString()/]" from: tasks;
 	//Writing activity execution to log
-	save ['['/]"[resourceRole.name.normaliseString()/]", case_id, "[task.name/]", current_process[']'/] to: "event_log.csv" type: csv rewrite: false;
+	save ['['/]"[resourceRole.name.normaliseString()/]", self_case_id, "[task.name/]", current_process, name[']'/] to: "event_log.csv" type: csv rewrite: false;
 	[handleNode(nextNode, false)/]
 }
 	[/let]
@@ -259,7 +262,7 @@ if ("[subprocess.name.normaliseString()/]" in tasks) {
 	if(not started_subprocess_[subprocess.name.normaliseString()/]) {
 [if (subprocess.processRef.resource <> resourceRole)]
 		ask any([subprocess.processRef.resource.name.normaliseString()/] where(each.current_process = nil)) {
-		case_id <- case_id + 1;
+		self_case_id <- myself.self_case_id;
 		current_process <- "[subprocess.processRef.name.normaliseString()/]";
 		[subprocess.processRef.getStartEvent().generateTasks(subprocess.processRef.resource)/]
 		add self at: "[subprocess.processRef.name.normaliseString()/]" to: myself.active_agents;
@@ -276,7 +279,7 @@ if ("[subprocess.name.normaliseString()/]" in tasks) {
 		* A subroutine species inheriting from this species is created to handle the subprocess execution
 		* However, you have to specify which relevant variables should be copied by using with: ['['/]attribute_in_subspecies::attribute_in_species[']'/]
 		*/
-		create subroutine_[resourceRole.name.normaliseString()/] number: 1 with: ['['/]case_id::case_id, name::name[']'/] {
+		create subroutine_[resourceRole.name.normaliseString()/] number: 1 with: ['['/]self_case_id::self_case_id, name::name[']'/] {
 			add self to: myself.active_subroutines;
 			calling_agent <- myself;
 			current_process <- "[subprocess.processRef.name.normaliseString()/]";
@@ -303,7 +306,7 @@ if("[f.name.normaliseString()/]" in tasks) {
 	do send to: self contents: "message";
 	remove "[f.name.normaliseString()/]" from: tasks;
 	//Writing activity execution to log
-	//save ['['/]"[resourceRole.name.normaliseString()/]", case_id, "[f.name/]", current_process[']'/] to: "event_log.csv" type: csv rewrite: false;
+	//save ['['/]"[resourceRole.name.normaliseString()/]", self_case_id, "[f.name/]", current_process, name[']'/] to: "event_log.csv" type: csv rewrite: false;
 [elseif (f.eventType = IntermediateEventType::Signal)]
 	ask self {
 		flag_[f.name.normaliseString()/] <- true;
