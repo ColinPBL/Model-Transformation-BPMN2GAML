@@ -1,7 +1,6 @@
-# This script is provided as is
-#
-#
-#
+# This script is meant to be used on a csv file containing BPMN process execution cases
+# It will produce a txt file with a summary of the different execution orders that are present in the logs
+# Feel free to redistribute, modify or use this
 
 import pandas as pa
 
@@ -23,9 +22,11 @@ unique_traces = []
 for value in dict_from_csv:
     if dict_from_csv[value] not in unique_traces:
         unique_traces.append(dict_from_csv[value])
-    
-print("\nThese are the unique traces identified from the generated log file:\n")
+
+# Now we write the list of unique traces to a text file
+out_file = open("event_log_summary.txt", "w")
+out_file.write("These are the unique traces identified from the generated log file:\n")
 for trace in unique_traces:
-    print("--------------------------------")
+    out_file.write("--------------------------------\n")
     for activity in trace:
-        print(activity)
+        out_file.write(activity + "\n")
