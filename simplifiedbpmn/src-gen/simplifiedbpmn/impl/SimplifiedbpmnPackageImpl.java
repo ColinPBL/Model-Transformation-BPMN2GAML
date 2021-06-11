@@ -31,6 +31,7 @@ import simplifiedbpmn.SequenceFlow;
 import simplifiedbpmn.SimplifiedbpmnFactory;
 import simplifiedbpmn.SimplifiedbpmnPackage;
 import simplifiedbpmn.StartEvent;
+import simplifiedbpmn.Subprocess;
 import simplifiedbpmn.Task;
 import simplifiedbpmn.ThrowEvent;
 import simplifiedbpmn.XORGateway;
@@ -183,6 +184,13 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 	 * @generated
 	 */
 	private EClass resourceRoleEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass subprocessEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -445,6 +453,15 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getActivity_BoundaryEventRefs() {
+		return (EReference) activityEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getTask() {
 		return taskEClass;
 	}
@@ -517,6 +534,24 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getBoundaryEvent_CancelActivity() {
+		return (EAttribute) boundaryEventEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBoundaryEvent_AttachedToRef() {
+		return (EReference) boundaryEventEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getThrowEvent() {
 		return throwEventEClass;
 	}
@@ -573,6 +608,24 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 	 */
 	public EReference getResourceRole_Processes() {
 		return (EReference) resourceRoleEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getSubprocess() {
+		return subprocessEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSubprocess_ProcessRef() {
+		return (EReference) subprocessEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -650,6 +703,7 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 		orGatewayEClass = createEClass(OR_GATEWAY);
 
 		activityEClass = createEClass(ACTIVITY);
+		createEReference(activityEClass, ACTIVITY__BOUNDARY_EVENT_REFS);
 
 		taskEClass = createEClass(TASK);
 
@@ -664,6 +718,8 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 
 		boundaryEventEClass = createEClass(BOUNDARY_EVENT);
 		createEAttribute(boundaryEventEClass, BOUNDARY_EVENT__EVENT_TYPE);
+		createEAttribute(boundaryEventEClass, BOUNDARY_EVENT__CANCEL_ACTIVITY);
+		createEReference(boundaryEventEClass, BOUNDARY_EVENT__ATTACHED_TO_REF);
 
 		throwEventEClass = createEClass(THROW_EVENT);
 
@@ -675,6 +731,9 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 		resourceRoleEClass = createEClass(RESOURCE_ROLE);
 		createEAttribute(resourceRoleEClass, RESOURCE_ROLE__NAME);
 		createEReference(resourceRoleEClass, RESOURCE_ROLE__PROCESSES);
+
+		subprocessEClass = createEClass(SUBPROCESS);
+		createEReference(subprocessEClass, SUBPROCESS__PROCESS_REF);
 
 		// Create enums
 		gatewayDirectionEEnum = createEEnum(GATEWAY_DIRECTION);
@@ -727,6 +786,7 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 		throwEventEClass.getESuperTypes().add(this.getEvent());
 		endEventEClass.getESuperTypes().add(this.getThrowEvent());
 		intermediateThrowEventEClass.getESuperTypes().add(this.getThrowEvent());
+		subprocessEClass.getESuperTypes().add(this.getActivity());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(flowElementEClass, FlowElement.class, "FlowElement", IS_ABSTRACT, !IS_INTERFACE,
@@ -781,6 +841,9 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 				IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(activityEClass, Activity.class, "Activity", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getActivity_BoundaryEventRefs(), this.getBoundaryEvent(), this.getBoundaryEvent_AttachedToRef(),
+				"boundaryEventRefs", null, 0, -1, Activity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(taskEClass, Task.class, "Task", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -803,6 +866,12 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 		initEAttribute(getBoundaryEvent_EventType(), this.getIntermediateEventType(), "eventType", null, 1, 1,
 				BoundaryEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBoundaryEvent_CancelActivity(), ecorePackage.getEBoolean(), "cancelActivity", null, 1, 1,
+				BoundaryEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
+		initEReference(getBoundaryEvent_AttachedToRef(), this.getActivity(), this.getActivity_BoundaryEventRefs(),
+				"attachedToRef", null, 1, 1, BoundaryEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(throwEventEClass, ThrowEvent.class, "ThrowEvent", IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
@@ -824,6 +893,12 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 				this.getFlowElementContainer_Resource(), "processes", null, 0, -1, ResourceRole.class, !IS_TRANSIENT,
 				!IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
 				IS_ORDERED);
+
+		initEClass(subprocessEClass, Subprocess.class, "Subprocess", !IS_ABSTRACT, !IS_INTERFACE,
+				IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSubprocess_ProcessRef(), this.getProcess(), null, "processRef", null, 1, 1, Subprocess.class,
+				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(gatewayDirectionEEnum, GatewayDirection.class, "GatewayDirection");

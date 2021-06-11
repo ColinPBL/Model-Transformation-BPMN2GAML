@@ -41,7 +41,9 @@
     <genClasses ecoreClass="simplifiedbpmn.ecore#//ANDGateway"/>
     <genClasses ecoreClass="simplifiedbpmn.ecore#//XORGateway"/>
     <genClasses ecoreClass="simplifiedbpmn.ecore#//ORGateway"/>
-    <genClasses image="false" ecoreClass="simplifiedbpmn.ecore#//Activity"/>
+    <genClasses image="false" ecoreClass="simplifiedbpmn.ecore#//Activity">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference simplifiedbpmn.ecore#//Activity/boundaryEventRefs"/>
+    </genClasses>
     <genClasses ecoreClass="simplifiedbpmn.ecore#//Task"/>
     <genClasses image="false" ecoreClass="simplifiedbpmn.ecore#//Event"/>
     <genClasses image="false" ecoreClass="simplifiedbpmn.ecore#//CatchEvent"/>
@@ -51,6 +53,8 @@
     </genClasses>
     <genClasses ecoreClass="simplifiedbpmn.ecore#//BoundaryEvent">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute simplifiedbpmn.ecore#//BoundaryEvent/eventType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute simplifiedbpmn.ecore#//BoundaryEvent/cancelActivity"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference simplifiedbpmn.ecore#//BoundaryEvent/attachedToRef"/>
     </genClasses>
     <genClasses image="false" ecoreClass="simplifiedbpmn.ecore#//ThrowEvent"/>
     <genClasses ecoreClass="simplifiedbpmn.ecore#//EndEvent"/>
@@ -60,6 +64,9 @@
     <genClasses ecoreClass="simplifiedbpmn.ecore#//ResourceRole">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute simplifiedbpmn.ecore#//ResourceRole/name"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference simplifiedbpmn.ecore#//ResourceRole/processes"/>
+    </genClasses>
+    <genClasses ecoreClass="simplifiedbpmn.ecore#//Subprocess">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference simplifiedbpmn.ecore#//Subprocess/processRef"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -130,6 +130,15 @@ public interface SimplifiedbpmnFactory extends EFactory {
 	ResourceRole createResourceRole();
 
 	/**
+	 * Returns a new object of class '<em>Subprocess</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Subprocess</em>'.
+	 * @generated
+	 */
+	Subprocess createSubprocess();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

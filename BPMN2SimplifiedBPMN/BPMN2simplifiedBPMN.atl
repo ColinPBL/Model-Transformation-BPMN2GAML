@@ -11,7 +11,7 @@ rule Process2Process {
 	to
 		out_process: SimplifiedBPMN!Process (
 			flowElements <- in_process.flowElements,
-			name <- in_process.id
+			name <- in_process.name
 		)
 }
 
@@ -160,5 +160,14 @@ rule EndEvent2EndEvent {
 			name <- in_start.name,
 			outgoing <- in_start.outgoing,
 			incoming <- in_start.incoming
+		)
+}
+
+rule CallActivity2Subprocess {
+	from
+		in_call_activity: BPMN!CallActivity
+	to
+		out_subprocess: SimplifiedBPMN!Subprocess (
+			name <- in_call_activity.name
 		)
 }

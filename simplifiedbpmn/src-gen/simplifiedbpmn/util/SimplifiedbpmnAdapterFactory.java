@@ -26,6 +26,7 @@ import simplifiedbpmn.ResourceRole;
 import simplifiedbpmn.SequenceFlow;
 import simplifiedbpmn.SimplifiedbpmnPackage;
 import simplifiedbpmn.StartEvent;
+import simplifiedbpmn.Subprocess;
 import simplifiedbpmn.Task;
 import simplifiedbpmn.ThrowEvent;
 import simplifiedbpmn.XORGateway;
@@ -183,6 +184,11 @@ public class SimplifiedbpmnAdapterFactory extends AdapterFactoryImpl {
 		@Override
 		public Adapter caseResourceRole(ResourceRole object) {
 			return createResourceRoleAdapter();
+		}
+
+		@Override
+		public Adapter caseSubprocess(Subprocess object) {
+			return createSubprocessAdapter();
 		}
 
 		@Override
@@ -481,6 +487,20 @@ public class SimplifiedbpmnAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createResourceRoleAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link simplifiedbpmn.Subprocess <em>Subprocess</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see simplifiedbpmn.Subprocess
+	 * @generated
+	 */
+	public Adapter createSubprocessAdapter() {
 		return null;
 	}
 
