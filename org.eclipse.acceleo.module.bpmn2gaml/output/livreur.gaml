@@ -6,15 +6,17 @@ model livreur
 * to adapt and modify this file as needed.
 */
 
-//Here we create a log file for later process mining
 global {
+	//This global variable is used in logs and should not be modified
+	int case_id <- 0;
 	init {
-		save ['resource', 'case_id', 'activity', 'process'] to:"event_log.csv" type: csv rewrite:true header:false;
+		//Here we create a log file for later process mining
+		save ['resource', 'case_id', 'activity', 'process', 'agent_id'] to:"event_log.csv" type: csv rewrite:true header:false;
 	}
 }
 
 species livreur {
-	int case_id <- 0;
+	int self_case_id <- 0;
 
 
 	/**
@@ -39,6 +41,7 @@ species livreur {
 		* For each process, replace "true" by the corresponding condition
 		*/
 		if (true and current_process = nil) {
+			self_case_id <- case_id;
 			case_id <- case_id + 1;
 			current_process <- "livrer_marchandises";
 			if(not ("livrer_les_marchandises" in tasks)) {
@@ -55,7 +58,7 @@ species livreur {
 			if(result) {
 				remove "livrer_les_marchandises" from: tasks;
 				//Writing activity execution to log
-				save ["livreur", case_id, "Livrer les marchandises", current_process] to: "event_log.csv" type: csv rewrite: false;
+				save ["livreur", self_case_id, "Livrer les marchandises", current_process, name] to: "event_log.csv" type: csv rewrite: false;
 				
 			}
 		}
