@@ -76,6 +76,7 @@
     <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
       <details key="noIncomingFlow" value="self.incoming->size() = 0"/>
     </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="eventType" eType="#//IntermediateEventType"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IntermediateCatchEvent" eSuperTypes="#//CatchEvent">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="eventType" lowerBound="1"

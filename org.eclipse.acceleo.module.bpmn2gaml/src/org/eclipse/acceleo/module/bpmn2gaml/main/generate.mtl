@@ -68,6 +68,9 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 		//TODO
 		return false;
 	}
+			[if (task.isLoop)]
+	bool [task.name.normaliseString()/]_loop_stop_condition <- false;
+			[/if]
 		[/for]
 	[/for]
 
@@ -230,10 +233,23 @@ if ("[f.name.normaliseString()/]" in tasks) {
 bool result <- ['action_' + task.name.normaliseString()/]();
 	[let nextNode : FlowNode = task.getNextFlowNode()]
 if(result) {
+	[if (task.isLoop)]
+	if([task.name.normaliseString()/]_loop_stop_condition) {
+		[task.name.normaliseString()/]_loop_stop_condition <- false;
+		remove "[task.name.normaliseString()/]" from: tasks;
+		//Writing activity execution to log
+		save ['['/]"[resourceRole.name.normaliseString()/]", self_case_id, "[task.name/]", current_process, name[']'/] to: "event_log.csv" type: csv rewrite: false;
+		[handleNode(nextNode, false)/]
+	}
+	else {
+		// check for change in loop stop condition here
+	}
+	[else]
 	remove "[task.name.normaliseString()/]" from: tasks;
 	//Writing activity execution to log
 	save ['['/]"[resourceRole.name.normaliseString()/]", self_case_id, "[task.name/]", current_process, name[']'/] to: "event_log.csv" type: csv rewrite: false;
 	[handleNode(nextNode, false)/]
+	[/if]
 }
 	[/let]
 [/template]
@@ -261,7 +277,7 @@ if (("[f.getMixedBlockName()/]" in tasks)) {
 if ("[subprocess.name.normaliseString()/]" in tasks) {
 	if(not started_subprocess_[subprocess.name.normaliseString()/]) {
 [if (subprocess.processRef.resource <> resourceRole)]
-		ask any([subprocess.processRef.resource.name.normaliseString()/] where(each.current_process = nil)) {
+		ask [if subprocess.isMultiInstance]5 among[else]any[/if]([subprocess.processRef.resource.name.normaliseString()/] where(each.current_process = nil)) {
 		self_case_id <- myself.self_case_id;
 		current_process <- "[subprocess.processRef.name.normaliseString()/]";
 		[subprocess.processRef.getStartEvent().generateTasks(subprocess.processRef.resource)/]
@@ -270,16 +286,34 @@ if ("[subprocess.name.normaliseString()/]" in tasks) {
 		started_subprocess_[subprocess.name.normaliseString()/] <- true;
 	}
 	list<agent> agents_for_subprocess <- active_agents['['/]"[subprocess.name.normaliseString()/]"[']'/] where ([subprocess.processRef.resource.name.normaliseString()/](each).current_process = "[subprocess.processRef.name.normaliseString()/]");
-	active_agents['['/]"[subprocess.processRef.name.normaliseString()/]"[']'/] <- agents_for_subprocess;
 	if(empty (agents_for_subprocess)) {
+		[if subprocess.isLoop]
+		if([subprocess.name.normaliseString()/]_loop_stop_condition) {
+			active_agents['['/]"[subprocess.processRef.name.normaliseString()/]"[']'/] <- agents_for_subprocess;
+			remove "[subprocess.name.normaliseString()/]" from: tasks;
+			[handleNode(subprocess.getNextFlowNode(), false)/]
+			started_subprocess_[subprocess.name.normaliseString()/] <- false;
+		}
+		else {
+			loop an_agent over: active_agents['['/]"[subprocess.processRef.name.normaliseString()/]"[']'/] {
+				an_agent.current_process <- "[subprocess.processRef.name.normaliseString()/]";
+			}
+			// check for change in loop stop condition here
+		}
+		[else]
+		active_agents['['/]"[subprocess.processRef.name.normaliseString()/]"[']'/] <- agents_for_subprocess;
 		remove "[subprocess.name.normaliseString()/]" from: tasks;
 		[handleNode(subprocess.getNextFlowNode(), false)/]
+		started_subprocess_[subprocess.name.normaliseString()/] <- false;
+	}
+}
+		[/if]
 [else]
 		/**
-		* A subroutine species inheriting from this species is created to handle the subprocess execution
+		* A subroutine species inheriting from this species is instantiated to handle the subprocess execution
 		* However, you have to specify which relevant variables should be copied by using with: ['['/]attribute_in_subspecies::attribute_in_species[']'/]
 		*/
-		create subroutine_[resourceRole.name.normaliseString()/] number: 1 with: ['['/]self_case_id::self_case_id, name::name[']'/] {
+		create subroutine_[resourceRole.name.normaliseString()/] number: [if subprocess.isMultiInstance]5[else]1[/if] with: ['['/]self_case_id::self_case_id, name::name[']'/] {
 			add self to: myself.active_subroutines;
 			calling_agent <- myself;
 			current_process <- "[subprocess.processRef.name.normaliseString()/]";
@@ -288,12 +322,29 @@ if ("[subprocess.name.normaliseString()/]" in tasks) {
 		started_subprocess_[subprocess.name.normaliseString()/] <- true;
 	}
 	if(empty(active_subroutines of_species subroutine_[resourceRole.name.normaliseString()/] where (each.current_process = "[subprocess.name.normaliseString()/]"))) {
+		[if subprocess.isLoop]
+		if([subprocess.name.normaliseString()/]_loop_stop_condition) {
+			remove "[subprocess.name.normaliseString()/]" from: tasks;
+			[handleNode(subprocess.getNextFlowNode(), false)/]
+			started_subprocess_[subprocess.name.normaliseString()/] <- false;
+		}
+		else {
+			create subroutine_[resourceRole.name.normaliseString()/] number: 1 with: ['['/]self_case_id::self_case_id, name::name[']'/] {
+				add self to: myself.active_subroutines;
+				calling_agent <- myself;
+				current_process <- "[subprocess.processRef.name.normaliseString()/]";
+				[subprocess.processRef.getStartEvent().generateTasks(subprocess.processRef.resource)/]
+			}
+			//check for change in loop stop condition here
+		}
+		[else]
 		remove "[subprocess.name.normaliseString()/]" from: tasks;
 		[handleNode(subprocess.getNextFlowNode(), false)/]
-[/if]
 		started_subprocess_[subprocess.name.normaliseString()/] <- false;
+		[/if]
 	}
 }
+[/if]
 [/template]
 
 [comment These elements do not directly generate code in a reflex, their template is therefore empty/]

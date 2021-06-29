@@ -84,6 +84,30 @@ rule StartEvent2StartEvent {
 		)
 }
 
+rule MessageStartEvent2StartEvent {
+	from
+		in_start: BPMN!StartEvent (in_start.eventDefinitions->size() = 1 and in_start.eventDefinitions->first().oclIsTypeOf(BPMN!MessageEventDefinition))
+	to
+		out_start: SimplifiedBPMN!StartEvent (
+			name <- in_start.name,
+			outgoing <- in_start.outgoing,
+			incoming <- in_start.incoming,
+			eventType <- #Message
+		)
+}
+
+rule SignalStartEvent2StartEvent {
+	from
+		in_start: BPMN!StartEvent (in_start.eventDefinitions->size() = 1 and in_start.eventDefinitions->first().oclIsTypeOf(BPMN!SignalEventDefinition))
+	to
+		out_start: SimplifiedBPMN!StartEvent (
+			name <- in_start.name,
+			outgoing <- in_start.outgoing,
+			incoming <- in_start.incoming,
+			eventType <- #Signal
+		)
+}
+
 rule MessageCatchEvent2IntermediateCatchEvent {
 	from
 		in_event: BPMN!IntermediateCatchEvent (in_event.eventDefinitions->size() = 1 and in_event.eventDefinitions->first().oclIsTypeOf(BPMN!MessageEventDefinition))
