@@ -591,13 +591,22 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	int ACTIVITY__OUTGOING = FLOW_NODE__OUTGOING;
 
 	/**
+	 * The feature id for the '<em><b>Boundary Event Refs</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__BOUNDARY_EVENT_REFS = FLOW_NODE_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Activity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY_FEATURE_COUNT = FLOW_NODE_FEATURE_COUNT + 0;
+	int ACTIVITY_FEATURE_COUNT = FLOW_NODE_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Activity</em>' class.
@@ -644,6 +653,15 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @ordered
 	 */
 	int TASK__OUTGOING = ACTIVITY__OUTGOING;
+
+	/**
+	 * The feature id for the '<em><b>Boundary Event Refs</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK__BOUNDARY_EVENT_REFS = ACTIVITY__BOUNDARY_EVENT_REFS;
 
 	/**
 	 * The number of structural features of the '<em>Task</em>' class.
@@ -719,14 +737,14 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	int EVENT_OPERATION_COUNT = FLOW_NODE_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link simplifiedbpmn.impl.StartEventImpl <em>Start Event</em>}' class.
+	 * The meta object id for the '{@link simplifiedbpmn.impl.CatchEventImpl <em>Catch Event</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see simplifiedbpmn.impl.StartEventImpl
-	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getStartEvent()
+	 * @see simplifiedbpmn.impl.CatchEventImpl
+	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getCatchEvent()
 	 * @generated
 	 */
-	int START_EVENT = 12;
+	int CATCH_EVENT = 12;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -735,7 +753,7 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__NAME = EVENT__NAME;
+	int CATCH_EVENT__NAME = EVENT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Incoming</b></em>' reference list.
@@ -744,7 +762,7 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__INCOMING = EVENT__INCOMING;
+	int CATCH_EVENT__INCOMING = EVENT__INCOMING;
 
 	/**
 	 * The feature id for the '<em><b>Outgoing</b></em>' reference list.
@@ -753,7 +771,62 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__OUTGOING = EVENT__OUTGOING;
+	int CATCH_EVENT__OUTGOING = EVENT__OUTGOING;
+
+	/**
+	 * The number of structural features of the '<em>Catch Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CATCH_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Catch Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CATCH_EVENT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link simplifiedbpmn.impl.StartEventImpl <em>Start Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see simplifiedbpmn.impl.StartEventImpl
+	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getStartEvent()
+	 * @generated
+	 */
+	int START_EVENT = 13;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_EVENT__NAME = CATCH_EVENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Incoming</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_EVENT__INCOMING = CATCH_EVENT__INCOMING;
+
+	/**
+	 * The feature id for the '<em><b>Outgoing</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_EVENT__OUTGOING = CATCH_EVENT__OUTGOING;
 
 	/**
 	 * The number of structural features of the '<em>Start Event</em>' class.
@@ -762,7 +835,7 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 0;
+	int START_EVENT_FEATURE_COUNT = CATCH_EVENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Start Event</em>' class.
@@ -771,7 +844,208 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
+	int START_EVENT_OPERATION_COUNT = CATCH_EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link simplifiedbpmn.impl.IntermediateCatchEventImpl <em>Intermediate Catch Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see simplifiedbpmn.impl.IntermediateCatchEventImpl
+	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getIntermediateCatchEvent()
+	 * @generated
+	 */
+	int INTERMEDIATE_CATCH_EVENT = 14;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERMEDIATE_CATCH_EVENT__NAME = CATCH_EVENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Incoming</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERMEDIATE_CATCH_EVENT__INCOMING = CATCH_EVENT__INCOMING;
+
+	/**
+	 * The feature id for the '<em><b>Outgoing</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERMEDIATE_CATCH_EVENT__OUTGOING = CATCH_EVENT__OUTGOING;
+
+	/**
+	 * The feature id for the '<em><b>Event Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERMEDIATE_CATCH_EVENT__EVENT_TYPE = CATCH_EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Intermediate Catch Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERMEDIATE_CATCH_EVENT_FEATURE_COUNT = CATCH_EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Intermediate Catch Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERMEDIATE_CATCH_EVENT_OPERATION_COUNT = CATCH_EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link simplifiedbpmn.impl.BoundaryEventImpl <em>Boundary Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see simplifiedbpmn.impl.BoundaryEventImpl
+	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getBoundaryEvent()
+	 * @generated
+	 */
+	int BOUNDARY_EVENT = 15;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOUNDARY_EVENT__NAME = CATCH_EVENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Incoming</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOUNDARY_EVENT__INCOMING = CATCH_EVENT__INCOMING;
+
+	/**
+	 * The feature id for the '<em><b>Outgoing</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOUNDARY_EVENT__OUTGOING = CATCH_EVENT__OUTGOING;
+
+	/**
+	 * The feature id for the '<em><b>Event Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOUNDARY_EVENT__EVENT_TYPE = CATCH_EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Cancel Activity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOUNDARY_EVENT__CANCEL_ACTIVITY = CATCH_EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Attached To Ref</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOUNDARY_EVENT__ATTACHED_TO_REF = CATCH_EVENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Boundary Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOUNDARY_EVENT_FEATURE_COUNT = CATCH_EVENT_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of operations of the '<em>Boundary Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOUNDARY_EVENT_OPERATION_COUNT = CATCH_EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link simplifiedbpmn.impl.ThrowEventImpl <em>Throw Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see simplifiedbpmn.impl.ThrowEventImpl
+	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getThrowEvent()
+	 * @generated
+	 */
+	int THROW_EVENT = 16;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int THROW_EVENT__NAME = EVENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Incoming</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int THROW_EVENT__INCOMING = EVENT__INCOMING;
+
+	/**
+	 * The feature id for the '<em><b>Outgoing</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int THROW_EVENT__OUTGOING = EVENT__OUTGOING;
+
+	/**
+	 * The number of structural features of the '<em>Throw Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int THROW_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Throw Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int THROW_EVENT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link simplifiedbpmn.impl.EndEventImpl <em>End Event</em>}' class.
@@ -781,7 +1055,7 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getEndEvent()
 	 * @generated
 	 */
-	int END_EVENT = 13;
+	int END_EVENT = 17;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -790,7 +1064,7 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__NAME = EVENT__NAME;
+	int END_EVENT__NAME = THROW_EVENT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Incoming</b></em>' reference list.
@@ -799,7 +1073,7 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__INCOMING = EVENT__INCOMING;
+	int END_EVENT__INCOMING = THROW_EVENT__INCOMING;
 
 	/**
 	 * The feature id for the '<em><b>Outgoing</b></em>' reference list.
@@ -808,7 +1082,7 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__OUTGOING = EVENT__OUTGOING;
+	int END_EVENT__OUTGOING = THROW_EVENT__OUTGOING;
 
 	/**
 	 * The number of structural features of the '<em>End Event</em>' class.
@@ -817,7 +1091,7 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 0;
+	int END_EVENT_FEATURE_COUNT = THROW_EVENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>End Event</em>' class.
@@ -826,7 +1100,71 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
+	int END_EVENT_OPERATION_COUNT = THROW_EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link simplifiedbpmn.impl.IntermediateThrowEventImpl <em>Intermediate Throw Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see simplifiedbpmn.impl.IntermediateThrowEventImpl
+	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getIntermediateThrowEvent()
+	 * @generated
+	 */
+	int INTERMEDIATE_THROW_EVENT = 18;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERMEDIATE_THROW_EVENT__NAME = THROW_EVENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Incoming</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERMEDIATE_THROW_EVENT__INCOMING = THROW_EVENT__INCOMING;
+
+	/**
+	 * The feature id for the '<em><b>Outgoing</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERMEDIATE_THROW_EVENT__OUTGOING = THROW_EVENT__OUTGOING;
+
+	/**
+	 * The feature id for the '<em><b>Event Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERMEDIATE_THROW_EVENT__EVENT_TYPE = THROW_EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Intermediate Throw Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERMEDIATE_THROW_EVENT_FEATURE_COUNT = THROW_EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Intermediate Throw Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERMEDIATE_THROW_EVENT_OPERATION_COUNT = THROW_EVENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link simplifiedbpmn.impl.ResourceRoleImpl <em>Resource Role</em>}' class.
@@ -836,7 +1174,7 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getResourceRole()
 	 * @generated
 	 */
-	int RESOURCE_ROLE = 14;
+	int RESOURCE_ROLE = 19;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -875,6 +1213,79 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	int RESOURCE_ROLE_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link simplifiedbpmn.impl.SubprocessImpl <em>Subprocess</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see simplifiedbpmn.impl.SubprocessImpl
+	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getSubprocess()
+	 * @generated
+	 */
+	int SUBPROCESS = 20;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBPROCESS__NAME = ACTIVITY__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Incoming</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBPROCESS__INCOMING = ACTIVITY__INCOMING;
+
+	/**
+	 * The feature id for the '<em><b>Outgoing</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBPROCESS__OUTGOING = ACTIVITY__OUTGOING;
+
+	/**
+	 * The feature id for the '<em><b>Boundary Event Refs</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBPROCESS__BOUNDARY_EVENT_REFS = ACTIVITY__BOUNDARY_EVENT_REFS;
+
+	/**
+	 * The feature id for the '<em><b>Process Ref</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBPROCESS__PROCESS_REF = ACTIVITY_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Subprocess</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBPROCESS_FEATURE_COUNT = ACTIVITY_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Subprocess</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBPROCESS_OPERATION_COUNT = ACTIVITY_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link simplifiedbpmn.GatewayDirection <em>Gateway Direction</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -882,7 +1293,17 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getGatewayDirection()
 	 * @generated
 	 */
-	int GATEWAY_DIRECTION = 15;
+	int GATEWAY_DIRECTION = 21;
+
+	/**
+	 * The meta object id for the '{@link simplifiedbpmn.IntermediateEventType <em>Intermediate Event Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see simplifiedbpmn.IntermediateEventType
+	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getIntermediateEventType()
+	 * @generated
+	 */
+	int INTERMEDIATE_EVENT_TYPE = 22;
 
 	/**
 	 * Returns the meta object for class '{@link simplifiedbpmn.FlowElement <em>Flow Element</em>}'.
@@ -1084,6 +1505,17 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	EClass getActivity();
 
 	/**
+	 * Returns the meta object for the reference list '{@link simplifiedbpmn.Activity#getBoundaryEventRefs <em>Boundary Event Refs</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Boundary Event Refs</em>'.
+	 * @see simplifiedbpmn.Activity#getBoundaryEventRefs()
+	 * @see #getActivity()
+	 * @generated
+	 */
+	EReference getActivity_BoundaryEventRefs();
+
+	/**
 	 * Returns the meta object for class '{@link simplifiedbpmn.Task <em>Task</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1104,6 +1536,16 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	EClass getEvent();
 
 	/**
+	 * Returns the meta object for class '{@link simplifiedbpmn.CatchEvent <em>Catch Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Catch Event</em>'.
+	 * @see simplifiedbpmn.CatchEvent
+	 * @generated
+	 */
+	EClass getCatchEvent();
+
+	/**
 	 * Returns the meta object for class '{@link simplifiedbpmn.StartEvent <em>Start Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1114,6 +1556,80 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	EClass getStartEvent();
 
 	/**
+	 * Returns the meta object for class '{@link simplifiedbpmn.IntermediateCatchEvent <em>Intermediate Catch Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Intermediate Catch Event</em>'.
+	 * @see simplifiedbpmn.IntermediateCatchEvent
+	 * @generated
+	 */
+	EClass getIntermediateCatchEvent();
+
+	/**
+	 * Returns the meta object for the attribute '{@link simplifiedbpmn.IntermediateCatchEvent#getEventType <em>Event Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Event Type</em>'.
+	 * @see simplifiedbpmn.IntermediateCatchEvent#getEventType()
+	 * @see #getIntermediateCatchEvent()
+	 * @generated
+	 */
+	EAttribute getIntermediateCatchEvent_EventType();
+
+	/**
+	 * Returns the meta object for class '{@link simplifiedbpmn.BoundaryEvent <em>Boundary Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Boundary Event</em>'.
+	 * @see simplifiedbpmn.BoundaryEvent
+	 * @generated
+	 */
+	EClass getBoundaryEvent();
+
+	/**
+	 * Returns the meta object for the attribute '{@link simplifiedbpmn.BoundaryEvent#getEventType <em>Event Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Event Type</em>'.
+	 * @see simplifiedbpmn.BoundaryEvent#getEventType()
+	 * @see #getBoundaryEvent()
+	 * @generated
+	 */
+	EAttribute getBoundaryEvent_EventType();
+
+	/**
+	 * Returns the meta object for the attribute '{@link simplifiedbpmn.BoundaryEvent#isCancelActivity <em>Cancel Activity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cancel Activity</em>'.
+	 * @see simplifiedbpmn.BoundaryEvent#isCancelActivity()
+	 * @see #getBoundaryEvent()
+	 * @generated
+	 */
+	EAttribute getBoundaryEvent_CancelActivity();
+
+	/**
+	 * Returns the meta object for the reference '{@link simplifiedbpmn.BoundaryEvent#getAttachedToRef <em>Attached To Ref</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Attached To Ref</em>'.
+	 * @see simplifiedbpmn.BoundaryEvent#getAttachedToRef()
+	 * @see #getBoundaryEvent()
+	 * @generated
+	 */
+	EReference getBoundaryEvent_AttachedToRef();
+
+	/**
+	 * Returns the meta object for class '{@link simplifiedbpmn.ThrowEvent <em>Throw Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Throw Event</em>'.
+	 * @see simplifiedbpmn.ThrowEvent
+	 * @generated
+	 */
+	EClass getThrowEvent();
+
+	/**
 	 * Returns the meta object for class '{@link simplifiedbpmn.EndEvent <em>End Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1122,6 +1638,27 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getEndEvent();
+
+	/**
+	 * Returns the meta object for class '{@link simplifiedbpmn.IntermediateThrowEvent <em>Intermediate Throw Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Intermediate Throw Event</em>'.
+	 * @see simplifiedbpmn.IntermediateThrowEvent
+	 * @generated
+	 */
+	EClass getIntermediateThrowEvent();
+
+	/**
+	 * Returns the meta object for the attribute '{@link simplifiedbpmn.IntermediateThrowEvent#getEventType <em>Event Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Event Type</em>'.
+	 * @see simplifiedbpmn.IntermediateThrowEvent#getEventType()
+	 * @see #getIntermediateThrowEvent()
+	 * @generated
+	 */
+	EAttribute getIntermediateThrowEvent_EventType();
 
 	/**
 	 * Returns the meta object for class '{@link simplifiedbpmn.ResourceRole <em>Resource Role</em>}'.
@@ -1156,6 +1693,27 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	EReference getResourceRole_Processes();
 
 	/**
+	 * Returns the meta object for class '{@link simplifiedbpmn.Subprocess <em>Subprocess</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Subprocess</em>'.
+	 * @see simplifiedbpmn.Subprocess
+	 * @generated
+	 */
+	EClass getSubprocess();
+
+	/**
+	 * Returns the meta object for the reference '{@link simplifiedbpmn.Subprocess#getProcessRef <em>Process Ref</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Process Ref</em>'.
+	 * @see simplifiedbpmn.Subprocess#getProcessRef()
+	 * @see #getSubprocess()
+	 * @generated
+	 */
+	EReference getSubprocess_ProcessRef();
+
+	/**
 	 * Returns the meta object for enum '{@link simplifiedbpmn.GatewayDirection <em>Gateway Direction</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1164,6 +1722,16 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getGatewayDirection();
+
+	/**
+	 * Returns the meta object for enum '{@link simplifiedbpmn.IntermediateEventType <em>Intermediate Event Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Intermediate Event Type</em>'.
+	 * @see simplifiedbpmn.IntermediateEventType
+	 * @generated
+	 */
+	EEnum getIntermediateEventType();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -1361,6 +1929,14 @@ public interface SimplifiedbpmnPackage extends EPackage {
 		EClass ACTIVITY = eINSTANCE.getActivity();
 
 		/**
+		 * The meta object literal for the '<em><b>Boundary Event Refs</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ACTIVITY__BOUNDARY_EVENT_REFS = eINSTANCE.getActivity_BoundaryEventRefs();
+
+		/**
 		 * The meta object literal for the '{@link simplifiedbpmn.impl.TaskImpl <em>Task</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1381,6 +1957,16 @@ public interface SimplifiedbpmnPackage extends EPackage {
 		EClass EVENT = eINSTANCE.getEvent();
 
 		/**
+		 * The meta object literal for the '{@link simplifiedbpmn.impl.CatchEventImpl <em>Catch Event</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see simplifiedbpmn.impl.CatchEventImpl
+		 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getCatchEvent()
+		 * @generated
+		 */
+		EClass CATCH_EVENT = eINSTANCE.getCatchEvent();
+
+		/**
 		 * The meta object literal for the '{@link simplifiedbpmn.impl.StartEventImpl <em>Start Event</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1391,6 +1977,68 @@ public interface SimplifiedbpmnPackage extends EPackage {
 		EClass START_EVENT = eINSTANCE.getStartEvent();
 
 		/**
+		 * The meta object literal for the '{@link simplifiedbpmn.impl.IntermediateCatchEventImpl <em>Intermediate Catch Event</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see simplifiedbpmn.impl.IntermediateCatchEventImpl
+		 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getIntermediateCatchEvent()
+		 * @generated
+		 */
+		EClass INTERMEDIATE_CATCH_EVENT = eINSTANCE.getIntermediateCatchEvent();
+
+		/**
+		 * The meta object literal for the '<em><b>Event Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INTERMEDIATE_CATCH_EVENT__EVENT_TYPE = eINSTANCE.getIntermediateCatchEvent_EventType();
+
+		/**
+		 * The meta object literal for the '{@link simplifiedbpmn.impl.BoundaryEventImpl <em>Boundary Event</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see simplifiedbpmn.impl.BoundaryEventImpl
+		 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getBoundaryEvent()
+		 * @generated
+		 */
+		EClass BOUNDARY_EVENT = eINSTANCE.getBoundaryEvent();
+
+		/**
+		 * The meta object literal for the '<em><b>Event Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BOUNDARY_EVENT__EVENT_TYPE = eINSTANCE.getBoundaryEvent_EventType();
+
+		/**
+		 * The meta object literal for the '<em><b>Cancel Activity</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BOUNDARY_EVENT__CANCEL_ACTIVITY = eINSTANCE.getBoundaryEvent_CancelActivity();
+
+		/**
+		 * The meta object literal for the '<em><b>Attached To Ref</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BOUNDARY_EVENT__ATTACHED_TO_REF = eINSTANCE.getBoundaryEvent_AttachedToRef();
+
+		/**
+		 * The meta object literal for the '{@link simplifiedbpmn.impl.ThrowEventImpl <em>Throw Event</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see simplifiedbpmn.impl.ThrowEventImpl
+		 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getThrowEvent()
+		 * @generated
+		 */
+		EClass THROW_EVENT = eINSTANCE.getThrowEvent();
+
+		/**
 		 * The meta object literal for the '{@link simplifiedbpmn.impl.EndEventImpl <em>End Event</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1399,6 +2047,24 @@ public interface SimplifiedbpmnPackage extends EPackage {
 		 * @generated
 		 */
 		EClass END_EVENT = eINSTANCE.getEndEvent();
+
+		/**
+		 * The meta object literal for the '{@link simplifiedbpmn.impl.IntermediateThrowEventImpl <em>Intermediate Throw Event</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see simplifiedbpmn.impl.IntermediateThrowEventImpl
+		 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getIntermediateThrowEvent()
+		 * @generated
+		 */
+		EClass INTERMEDIATE_THROW_EVENT = eINSTANCE.getIntermediateThrowEvent();
+
+		/**
+		 * The meta object literal for the '<em><b>Event Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INTERMEDIATE_THROW_EVENT__EVENT_TYPE = eINSTANCE.getIntermediateThrowEvent_EventType();
 
 		/**
 		 * The meta object literal for the '{@link simplifiedbpmn.impl.ResourceRoleImpl <em>Resource Role</em>}' class.
@@ -1427,6 +2093,24 @@ public interface SimplifiedbpmnPackage extends EPackage {
 		EReference RESOURCE_ROLE__PROCESSES = eINSTANCE.getResourceRole_Processes();
 
 		/**
+		 * The meta object literal for the '{@link simplifiedbpmn.impl.SubprocessImpl <em>Subprocess</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see simplifiedbpmn.impl.SubprocessImpl
+		 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getSubprocess()
+		 * @generated
+		 */
+		EClass SUBPROCESS = eINSTANCE.getSubprocess();
+
+		/**
+		 * The meta object literal for the '<em><b>Process Ref</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SUBPROCESS__PROCESS_REF = eINSTANCE.getSubprocess_ProcessRef();
+
+		/**
 		 * The meta object literal for the '{@link simplifiedbpmn.GatewayDirection <em>Gateway Direction</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1435,6 +2119,16 @@ public interface SimplifiedbpmnPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum GATEWAY_DIRECTION = eINSTANCE.getGatewayDirection();
+
+		/**
+		 * The meta object literal for the '{@link simplifiedbpmn.IntermediateEventType <em>Intermediate Event Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see simplifiedbpmn.IntermediateEventType
+		 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getIntermediateEventType()
+		 * @generated
+		 */
+		EEnum INTERMEDIATE_EVENT_TYPE = eINSTANCE.getIntermediateEventType();
 
 	}
 

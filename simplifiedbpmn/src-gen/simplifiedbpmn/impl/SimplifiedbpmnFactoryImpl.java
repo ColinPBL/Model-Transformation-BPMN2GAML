@@ -12,14 +12,19 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import simplifiedbpmn.ANDGateway;
+import simplifiedbpmn.BoundaryEvent;
 import simplifiedbpmn.EndEvent;
 import simplifiedbpmn.GatewayDirection;
+import simplifiedbpmn.IntermediateCatchEvent;
+import simplifiedbpmn.IntermediateEventType;
+import simplifiedbpmn.IntermediateThrowEvent;
 import simplifiedbpmn.ORGateway;
 import simplifiedbpmn.ResourceRole;
 import simplifiedbpmn.SequenceFlow;
 import simplifiedbpmn.SimplifiedbpmnFactory;
 import simplifiedbpmn.SimplifiedbpmnPackage;
 import simplifiedbpmn.StartEvent;
+import simplifiedbpmn.Subprocess;
 import simplifiedbpmn.Task;
 import simplifiedbpmn.XORGateway;
 
@@ -81,10 +86,18 @@ public class SimplifiedbpmnFactoryImpl extends EFactoryImpl implements Simplifie
 			return createTask();
 		case SimplifiedbpmnPackage.START_EVENT:
 			return createStartEvent();
+		case SimplifiedbpmnPackage.INTERMEDIATE_CATCH_EVENT:
+			return createIntermediateCatchEvent();
+		case SimplifiedbpmnPackage.BOUNDARY_EVENT:
+			return createBoundaryEvent();
 		case SimplifiedbpmnPackage.END_EVENT:
 			return createEndEvent();
+		case SimplifiedbpmnPackage.INTERMEDIATE_THROW_EVENT:
+			return createIntermediateThrowEvent();
 		case SimplifiedbpmnPackage.RESOURCE_ROLE:
 			return createResourceRole();
+		case SimplifiedbpmnPackage.SUBPROCESS:
+			return createSubprocess();
 		default:
 			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -100,6 +113,8 @@ public class SimplifiedbpmnFactoryImpl extends EFactoryImpl implements Simplifie
 		switch (eDataType.getClassifierID()) {
 		case SimplifiedbpmnPackage.GATEWAY_DIRECTION:
 			return createGatewayDirectionFromString(eDataType, initialValue);
+		case SimplifiedbpmnPackage.INTERMEDIATE_EVENT_TYPE:
+			return createIntermediateEventTypeFromString(eDataType, initialValue);
 		default:
 			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -115,6 +130,8 @@ public class SimplifiedbpmnFactoryImpl extends EFactoryImpl implements Simplifie
 		switch (eDataType.getClassifierID()) {
 		case SimplifiedbpmnPackage.GATEWAY_DIRECTION:
 			return convertGatewayDirectionToString(eDataType, instanceValue);
+		case SimplifiedbpmnPackage.INTERMEDIATE_EVENT_TYPE:
+			return convertIntermediateEventTypeToString(eDataType, instanceValue);
 		default:
 			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -195,6 +212,26 @@ public class SimplifiedbpmnFactoryImpl extends EFactoryImpl implements Simplifie
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public IntermediateCatchEvent createIntermediateCatchEvent() {
+		IntermediateCatchEventImpl intermediateCatchEvent = new IntermediateCatchEventImpl();
+		return intermediateCatchEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BoundaryEvent createBoundaryEvent() {
+		BoundaryEventImpl boundaryEvent = new BoundaryEventImpl();
+		return boundaryEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EndEvent createEndEvent() {
 		EndEventImpl endEvent = new EndEventImpl();
 		return endEvent;
@@ -205,9 +242,29 @@ public class SimplifiedbpmnFactoryImpl extends EFactoryImpl implements Simplifie
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public IntermediateThrowEvent createIntermediateThrowEvent() {
+		IntermediateThrowEventImpl intermediateThrowEvent = new IntermediateThrowEventImpl();
+		return intermediateThrowEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ResourceRole createResourceRole() {
 		ResourceRoleImpl resourceRole = new ResourceRoleImpl();
 		return resourceRole;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Subprocess createSubprocess() {
+		SubprocessImpl subprocess = new SubprocessImpl();
+		return subprocess;
 	}
 
 	/**
@@ -229,6 +286,28 @@ public class SimplifiedbpmnFactoryImpl extends EFactoryImpl implements Simplifie
 	 * @generated
 	 */
 	public String convertGatewayDirectionToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public IntermediateEventType createIntermediateEventTypeFromString(EDataType eDataType, String initialValue) {
+		IntermediateEventType result = IntermediateEventType.get(initialValue);
+		if (result == null)
+			throw new IllegalArgumentException(
+					"The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertIntermediateEventTypeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

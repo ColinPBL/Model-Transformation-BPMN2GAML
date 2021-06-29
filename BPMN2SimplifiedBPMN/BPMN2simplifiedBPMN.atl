@@ -11,7 +11,7 @@ rule Process2Process {
 	to
 		out_process: SimplifiedBPMN!Process (
 			flowElements <- in_process.flowElements,
-			name <- in_process.id
+			name <- in_process.name
 		)
 }
 
@@ -22,6 +22,7 @@ rule Task2Task {
 		out_task: SimplifiedBPMN!Task (
 			outgoing <- in_task.outgoing,
 			incoming <- in_task.incoming,
+			boundaryEventRefs <- in_task.boundaryEventRefs,
 			name <- in_task.name
 		)
 }
@@ -83,6 +84,74 @@ rule StartEvent2StartEvent {
 		)
 }
 
+rule MessageCatchEvent2IntermediateCatchEvent {
+	from
+		in_event: BPMN!IntermediateCatchEvent (in_event.eventDefinitions->size() = 1 and in_event.eventDefinitions->first().oclIsTypeOf(BPMN!MessageEventDefinition))
+	to
+		out_event: SimplifiedBPMN!IntermediateCatchEvent(
+			name <- in_event.name,
+			outgoing <- in_event.outgoing,
+			eventType <- #Message
+		)
+}
+
+rule SignalCatchEvent2IntermediateCatchEvent {
+	from
+		in_event: BPMN!IntermediateCatchEvent (in_event.eventDefinitions->size() = 1 and in_event.eventDefinitions->first().oclIsTypeOf(BPMN!SignalEventDefinition))
+	to
+		out_event: SimplifiedBPMN!IntermediateCatchEvent(
+			name <- in_event.name,
+			outgoing <- in_event.outgoing,
+			eventType <- #Signal
+		)
+}
+
+rule MessageThrowEvent2IntermediateThrowEvent {
+	from
+		in_event: BPMN!IntermediateThrowEvent (in_event.eventDefinitions->size() = 1 and in_event.eventDefinitions->first().oclIsTypeOf(BPMN!MessageEventDefinition))
+	to
+		out_event: SimplifiedBPMN!IntermediateThrowEvent(
+			name <- in_event.name,
+			outgoing <- in_event.outgoing,
+			eventType <- #Message
+		)
+}
+
+rule SignalThrowEvent2IntermediateThrowEvent {
+	from
+		in_event: BPMN!IntermediateThrowEvent (in_event.eventDefinitions->size() = 1 and in_event.eventDefinitions->first().oclIsTypeOf(BPMN!SignalEventDefinition))
+	to
+		out_event: SimplifiedBPMN!IntermediateThrowEvent(
+			name <- in_event.name,
+			outgoing <- in_event.outgoing,
+			eventType <- #Signal
+		)
+}
+
+rule MessageBoundaryEvent2MessageBoundaryEvent {
+	from
+		in_event: BPMN!BoundaryEvent (in_event.eventDefinitions->size() = 1 and in_event.eventDefinitions->first().oclIsTypeOf(BPMN!MessageEventDefinition))
+	to
+		out_event: SimplifiedBPMN!BoundaryEvent (
+			name <- in_event.name,
+			eventType <- #Message,
+			cancelActivity <- in_event.cancelActivity,
+			attachedToRef <- in_event.attachedToRef
+			)
+}
+
+rule SignalBoundaryEvent2MessageBoundaryEvent {
+	from
+		in_event: BPMN!BoundaryEvent (in_event.eventDefinitions->size() = 1 and in_event.eventDefinitions->first().oclIsTypeOf(BPMN!SignalEventDefinition))
+	to
+		out_event: SimplifiedBPMN!BoundaryEvent (
+			name <- in_event.name,
+			eventType <- #Signal,
+			cancelActivity <- in_event.cancelActivity,
+			attachedToRef <- in_event.attachedToRef
+			)
+}
+
 rule EndEvent2EndEvent {
 	from
 		in_start: BPMN!EndEvent
@@ -91,5 +160,14 @@ rule EndEvent2EndEvent {
 			name <- in_start.name,
 			outgoing <- in_start.outgoing,
 			incoming <- in_start.incoming
+		)
+}
+
+rule CallActivity2Subprocess {
+	from
+		in_call_activity: BPMN!CallActivity
+	to
+		out_subprocess: SimplifiedBPMN!Subprocess (
+			name <- in_call_activity.name
 		)
 }

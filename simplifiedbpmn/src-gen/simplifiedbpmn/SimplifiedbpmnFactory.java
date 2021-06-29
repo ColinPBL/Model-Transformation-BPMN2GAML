@@ -85,6 +85,24 @@ public interface SimplifiedbpmnFactory extends EFactory {
 	StartEvent createStartEvent();
 
 	/**
+	 * Returns a new object of class '<em>Intermediate Catch Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Intermediate Catch Event</em>'.
+	 * @generated
+	 */
+	IntermediateCatchEvent createIntermediateCatchEvent();
+
+	/**
+	 * Returns a new object of class '<em>Boundary Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Boundary Event</em>'.
+	 * @generated
+	 */
+	BoundaryEvent createBoundaryEvent();
+
+	/**
 	 * Returns a new object of class '<em>End Event</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -94,6 +112,15 @@ public interface SimplifiedbpmnFactory extends EFactory {
 	EndEvent createEndEvent();
 
 	/**
+	 * Returns a new object of class '<em>Intermediate Throw Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Intermediate Throw Event</em>'.
+	 * @generated
+	 */
+	IntermediateThrowEvent createIntermediateThrowEvent();
+
+	/**
 	 * Returns a new object of class '<em>Resource Role</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -101,6 +128,15 @@ public interface SimplifiedbpmnFactory extends EFactory {
 	 * @generated
 	 */
 	ResourceRole createResourceRole();
+
+	/**
+	 * Returns a new object of class '<em>Subprocess</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Subprocess</em>'.
+	 * @generated
+	 */
+	Subprocess createSubprocess();
 
 	/**
 	 * Returns the package supported by this factory.

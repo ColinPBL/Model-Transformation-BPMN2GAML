@@ -11,18 +11,24 @@ import org.eclipse.emf.ecore.EObject;
 
 import simplifiedbpmn.ANDGateway;
 import simplifiedbpmn.Activity;
+import simplifiedbpmn.BoundaryEvent;
+import simplifiedbpmn.CatchEvent;
 import simplifiedbpmn.EndEvent;
 import simplifiedbpmn.Event;
 import simplifiedbpmn.FlowElement;
 import simplifiedbpmn.FlowElementContainer;
 import simplifiedbpmn.FlowNode;
 import simplifiedbpmn.Gateway;
+import simplifiedbpmn.IntermediateCatchEvent;
+import simplifiedbpmn.IntermediateThrowEvent;
 import simplifiedbpmn.ORGateway;
 import simplifiedbpmn.ResourceRole;
 import simplifiedbpmn.SequenceFlow;
 import simplifiedbpmn.SimplifiedbpmnPackage;
 import simplifiedbpmn.StartEvent;
+import simplifiedbpmn.Subprocess;
 import simplifiedbpmn.Task;
+import simplifiedbpmn.ThrowEvent;
 import simplifiedbpmn.XORGateway;
 
 /**
@@ -141,8 +147,28 @@ public class SimplifiedbpmnAdapterFactory extends AdapterFactoryImpl {
 		}
 
 		@Override
+		public Adapter caseCatchEvent(CatchEvent object) {
+			return createCatchEventAdapter();
+		}
+
+		@Override
 		public Adapter caseStartEvent(StartEvent object) {
 			return createStartEventAdapter();
+		}
+
+		@Override
+		public Adapter caseIntermediateCatchEvent(IntermediateCatchEvent object) {
+			return createIntermediateCatchEventAdapter();
+		}
+
+		@Override
+		public Adapter caseBoundaryEvent(BoundaryEvent object) {
+			return createBoundaryEventAdapter();
+		}
+
+		@Override
+		public Adapter caseThrowEvent(ThrowEvent object) {
+			return createThrowEventAdapter();
 		}
 
 		@Override
@@ -151,8 +177,18 @@ public class SimplifiedbpmnAdapterFactory extends AdapterFactoryImpl {
 		}
 
 		@Override
+		public Adapter caseIntermediateThrowEvent(IntermediateThrowEvent object) {
+			return createIntermediateThrowEventAdapter();
+		}
+
+		@Override
 		public Adapter caseResourceRole(ResourceRole object) {
 			return createResourceRoleAdapter();
+		}
+
+		@Override
+		public Adapter caseSubprocess(Subprocess object) {
+			return createSubprocessAdapter();
 		}
 
 		@Override
@@ -343,6 +379,20 @@ public class SimplifiedbpmnAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link simplifiedbpmn.CatchEvent <em>Catch Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see simplifiedbpmn.CatchEvent
+	 * @generated
+	 */
+	public Adapter createCatchEventAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link simplifiedbpmn.StartEvent <em>Start Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -353,6 +403,48 @@ public class SimplifiedbpmnAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createStartEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link simplifiedbpmn.IntermediateCatchEvent <em>Intermediate Catch Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see simplifiedbpmn.IntermediateCatchEvent
+	 * @generated
+	 */
+	public Adapter createIntermediateCatchEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link simplifiedbpmn.BoundaryEvent <em>Boundary Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see simplifiedbpmn.BoundaryEvent
+	 * @generated
+	 */
+	public Adapter createBoundaryEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link simplifiedbpmn.ThrowEvent <em>Throw Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see simplifiedbpmn.ThrowEvent
+	 * @generated
+	 */
+	public Adapter createThrowEventAdapter() {
 		return null;
 	}
 
@@ -371,6 +463,20 @@ public class SimplifiedbpmnAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link simplifiedbpmn.IntermediateThrowEvent <em>Intermediate Throw Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see simplifiedbpmn.IntermediateThrowEvent
+	 * @generated
+	 */
+	public Adapter createIntermediateThrowEventAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link simplifiedbpmn.ResourceRole <em>Resource Role</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -381,6 +487,20 @@ public class SimplifiedbpmnAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createResourceRoleAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link simplifiedbpmn.Subprocess <em>Subprocess</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see simplifiedbpmn.Subprocess
+	 * @generated
+	 */
+	public Adapter createSubprocessAdapter() {
 		return null;
 	}
 
