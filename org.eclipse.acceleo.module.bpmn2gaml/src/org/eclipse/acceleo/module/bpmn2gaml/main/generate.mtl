@@ -414,7 +414,6 @@ so we have to check for the condition/]
 [template public generateTasks(f : IntermediateCatchEvent, resourceRole : ResourceRole) post(trim())]
 [if (f.incoming->size() > 0)]
 if("[f.name.normaliseString()/]" in tasks) {
-	remove "[f.name.normaliseString()/]" from: tasks;
 	[catchEventBehaviour(f)/]
 }
 [else]
@@ -433,6 +432,7 @@ if(not empty(mailbox where (each.contents = "message"))) {
 	message received_message <- any(mailbox where (each.contents = "message"));
 	remove received_message from: mailbox;
 	[/if]
+	remove "[f.name.normaliseString()/]" from: tasks;
 	[let nextNode : FlowNode = f.getNextFlowNode()]
 	[handleNode(nextNode, false)/]
 	[/let]
@@ -440,9 +440,11 @@ if(not empty(mailbox where (each.contents = "message"))) {
 [elseif (f.eventType = EventType::Signal)]
 	[if (f.name.size() > 0)]
 if(flag_[f.name.normaliseString()/]) {
+	flag_[f.name.normaliseString()/] <- false;
 	[else]
 if(true) {
 	[/if]
+	remove "[f.name.normaliseString()/]" from: tasks;
 	[let nextNode : FlowNode = f.getNextFlowNode()]
 	[handleNode(nextNode, false)/]
 	[/let]
