@@ -75,7 +75,7 @@ rule SequenceFlow2SequenceFlow {
 
 rule StartEvent2StartEvent {
 	from
-		in_start: BPMN!StartEvent
+		in_start: BPMN!StartEvent (in_start.eventDefinitions->size() = 0)
 	to
 		out_start: SimplifiedBPMN!StartEvent (
 			name <- in_start.name,

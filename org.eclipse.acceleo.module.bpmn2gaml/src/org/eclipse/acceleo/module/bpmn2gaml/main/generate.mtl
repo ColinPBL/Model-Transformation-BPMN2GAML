@@ -12,6 +12,7 @@ model [aResource.name.normaliseString()/]
 * It has been automatically generated from a specification, and may not be exactly suited to your modeling needs. Feel free
 * to adapt and modify this file as needed.
 */
+[comment Here we import every resource that's involved in a subprocess to make sure the agent has access to it/]
 [for (process : FlowElementContainer | aResource.processes)]
 	[for (subprocess : Subprocess | process.getSubprocesses())]
 import "[subprocess.processRef.resource.name.normaliseString()/].gaml"
@@ -37,6 +38,11 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 	bool ['flag_' + event.name.normaliseString()/] <- false;
 			[/if]
 		[/for]
+		[let startEvent : StartEvent = process.getStartEvent()]
+			[if (startEvent.eventType = EventType::Signal)]
+	bool flag_[startEvent.name.normaliseString()/] <- false;
+			[/if]
+		[/let]
 	[/for]
 
 		[comment If the ResourceRole has a subroutine, we need a flag to differentiate it from its subroutines/]
@@ -99,7 +105,18 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 		*/
 	[for (process : FlowElementContainer | aResource.processes)]
 		[let start : StartEvent = process.getStartEvent()]
+		[if (start.eventType = EventType::Message)]
+			[if (not start.name.oclIsUndefined())]
+		if(current_process = nil and not empty(mailbox where (each.contents = "[start.name.normaliseString()/]"))) {
+			message message_received <- any (mailbox where (each.contents = "[start.name.normaliseString()/]"));
+			remove message_received from: mailbox;
+			[/if]
+		[elseif (start.eventType = EventType::Signal)]
+		if (flag_[start.name.normaliseString()/] and current_process = nil) {
+			flag_[start.name.normaliseString()/] <- false;
+		[else]
 		if (true and current_process = nil) {
+		[/if]
 			self_case_id <- case_id;
 			case_id <- case_id + 1;
 			current_process <- "[process.name.normaliseString()/]";
@@ -155,7 +172,7 @@ species subroutine_[aResource.name.normaliseString()/] parent: [aResource.name.n
 /]
 [comment Returns the set of signal events of a process/]
 [query public getSignalEvents(p : FlowElementContainer) : Set(Event) =  
-	p.flowElements->select(e | (e.oclIsTypeOf(IntermediateCatchEvent) and e.oclAsType(IntermediateCatchEvent).eventType = IntermediateEventType::Signal) or (e.oclIsTypeOf(BoundaryEvent) and e.oclAsType(BoundaryEvent).eventType = IntermediateEventType::Signal))
+	p.flowElements->select(e | (e.oclIsTypeOf(IntermediateCatchEvent) and e.oclAsType(IntermediateCatchEvent).eventType = EventType::Signal) or (e.oclIsTypeOf(BoundaryEvent) and e.oclAsType(BoundaryEvent).eventType = EventType::Signal))
 /]
 
 [comment Returns the set of subprocesses that are internal to this resource/]
@@ -174,7 +191,9 @@ species subroutine_[aResource.name.normaliseString()/] parent: [aResource.name.n
 /]
 [comment Returns true if an event (throw or catch) is a message event/]
 [query public isMessageEvent(e : Event) : Boolean =
-	(e.oclIsTypeOf(IntermediateThrowEvent) and e.oclAsType(IntermediateThrowEvent).eventType = IntermediateEventType::Message) or (e.oclIsTypeOf(IntermediateCatchEvent) and e.oclAsType(IntermediateCatchEvent).eventType = IntermediateEventType::Message)
+	(e.oclIsTypeOf(IntermediateThrowEvent) and e.oclAsType(IntermediateThrowEvent).eventType = EventType::Message) 
+or (e.oclIsTypeOf(IntermediateCatchEvent) and e.oclAsType(IntermediateCatchEvent).eventType = EventType::Message) 
+or (e.oclIsTypeOf(StartEvent) and e.oclAsType(StartEvent).eventType = EventType::Message)
 /]
 [comment Returns true if an activity has at least one boundary event/]
 [query public hasBoundaryEvent(a : Activity) : Boolean = 
@@ -372,12 +391,12 @@ if ("[subprocess.name.normaliseString()/]" in tasks) {
 [template public generateTasks(f : IntermediateThrowEvent, resourceRole : ResourceRole) post(trim())]
 if("[f.name.normaliseString()/]" in tasks) {
 	//Generated from a throw event, replace self by the relevant agent
-[if (f.eventType = IntermediateEventType::Message)]
+[if (f.eventType = EventType::Message)]
 	do send to: self contents: "message";
 	remove "[f.name.normaliseString()/]" from: tasks;
 	//Writing activity execution to log
 	//save ['['/]"[resourceRole.name.normaliseString()/]", self_case_id, "[f.name/]", current_process, name[']'/] to: "event_log.csv" type: csv rewrite: false;
-[elseif (f.eventType = IntermediateEventType::Signal)]
+[elseif (f.eventType = EventType::Signal)]
 	ask self {
 		flag_[f.name.normaliseString()/] <- true;
 	}
@@ -395,6 +414,7 @@ so we have to check for the condition/]
 [template public generateTasks(f : IntermediateCatchEvent, resourceRole : ResourceRole) post(trim())]
 [if (f.incoming->size() > 0)]
 if("[f.name.normaliseString()/]" in tasks) {
+	remove "[f.name.normaliseString()/]" from: tasks;
 	[catchEventBehaviour(f)/]
 }
 [else]
@@ -403,17 +423,21 @@ if("[f.name.normaliseString()/]" in tasks) {
 [/template]
 
 [template public catchEventBehaviour(f : IntermediateCatchEvent) post(trim())]
-[if (f.eventType = IntermediateEventType::Message)]
+[if (f.eventType = EventType::Message)]
 	[if (f.name.size() > 0)]
-if("[f.name.normaliseString()/]" in mailbox) {
+if(not empty(mailbox where (each.contents = "[f.name.normaliseString()/]"))) {
+	message received_message <- any(mailbox where (each.contents = "[f.name.normaliseString()/]"));
+	remove received_message from: mailbox;
 	[else]
-if("message" in mailbox) {
+if(not empty(mailbox where (each.contents = "message"))) {
+	message received_message <- any(mailbox where (each.contents = "message"));
+	remove received_message from: mailbox;
 	[/if]
 	[let nextNode : FlowNode = f.getNextFlowNode()]
 	[handleNode(nextNode, false)/]
 	[/let]
 }
-[elseif (f.eventType = IntermediateEventType::Signal)]
+[elseif (f.eventType = EventType::Signal)]
 	[if (f.name.size() > 0)]
 if(flag_[f.name.normaliseString()/]) {
 	[else]
@@ -584,11 +608,15 @@ if(not ("[f.name.normaliseString()/]" in tasks)[if not from_start_event] and not
 [template public handleNode(f : BoundaryEvent, from_start_event : Boolean) post(trim())]
 [comment A boundary event behaves roughly the same as a catch event, however it is bound to an activity
 It can only be triggered during this activity, and may interrupt it/]
-[if (f.eventType = IntermediateEventType::Message)]
+[if (f.eventType = EventType::Message)]
 	[if (f.name.size() > 0)]
-if("[f.name.normaliseString()/]" in mailbox) {
+if(not empty(mailbox where (each.contents = "[f.name.normaliseString()/]"))) {
+	message received_message <- any(mailbox where (each.contents = "[f.name.normaliseString()/]"));
+	remove received_message from: mailbox;
 	[else]
-if("message" in mailbox) {
+if(not empty(mailbox where (each.contents = "message"))) {
+	message received_message <- any(mailbox where (each.contents = "message"));
+	remove received_message from: mailbox;
 	[/if]
 	[if (f.cancelActivity)]
 	is_interrupted <- true;
@@ -597,7 +625,7 @@ if("message" in mailbox) {
 	[handleNode(nextNode, false)/]
 	[/let]
 }
-[elseif (f.eventType = IntermediateEventType::Signal)]
+[elseif (f.eventType = EventType::Signal)]
 	[if (f.name.size() > 0)]
 if(flag_[f.name.normaliseString()/]) {
 	[else]
