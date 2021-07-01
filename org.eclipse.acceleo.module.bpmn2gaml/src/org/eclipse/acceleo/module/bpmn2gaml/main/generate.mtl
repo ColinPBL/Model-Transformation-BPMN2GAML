@@ -218,7 +218,7 @@ or (e.oclIsTypeOf(StartEvent) and e.oclAsType(StartEvent).eventType = EventType:
 
 [comment Strings are usually formated in snake_case as a naming convention/]
 [template public normaliseString(s : String)]
-[s.toLower().substituteAll(' ', '_').substituteAll('\'', '_').substituteAll('_?', '')/]
+[s.toLower().substituteAll(' ', '_').substituteAll('\'', '_').substituteAll('_?', '').substituteAll('à', 'a').substituteAll('é', 'e').substituteAll('è', 'e').substituteAll('ê', 'e').substituteAll('î', 'i').substituteAll('ï', 'i')/]
 [/template]
 
 
