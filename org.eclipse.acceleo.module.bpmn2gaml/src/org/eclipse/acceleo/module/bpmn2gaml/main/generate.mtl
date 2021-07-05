@@ -15,7 +15,9 @@ model [aResource.name.normaliseString()/]
 [comment Here we import every resource that's involved in a subprocess to make sure the agent has access to it/]
 [for (process : FlowElementContainer | aResource.processes)]
 	[for (subprocess : Subprocess | process.getSubprocesses())]
+		[if not subprocess.processRef.oclIsUndefined()]
 import "[subprocess.processRef.resource.name.normaliseString()/].gaml"
+		[/if]
 	[/for]
 [/for]
 
@@ -177,12 +179,12 @@ species subroutine_[aResource.name.normaliseString()/] parent: [aResource.name.n
 
 [comment Returns the set of subprocesses that are internal to this resource/]
 [query public getSubroutines(p : FlowElementContainer) : Set(Subprocess) =
-	p.flowElements->select(e | e.oclIsTypeOf(Subprocess) and e.oclAsType(Subprocess).processRef.resource = p.resource)
+	p.flowElements->select(e | e.oclIsTypeOf(Subprocess) and not e.oclAsType(Subprocess).processRef.oclIsUndefined() and e.oclAsType(Subprocess).processRef.resource = p.resource)
 /]
 
 [comment Returns the set of subprocesses that are referring to another agent's process/]
 [query public getSubprocesses(p : FlowElementContainer) : Set(Subprocess) =
-	p.flowElements->select(e | e.oclIsTypeOf(Subprocess) and e.oclAsType(Subprocess).processRef.resource <> p.resource)
+	p.flowElements->select(e | e.oclIsTypeOf(Subprocess) and not e.oclAsType(Subprocess).processRef.oclIsUndefined() and e.oclAsType(Subprocess).processRef.resource <> p.resource)
 /]
 
 [comment Returns true if the resource has at least one process with a message event /]
@@ -304,6 +306,7 @@ if (("[f.getMixedBlockName()/]" in tasks)) {
 [template public generateTasks(subprocess : Subprocess, resourceRole : ResourceRole)]
 [comment First, we check if the subprocess refers to another agent's process or if it is internal/]
 if ("[subprocess.name.normaliseString()/]" in tasks) {
+[let processRef : Process = subprocess.processRef]
 	if(not started_subprocess_[subprocess.name.normaliseString()/]) {
 [if (subprocess.processRef.resource <> resourceRole)]
 		ask [if subprocess.isMultiInstance]5 among[else]any[/if]([subprocess.processRef.resource.name.normaliseString()/] where(each.current_process = nil)) {
@@ -342,7 +345,6 @@ if ("[subprocess.name.normaliseString()/]" in tasks) {
 		started_subprocess_[subprocess.name.normaliseString()/] <- false;
 		[/if]
 	}
-}
 [else]
 		/**
 		* A subroutine species inheriting from this species is instantiated to handle the subprocess execution
@@ -381,8 +383,9 @@ if ("[subprocess.name.normaliseString()/]" in tasks) {
 		started_subprocess_[subprocess.name.normaliseString()/] <- false;
 		[/if]
 	}
-}
 [/if]
+[/let]
+}
 [/template]
 
 [comment These elements do not directly generate code in a reflex, their template is therefore empty/]

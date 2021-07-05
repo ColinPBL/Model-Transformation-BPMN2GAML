@@ -4,7 +4,8 @@
   <bpmn2:process id="evacuer" name="Evacuer" isExecutable="false">
     <bpmn2:startEvent id="StartEvent_1" name="Blesse grave">
       <bpmn2:outgoing>SequenceFlow_2</bpmn2:outgoing>
-      <bpmn2:signalEventDefinition id="SignalEventDefinition_1"/>
+      <bpmn2:outputSet id="OutputSet_1" name="Output Set 1"/>
+      <bpmn2:messageEventDefinition id="MessageEventDefinition_1"/>
     </bpmn2:startEvent>
     <bpmn2:endEvent id="EndEvent_1">
       <bpmn2:incoming>SequenceFlow_4</bpmn2:incoming>
