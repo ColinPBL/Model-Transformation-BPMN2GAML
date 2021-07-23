@@ -358,7 +358,7 @@ if ("[subprocess.name.normaliseString()/]" in tasks) {
 		}
 		started_subprocess_[subprocess.name.normaliseString()/] <- true;
 	}
-	if(empty(active_subroutines of_species subroutine_[resourceRole.name.normaliseString()/] where (each.current_process = "[subprocess.name.normaliseString()/]"))) {
+	if(empty(active_subroutines of_species subroutine_[resourceRole.name.normaliseString()/] where (each.current_process = "[subprocess.processRef.name.normaliseString()/]"))) {
 		[if subprocess.isLoop]
 		if(not [subprocess.name.normaliseString()/]_loop_stop_condition) {
 			//check for change in loop stop condition here
@@ -435,7 +435,9 @@ if(not empty(mailbox where (each.contents = "message"))) {
 	message received_message <- any(mailbox where (each.contents = "message"));
 	remove received_message from: mailbox;
 	[/if]
+	[if (f.incoming->size() > 0)]
 	remove "[f.name.normaliseString()/]" from: tasks;
+	[/if]
 	[let nextNode : FlowNode = f.getNextFlowNode()]
 	[handleNode(nextNode, false)/]
 	[/let]
