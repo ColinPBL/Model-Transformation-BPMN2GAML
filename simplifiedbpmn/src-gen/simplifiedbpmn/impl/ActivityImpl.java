@@ -3,11 +3,13 @@
 package simplifiedbpmn.impl;
 
 import java.util.Collection;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import simplifiedbpmn.Activity;
@@ -23,6 +25,7 @@ import simplifiedbpmn.SimplifiedbpmnPackage;
  * </p>
  * <ul>
  *   <li>{@link simplifiedbpmn.impl.ActivityImpl#getBoundaryEventRefs <em>Boundary Event Refs</em>}</li>
+ *   <li>{@link simplifiedbpmn.impl.ActivityImpl#isIsLoop <em>Is Loop</em>}</li>
  * </ul>
  *
  * @generated
@@ -37,6 +40,25 @@ public abstract class ActivityImpl extends FlowNodeImpl implements Activity {
 	 * @ordered
 	 */
 	protected EList<BoundaryEvent> boundaryEventRefs;
+
+	/**
+	 * The default value of the '{@link #isIsLoop() <em>Is Loop</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isIsLoop()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean IS_LOOP_EDEFAULT = false;
+	/**
+	 * The cached value of the '{@link #isIsLoop() <em>Is Loop</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isIsLoop()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean isLoop = IS_LOOP_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -69,6 +91,28 @@ public abstract class ActivityImpl extends FlowNodeImpl implements Activity {
 					SimplifiedbpmnPackage.BOUNDARY_EVENT__ATTACHED_TO_REF);
 		}
 		return boundaryEventRefs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isIsLoop() {
+		return isLoop;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setIsLoop(boolean newIsLoop) {
+		boolean oldIsLoop = isLoop;
+		isLoop = newIsLoop;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SimplifiedbpmnPackage.ACTIVITY__IS_LOOP, oldIsLoop,
+					isLoop));
 	}
 
 	/**
@@ -111,6 +155,8 @@ public abstract class ActivityImpl extends FlowNodeImpl implements Activity {
 		switch (featureID) {
 		case SimplifiedbpmnPackage.ACTIVITY__BOUNDARY_EVENT_REFS:
 			return getBoundaryEventRefs();
+		case SimplifiedbpmnPackage.ACTIVITY__IS_LOOP:
+			return isIsLoop();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -128,6 +174,9 @@ public abstract class ActivityImpl extends FlowNodeImpl implements Activity {
 			getBoundaryEventRefs().clear();
 			getBoundaryEventRefs().addAll((Collection<? extends BoundaryEvent>) newValue);
 			return;
+		case SimplifiedbpmnPackage.ACTIVITY__IS_LOOP:
+			setIsLoop((Boolean) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -143,6 +192,9 @@ public abstract class ActivityImpl extends FlowNodeImpl implements Activity {
 		case SimplifiedbpmnPackage.ACTIVITY__BOUNDARY_EVENT_REFS:
 			getBoundaryEventRefs().clear();
 			return;
+		case SimplifiedbpmnPackage.ACTIVITY__IS_LOOP:
+			setIsLoop(IS_LOOP_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -157,8 +209,27 @@ public abstract class ActivityImpl extends FlowNodeImpl implements Activity {
 		switch (featureID) {
 		case SimplifiedbpmnPackage.ACTIVITY__BOUNDARY_EVENT_REFS:
 			return boundaryEventRefs != null && !boundaryEventRefs.isEmpty();
+		case SimplifiedbpmnPackage.ACTIVITY__IS_LOOP:
+			return isLoop != IS_LOOP_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy())
+			return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (isLoop: ");
+		result.append(isLoop);
+		result.append(')');
+		return result.toString();
 	}
 
 } //ActivityImpl

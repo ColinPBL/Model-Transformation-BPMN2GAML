@@ -12,6 +12,7 @@ package simplifiedbpmn;
  * </p>
  * <ul>
  *   <li>{@link simplifiedbpmn.Subprocess#getProcessRef <em>Process Ref</em>}</li>
+ *   <li>{@link simplifiedbpmn.Subprocess#isIsMultiInstance <em>Is Multi Instance</em>}</li>
  * </ul>
  *
  * @see simplifiedbpmn.SimplifiedbpmnPackage#getSubprocess()
@@ -40,5 +41,27 @@ public interface Subprocess extends Activity {
 	 * @generated
 	 */
 	void setProcessRef(simplifiedbpmn.Process value);
+
+	/**
+	 * Returns the value of the '<em><b>Is Multi Instance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Is Multi Instance</em>' attribute.
+	 * @see #setIsMultiInstance(boolean)
+	 * @see simplifiedbpmn.SimplifiedbpmnPackage#getSubprocess_IsMultiInstance()
+	 * @model required="true"
+	 * @generated
+	 */
+	boolean isIsMultiInstance();
+
+	/**
+	 * Sets the value of the '{@link simplifiedbpmn.Subprocess#isIsMultiInstance <em>Is Multi Instance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Is Multi Instance</em>' attribute.
+	 * @see #isIsMultiInstance()
+	 * @generated
+	 */
+	void setIsMultiInstance(boolean value);
 
 } // Subprocess

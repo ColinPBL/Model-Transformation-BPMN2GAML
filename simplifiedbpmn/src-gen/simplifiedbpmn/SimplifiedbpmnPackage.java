@@ -600,13 +600,22 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	int ACTIVITY__BOUNDARY_EVENT_REFS = FLOW_NODE_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Is Loop</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__IS_LOOP = FLOW_NODE_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Activity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY_FEATURE_COUNT = FLOW_NODE_FEATURE_COUNT + 1;
+	int ACTIVITY_FEATURE_COUNT = FLOW_NODE_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Activity</em>' class.
@@ -662,6 +671,15 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @ordered
 	 */
 	int TASK__BOUNDARY_EVENT_REFS = ACTIVITY__BOUNDARY_EVENT_REFS;
+
+	/**
+	 * The feature id for the '<em><b>Is Loop</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK__IS_LOOP = ACTIVITY__IS_LOOP;
 
 	/**
 	 * The number of structural features of the '<em>Task</em>' class.
@@ -829,13 +847,22 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	int START_EVENT__OUTGOING = CATCH_EVENT__OUTGOING;
 
 	/**
+	 * The feature id for the '<em><b>Event Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_EVENT__EVENT_TYPE = CATCH_EVENT_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Start Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT_FEATURE_COUNT = CATCH_EVENT_FEATURE_COUNT + 0;
+	int START_EVENT_FEATURE_COUNT = CATCH_EVENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Start Event</em>' class.
@@ -1259,6 +1286,15 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	int SUBPROCESS__BOUNDARY_EVENT_REFS = ACTIVITY__BOUNDARY_EVENT_REFS;
 
 	/**
+	 * The feature id for the '<em><b>Is Loop</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBPROCESS__IS_LOOP = ACTIVITY__IS_LOOP;
+
+	/**
 	 * The feature id for the '<em><b>Process Ref</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1268,13 +1304,22 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	int SUBPROCESS__PROCESS_REF = ACTIVITY_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Is Multi Instance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUBPROCESS__IS_MULTI_INSTANCE = ACTIVITY_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Subprocess</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SUBPROCESS_FEATURE_COUNT = ACTIVITY_FEATURE_COUNT + 1;
+	int SUBPROCESS_FEATURE_COUNT = ACTIVITY_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Subprocess</em>' class.
@@ -1296,14 +1341,14 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	int GATEWAY_DIRECTION = 21;
 
 	/**
-	 * The meta object id for the '{@link simplifiedbpmn.IntermediateEventType <em>Intermediate Event Type</em>}' enum.
+	 * The meta object id for the '{@link simplifiedbpmn.EventType <em>Event Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see simplifiedbpmn.IntermediateEventType
-	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getIntermediateEventType()
+	 * @see simplifiedbpmn.EventType
+	 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getEventType()
 	 * @generated
 	 */
-	int INTERMEDIATE_EVENT_TYPE = 22;
+	int EVENT_TYPE = 22;
 
 	/**
 	 * Returns the meta object for class '{@link simplifiedbpmn.FlowElement <em>Flow Element</em>}'.
@@ -1516,6 +1561,17 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	EReference getActivity_BoundaryEventRefs();
 
 	/**
+	 * Returns the meta object for the attribute '{@link simplifiedbpmn.Activity#isIsLoop <em>Is Loop</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Is Loop</em>'.
+	 * @see simplifiedbpmn.Activity#isIsLoop()
+	 * @see #getActivity()
+	 * @generated
+	 */
+	EAttribute getActivity_IsLoop();
+
+	/**
 	 * Returns the meta object for class '{@link simplifiedbpmn.Task <em>Task</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1554,6 +1610,17 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getStartEvent();
+
+	/**
+	 * Returns the meta object for the attribute '{@link simplifiedbpmn.StartEvent#getEventType <em>Event Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Event Type</em>'.
+	 * @see simplifiedbpmn.StartEvent#getEventType()
+	 * @see #getStartEvent()
+	 * @generated
+	 */
+	EAttribute getStartEvent_EventType();
 
 	/**
 	 * Returns the meta object for class '{@link simplifiedbpmn.IntermediateCatchEvent <em>Intermediate Catch Event</em>}'.
@@ -1714,6 +1781,17 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	EReference getSubprocess_ProcessRef();
 
 	/**
+	 * Returns the meta object for the attribute '{@link simplifiedbpmn.Subprocess#isIsMultiInstance <em>Is Multi Instance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Is Multi Instance</em>'.
+	 * @see simplifiedbpmn.Subprocess#isIsMultiInstance()
+	 * @see #getSubprocess()
+	 * @generated
+	 */
+	EAttribute getSubprocess_IsMultiInstance();
+
+	/**
 	 * Returns the meta object for enum '{@link simplifiedbpmn.GatewayDirection <em>Gateway Direction</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1724,14 +1802,14 @@ public interface SimplifiedbpmnPackage extends EPackage {
 	EEnum getGatewayDirection();
 
 	/**
-	 * Returns the meta object for enum '{@link simplifiedbpmn.IntermediateEventType <em>Intermediate Event Type</em>}'.
+	 * Returns the meta object for enum '{@link simplifiedbpmn.EventType <em>Event Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for enum '<em>Intermediate Event Type</em>'.
-	 * @see simplifiedbpmn.IntermediateEventType
+	 * @return the meta object for enum '<em>Event Type</em>'.
+	 * @see simplifiedbpmn.EventType
 	 * @generated
 	 */
-	EEnum getIntermediateEventType();
+	EEnum getEventType();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -1937,6 +2015,14 @@ public interface SimplifiedbpmnPackage extends EPackage {
 		EReference ACTIVITY__BOUNDARY_EVENT_REFS = eINSTANCE.getActivity_BoundaryEventRefs();
 
 		/**
+		 * The meta object literal for the '<em><b>Is Loop</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ACTIVITY__IS_LOOP = eINSTANCE.getActivity_IsLoop();
+
+		/**
 		 * The meta object literal for the '{@link simplifiedbpmn.impl.TaskImpl <em>Task</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1975,6 +2061,14 @@ public interface SimplifiedbpmnPackage extends EPackage {
 		 * @generated
 		 */
 		EClass START_EVENT = eINSTANCE.getStartEvent();
+
+		/**
+		 * The meta object literal for the '<em><b>Event Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute START_EVENT__EVENT_TYPE = eINSTANCE.getStartEvent_EventType();
 
 		/**
 		 * The meta object literal for the '{@link simplifiedbpmn.impl.IntermediateCatchEventImpl <em>Intermediate Catch Event</em>}' class.
@@ -2111,6 +2205,14 @@ public interface SimplifiedbpmnPackage extends EPackage {
 		EReference SUBPROCESS__PROCESS_REF = eINSTANCE.getSubprocess_ProcessRef();
 
 		/**
+		 * The meta object literal for the '<em><b>Is Multi Instance</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUBPROCESS__IS_MULTI_INSTANCE = eINSTANCE.getSubprocess_IsMultiInstance();
+
+		/**
 		 * The meta object literal for the '{@link simplifiedbpmn.GatewayDirection <em>Gateway Direction</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2121,14 +2223,14 @@ public interface SimplifiedbpmnPackage extends EPackage {
 		EEnum GATEWAY_DIRECTION = eINSTANCE.getGatewayDirection();
 
 		/**
-		 * The meta object literal for the '{@link simplifiedbpmn.IntermediateEventType <em>Intermediate Event Type</em>}' enum.
+		 * The meta object literal for the '{@link simplifiedbpmn.EventType <em>Event Type</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see simplifiedbpmn.IntermediateEventType
-		 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getIntermediateEventType()
+		 * @see simplifiedbpmn.EventType
+		 * @see simplifiedbpmn.impl.SimplifiedbpmnPackageImpl#getEventType()
 		 * @generated
 		 */
-		EEnum INTERMEDIATE_EVENT_TYPE = eINSTANCE.getIntermediateEventType();
+		EEnum EVENT_TYPE = eINSTANCE.getEventType();
 
 	}
 

@@ -14,9 +14,9 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import simplifiedbpmn.ANDGateway;
 import simplifiedbpmn.BoundaryEvent;
 import simplifiedbpmn.EndEvent;
+import simplifiedbpmn.EventType;
 import simplifiedbpmn.GatewayDirection;
 import simplifiedbpmn.IntermediateCatchEvent;
-import simplifiedbpmn.IntermediateEventType;
 import simplifiedbpmn.IntermediateThrowEvent;
 import simplifiedbpmn.ORGateway;
 import simplifiedbpmn.ResourceRole;
@@ -113,8 +113,8 @@ public class SimplifiedbpmnFactoryImpl extends EFactoryImpl implements Simplifie
 		switch (eDataType.getClassifierID()) {
 		case SimplifiedbpmnPackage.GATEWAY_DIRECTION:
 			return createGatewayDirectionFromString(eDataType, initialValue);
-		case SimplifiedbpmnPackage.INTERMEDIATE_EVENT_TYPE:
-			return createIntermediateEventTypeFromString(eDataType, initialValue);
+		case SimplifiedbpmnPackage.EVENT_TYPE:
+			return createEventTypeFromString(eDataType, initialValue);
 		default:
 			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -130,8 +130,8 @@ public class SimplifiedbpmnFactoryImpl extends EFactoryImpl implements Simplifie
 		switch (eDataType.getClassifierID()) {
 		case SimplifiedbpmnPackage.GATEWAY_DIRECTION:
 			return convertGatewayDirectionToString(eDataType, instanceValue);
-		case SimplifiedbpmnPackage.INTERMEDIATE_EVENT_TYPE:
-			return convertIntermediateEventTypeToString(eDataType, instanceValue);
+		case SimplifiedbpmnPackage.EVENT_TYPE:
+			return convertEventTypeToString(eDataType, instanceValue);
 		default:
 			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -294,8 +294,8 @@ public class SimplifiedbpmnFactoryImpl extends EFactoryImpl implements Simplifie
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public IntermediateEventType createIntermediateEventTypeFromString(EDataType eDataType, String initialValue) {
-		IntermediateEventType result = IntermediateEventType.get(initialValue);
+	public EventType createEventTypeFromString(EDataType eDataType, String initialValue) {
+		EventType result = EventType.get(initialValue);
 		if (result == null)
 			throw new IllegalArgumentException(
 					"The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
@@ -307,7 +307,7 @@ public class SimplifiedbpmnFactoryImpl extends EFactoryImpl implements Simplifie
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertIntermediateEventTypeToString(EDataType eDataType, Object instanceValue) {
+	public String convertEventTypeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

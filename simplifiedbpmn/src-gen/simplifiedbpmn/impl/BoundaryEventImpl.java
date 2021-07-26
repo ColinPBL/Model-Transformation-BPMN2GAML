@@ -12,7 +12,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import simplifiedbpmn.Activity;
 import simplifiedbpmn.BoundaryEvent;
-import simplifiedbpmn.IntermediateEventType;
+import simplifiedbpmn.EventType;
 import simplifiedbpmn.SimplifiedbpmnPackage;
 
 /**
@@ -39,7 +39,7 @@ public class BoundaryEventImpl extends CatchEventImpl implements BoundaryEvent {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final IntermediateEventType EVENT_TYPE_EDEFAULT = IntermediateEventType.MESSAGE;
+	protected static final EventType EVENT_TYPE_EDEFAULT = EventType.MESSAGE;
 
 	/**
 	 * The cached value of the '{@link #getEventType() <em>Event Type</em>}' attribute.
@@ -49,7 +49,7 @@ public class BoundaryEventImpl extends CatchEventImpl implements BoundaryEvent {
 	 * @generated
 	 * @ordered
 	 */
-	protected IntermediateEventType eventType = EVENT_TYPE_EDEFAULT;
+	protected EventType eventType = EVENT_TYPE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isCancelActivity() <em>Cancel Activity</em>}' attribute.
@@ -105,7 +105,7 @@ public class BoundaryEventImpl extends CatchEventImpl implements BoundaryEvent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public IntermediateEventType getEventType() {
+	public EventType getEventType() {
 		return eventType;
 	}
 
@@ -114,8 +114,8 @@ public class BoundaryEventImpl extends CatchEventImpl implements BoundaryEvent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setEventType(IntermediateEventType newEventType) {
-		IntermediateEventType oldEventType = eventType;
+	public void setEventType(EventType newEventType) {
+		EventType oldEventType = eventType;
 		eventType = newEventType == null ? EVENT_TYPE_EDEFAULT : newEventType;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SimplifiedbpmnPackage.BOUNDARY_EVENT__EVENT_TYPE,
@@ -272,7 +272,7 @@ public class BoundaryEventImpl extends CatchEventImpl implements BoundaryEvent {
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 		case SimplifiedbpmnPackage.BOUNDARY_EVENT__EVENT_TYPE:
-			setEventType((IntermediateEventType) newValue);
+			setEventType((EventType) newValue);
 			return;
 		case SimplifiedbpmnPackage.BOUNDARY_EVENT__CANCEL_ACTIVITY:
 			setCancelActivity((Boolean) newValue);

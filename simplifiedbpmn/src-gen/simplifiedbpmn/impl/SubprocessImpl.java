@@ -21,6 +21,7 @@ import simplifiedbpmn.Subprocess;
  * </p>
  * <ul>
  *   <li>{@link simplifiedbpmn.impl.SubprocessImpl#getProcessRef <em>Process Ref</em>}</li>
+ *   <li>{@link simplifiedbpmn.impl.SubprocessImpl#isIsMultiInstance <em>Is Multi Instance</em>}</li>
  * </ul>
  *
  * @generated
@@ -35,6 +36,25 @@ public class SubprocessImpl extends ActivityImpl implements Subprocess {
 	 * @ordered
 	 */
 	protected simplifiedbpmn.Process processRef;
+
+	/**
+	 * The default value of the '{@link #isIsMultiInstance() <em>Is Multi Instance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isIsMultiInstance()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean IS_MULTI_INSTANCE_EDEFAULT = false;
+	/**
+	 * The cached value of the '{@link #isIsMultiInstance() <em>Is Multi Instance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isIsMultiInstance()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean isMultiInstance = IS_MULTI_INSTANCE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -100,6 +120,28 @@ public class SubprocessImpl extends ActivityImpl implements Subprocess {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isIsMultiInstance() {
+		return isMultiInstance;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setIsMultiInstance(boolean newIsMultiInstance) {
+		boolean oldIsMultiInstance = isMultiInstance;
+		isMultiInstance = newIsMultiInstance;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SimplifiedbpmnPackage.SUBPROCESS__IS_MULTI_INSTANCE,
+					oldIsMultiInstance, isMultiInstance));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -107,6 +149,8 @@ public class SubprocessImpl extends ActivityImpl implements Subprocess {
 			if (resolve)
 				return getProcessRef();
 			return basicGetProcessRef();
+		case SimplifiedbpmnPackage.SUBPROCESS__IS_MULTI_INSTANCE:
+			return isIsMultiInstance();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -121,6 +165,9 @@ public class SubprocessImpl extends ActivityImpl implements Subprocess {
 		switch (featureID) {
 		case SimplifiedbpmnPackage.SUBPROCESS__PROCESS_REF:
 			setProcessRef((simplifiedbpmn.Process) newValue);
+			return;
+		case SimplifiedbpmnPackage.SUBPROCESS__IS_MULTI_INSTANCE:
+			setIsMultiInstance((Boolean) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -137,6 +184,9 @@ public class SubprocessImpl extends ActivityImpl implements Subprocess {
 		case SimplifiedbpmnPackage.SUBPROCESS__PROCESS_REF:
 			setProcessRef((simplifiedbpmn.Process) null);
 			return;
+		case SimplifiedbpmnPackage.SUBPROCESS__IS_MULTI_INSTANCE:
+			setIsMultiInstance(IS_MULTI_INSTANCE_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -151,8 +201,27 @@ public class SubprocessImpl extends ActivityImpl implements Subprocess {
 		switch (featureID) {
 		case SimplifiedbpmnPackage.SUBPROCESS__PROCESS_REF:
 			return processRef != null;
+		case SimplifiedbpmnPackage.SUBPROCESS__IS_MULTI_INSTANCE:
+			return isMultiInstance != IS_MULTI_INSTANCE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy())
+			return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (isMultiInstance: ");
+		result.append(isMultiInstance);
+		result.append(')');
+		return result.toString();
 	}
 
 } //SubprocessImpl
