@@ -344,7 +344,6 @@ public class Generate extends AbstractAcceleoGenerator {
     public void registerPackages(ResourceSet resourceSet) {
         super.registerPackages(resourceSet);
         EPackage.Registry.INSTANCE.put(SimplifiedbpmnPackage.eNS_URI, SimplifiedbpmnPackage.eINSTANCE);
-        
         /*
          * If you want to change the content of this method, do NOT forget to change the "@generated"
          * tag in the Javadoc of this method to "@generated NOT". Without this new tag, any compilation

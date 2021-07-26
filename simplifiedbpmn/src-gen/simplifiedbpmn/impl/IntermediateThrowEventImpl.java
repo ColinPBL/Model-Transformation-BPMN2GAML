@@ -8,7 +8,7 @@ import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import simplifiedbpmn.IntermediateEventType;
+import simplifiedbpmn.EventType;
 import simplifiedbpmn.IntermediateThrowEvent;
 import simplifiedbpmn.SimplifiedbpmnPackage;
 
@@ -34,7 +34,7 @@ public class IntermediateThrowEventImpl extends ThrowEventImpl implements Interm
 	 * @generated
 	 * @ordered
 	 */
-	protected static final IntermediateEventType EVENT_TYPE_EDEFAULT = IntermediateEventType.MESSAGE;
+	protected static final EventType EVENT_TYPE_EDEFAULT = EventType.MESSAGE;
 
 	/**
 	 * The cached value of the '{@link #getEventType() <em>Event Type</em>}' attribute.
@@ -44,7 +44,7 @@ public class IntermediateThrowEventImpl extends ThrowEventImpl implements Interm
 	 * @generated
 	 * @ordered
 	 */
-	protected IntermediateEventType eventType = EVENT_TYPE_EDEFAULT;
+	protected EventType eventType = EVENT_TYPE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -70,7 +70,7 @@ public class IntermediateThrowEventImpl extends ThrowEventImpl implements Interm
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public IntermediateEventType getEventType() {
+	public EventType getEventType() {
 		return eventType;
 	}
 
@@ -79,8 +79,8 @@ public class IntermediateThrowEventImpl extends ThrowEventImpl implements Interm
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setEventType(IntermediateEventType newEventType) {
-		IntermediateEventType oldEventType = eventType;
+	public void setEventType(EventType newEventType) {
+		EventType oldEventType = eventType;
 		eventType = newEventType == null ? EVENT_TYPE_EDEFAULT : newEventType;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET,
@@ -110,7 +110,7 @@ public class IntermediateThrowEventImpl extends ThrowEventImpl implements Interm
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 		case SimplifiedbpmnPackage.INTERMEDIATE_THROW_EVENT__EVENT_TYPE:
-			setEventType((IntermediateEventType) newValue);
+			setEventType((EventType) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);

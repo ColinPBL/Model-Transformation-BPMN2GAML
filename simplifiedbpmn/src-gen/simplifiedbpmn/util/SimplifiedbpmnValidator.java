@@ -18,13 +18,13 @@ import simplifiedbpmn.BoundaryEvent;
 import simplifiedbpmn.CatchEvent;
 import simplifiedbpmn.EndEvent;
 import simplifiedbpmn.Event;
+import simplifiedbpmn.EventType;
 import simplifiedbpmn.FlowElement;
 import simplifiedbpmn.FlowElementContainer;
 import simplifiedbpmn.FlowNode;
 import simplifiedbpmn.Gateway;
 import simplifiedbpmn.GatewayDirection;
 import simplifiedbpmn.IntermediateCatchEvent;
-import simplifiedbpmn.IntermediateEventType;
 import simplifiedbpmn.IntermediateThrowEvent;
 import simplifiedbpmn.ORGateway;
 import simplifiedbpmn.ResourceRole;
@@ -153,8 +153,8 @@ public class SimplifiedbpmnValidator extends EObjectValidator {
 			return validateSubprocess((Subprocess) value, diagnostics, context);
 		case SimplifiedbpmnPackage.GATEWAY_DIRECTION:
 			return validateGatewayDirection((GatewayDirection) value, diagnostics, context);
-		case SimplifiedbpmnPackage.INTERMEDIATE_EVENT_TYPE:
-			return validateIntermediateEventType((IntermediateEventType) value, diagnostics, context);
+		case SimplifiedbpmnPackage.EVENT_TYPE:
+			return validateEventType((EventType) value, diagnostics, context);
 		default:
 			return true;
 		}
@@ -573,8 +573,7 @@ public class SimplifiedbpmnValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateIntermediateEventType(IntermediateEventType intermediateEventType,
-			DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateEventType(EventType eventType, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return true;
 	}
 

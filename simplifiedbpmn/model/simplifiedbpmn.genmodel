@@ -15,9 +15,9 @@
       <genEnumLiterals ecoreEnumLiteral="simplifiedbpmn.ecore#//GatewayDirection/Diverging"/>
       <genEnumLiterals ecoreEnumLiteral="simplifiedbpmn.ecore#//GatewayDirection/Mixed"/>
     </genEnums>
-    <genEnums typeSafeEnumCompatible="false" ecoreEnum="simplifiedbpmn.ecore#//IntermediateEventType">
-      <genEnumLiterals ecoreEnumLiteral="simplifiedbpmn.ecore#//IntermediateEventType/Message"/>
-      <genEnumLiterals ecoreEnumLiteral="simplifiedbpmn.ecore#//IntermediateEventType/Signal"/>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="simplifiedbpmn.ecore#//EventType">
+      <genEnumLiterals ecoreEnumLiteral="simplifiedbpmn.ecore#//EventType/Message"/>
+      <genEnumLiterals ecoreEnumLiteral="simplifiedbpmn.ecore#//EventType/Signal"/>
     </genEnums>
     <genClasses image="false" ecoreClass="simplifiedbpmn.ecore#//FlowElement"/>
     <genClasses image="false" ecoreClass="simplifiedbpmn.ecore#//FlowElementContainer">
@@ -43,11 +43,14 @@
     <genClasses ecoreClass="simplifiedbpmn.ecore#//ORGateway"/>
     <genClasses image="false" ecoreClass="simplifiedbpmn.ecore#//Activity">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference simplifiedbpmn.ecore#//Activity/boundaryEventRefs"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute simplifiedbpmn.ecore#//Activity/isLoop"/>
     </genClasses>
     <genClasses ecoreClass="simplifiedbpmn.ecore#//Task"/>
     <genClasses image="false" ecoreClass="simplifiedbpmn.ecore#//Event"/>
     <genClasses image="false" ecoreClass="simplifiedbpmn.ecore#//CatchEvent"/>
-    <genClasses ecoreClass="simplifiedbpmn.ecore#//StartEvent"/>
+    <genClasses ecoreClass="simplifiedbpmn.ecore#//StartEvent">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute simplifiedbpmn.ecore#//StartEvent/eventType"/>
+    </genClasses>
     <genClasses ecoreClass="simplifiedbpmn.ecore#//IntermediateCatchEvent">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute simplifiedbpmn.ecore#//IntermediateCatchEvent/eventType"/>
     </genClasses>
@@ -67,6 +70,7 @@
     </genClasses>
     <genClasses ecoreClass="simplifiedbpmn.ecore#//Subprocess">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference simplifiedbpmn.ecore#//Subprocess/processRef"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute simplifiedbpmn.ecore#//Subprocess/isMultiInstance"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

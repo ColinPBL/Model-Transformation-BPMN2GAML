@@ -21,27 +21,27 @@ package simplifiedbpmn;
 public interface IntermediateThrowEvent extends ThrowEvent {
 	/**
 	 * Returns the value of the '<em><b>Event Type</b></em>' attribute.
-	 * The literals are from the enumeration {@link simplifiedbpmn.IntermediateEventType}.
+	 * The literals are from the enumeration {@link simplifiedbpmn.EventType}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Event Type</em>' attribute.
-	 * @see simplifiedbpmn.IntermediateEventType
-	 * @see #setEventType(IntermediateEventType)
+	 * @see simplifiedbpmn.EventType
+	 * @see #setEventType(EventType)
 	 * @see simplifiedbpmn.SimplifiedbpmnPackage#getIntermediateThrowEvent_EventType()
 	 * @model required="true"
 	 * @generated
 	 */
-	IntermediateEventType getEventType();
+	EventType getEventType();
 
 	/**
 	 * Sets the value of the '{@link simplifiedbpmn.IntermediateThrowEvent#getEventType <em>Event Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Event Type</em>' attribute.
-	 * @see simplifiedbpmn.IntermediateEventType
+	 * @see simplifiedbpmn.EventType
 	 * @see #getEventType()
 	 * @generated
 	 */
-	void setEventType(IntermediateEventType value);
+	void setEventType(EventType value);
 
 } // IntermediateThrowEvent

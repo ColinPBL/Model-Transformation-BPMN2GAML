@@ -14,6 +14,7 @@ import org.eclipse.emf.common.util.EList;
  * </p>
  * <ul>
  *   <li>{@link simplifiedbpmn.Activity#getBoundaryEventRefs <em>Boundary Event Refs</em>}</li>
+ *   <li>{@link simplifiedbpmn.Activity#isIsLoop <em>Is Loop</em>}</li>
  * </ul>
  *
  * @see simplifiedbpmn.SimplifiedbpmnPackage#getActivity()
@@ -35,4 +36,26 @@ public interface Activity extends FlowNode {
 	 * @generated
 	 */
 	EList<BoundaryEvent> getBoundaryEventRefs();
+
+	/**
+	 * Returns the value of the '<em><b>Is Loop</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Is Loop</em>' attribute.
+	 * @see #setIsLoop(boolean)
+	 * @see simplifiedbpmn.SimplifiedbpmnPackage#getActivity_IsLoop()
+	 * @model required="true"
+	 * @generated
+	 */
+	boolean isIsLoop();
+
+	/**
+	 * Sets the value of the '{@link simplifiedbpmn.Activity#isIsLoop <em>Is Loop</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Is Loop</em>' attribute.
+	 * @see #isIsLoop()
+	 * @generated
+	 */
+	void setIsLoop(boolean value);
 } // Activity

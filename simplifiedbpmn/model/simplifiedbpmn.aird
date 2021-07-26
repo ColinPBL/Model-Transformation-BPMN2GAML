@@ -14,6 +14,8 @@
     <semanticResources>platform:/resource/BPMN2SimplifiedBPMN/output/testOR.xmi</semanticResources>
     <semanticResources>../instances/Livreur.xmi</semanticResources>
     <semanticResources>platform:/resource/BPMN2SimplifiedBPMN/output/Livreur.xmi</semanticResources>
+    <semanticResources>../simulation_application/resourceroles/NewResourceRole.xmi</semanticResources>
+    <semanticResources>../simulation_application/bpmn4gama_models/cellule_de_crise.xmi</semanticResources>
     <ownedViews xmi:type="viewpoint:DView" uid="_O1CVcK2DEeuik45icNy_Ew">
       <viewpoint xmi:type="description:Viewpoint" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']"/>
       <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_ySXjQL32Eeu0urhs-gd2iA" name="simplifiedbpmn class diagram" repPath="#_ySVuEL32Eeu0urhs-gd2iA" changeId="2a5391c7-3a54-4566-84c9-a97169871472">

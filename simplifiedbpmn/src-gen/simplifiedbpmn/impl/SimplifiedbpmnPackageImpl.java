@@ -17,13 +17,13 @@ import simplifiedbpmn.BoundaryEvent;
 import simplifiedbpmn.CatchEvent;
 import simplifiedbpmn.EndEvent;
 import simplifiedbpmn.Event;
+import simplifiedbpmn.EventType;
 import simplifiedbpmn.FlowElement;
 import simplifiedbpmn.FlowElementContainer;
 import simplifiedbpmn.FlowNode;
 import simplifiedbpmn.Gateway;
 import simplifiedbpmn.GatewayDirection;
 import simplifiedbpmn.IntermediateCatchEvent;
-import simplifiedbpmn.IntermediateEventType;
 import simplifiedbpmn.IntermediateThrowEvent;
 import simplifiedbpmn.ORGateway;
 import simplifiedbpmn.ResourceRole;
@@ -204,7 +204,7 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EEnum intermediateEventTypeEEnum = null;
+	private EEnum eventTypeEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -462,6 +462,15 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getActivity_IsLoop() {
+		return (EAttribute) activityEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getTask() {
 		return taskEClass;
 	}
@@ -491,6 +500,15 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 	 */
 	public EClass getStartEvent() {
 		return startEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getStartEvent_EventType() {
+		return (EAttribute) startEventEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -633,6 +651,15 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getSubprocess_IsMultiInstance() {
+		return (EAttribute) subprocessEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getGatewayDirection() {
 		return gatewayDirectionEEnum;
 	}
@@ -642,8 +669,8 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EEnum getIntermediateEventType() {
-		return intermediateEventTypeEEnum;
+	public EEnum getEventType() {
+		return eventTypeEEnum;
 	}
 
 	/**
@@ -704,6 +731,7 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 
 		activityEClass = createEClass(ACTIVITY);
 		createEReference(activityEClass, ACTIVITY__BOUNDARY_EVENT_REFS);
+		createEAttribute(activityEClass, ACTIVITY__IS_LOOP);
 
 		taskEClass = createEClass(TASK);
 
@@ -712,6 +740,7 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 		catchEventEClass = createEClass(CATCH_EVENT);
 
 		startEventEClass = createEClass(START_EVENT);
+		createEAttribute(startEventEClass, START_EVENT__EVENT_TYPE);
 
 		intermediateCatchEventEClass = createEClass(INTERMEDIATE_CATCH_EVENT);
 		createEAttribute(intermediateCatchEventEClass, INTERMEDIATE_CATCH_EVENT__EVENT_TYPE);
@@ -734,10 +763,11 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 
 		subprocessEClass = createEClass(SUBPROCESS);
 		createEReference(subprocessEClass, SUBPROCESS__PROCESS_REF);
+		createEAttribute(subprocessEClass, SUBPROCESS__IS_MULTI_INSTANCE);
 
 		// Create enums
 		gatewayDirectionEEnum = createEEnum(GATEWAY_DIRECTION);
-		intermediateEventTypeEEnum = createEEnum(INTERMEDIATE_EVENT_TYPE);
+		eventTypeEEnum = createEEnum(EVENT_TYPE);
 	}
 
 	/**
@@ -844,6 +874,8 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 		initEReference(getActivity_BoundaryEventRefs(), this.getBoundaryEvent(), this.getBoundaryEvent_AttachedToRef(),
 				"boundaryEventRefs", null, 0, -1, Activity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
 				!IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getActivity_IsLoop(), ecorePackage.getEBoolean(), "isLoop", null, 1, 1, Activity.class,
+				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(taskEClass, Task.class, "Task", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -854,18 +886,19 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 
 		initEClass(startEventEClass, StartEvent.class, "StartEvent", !IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getStartEvent_EventType(), this.getEventType(), "eventType", null, 0, 1, StartEvent.class,
+				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(intermediateCatchEventEClass, IntermediateCatchEvent.class, "IntermediateCatchEvent", !IS_ABSTRACT,
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getIntermediateCatchEvent_EventType(), this.getIntermediateEventType(), "eventType", null, 1, 1,
+		initEAttribute(getIntermediateCatchEvent_EventType(), this.getEventType(), "eventType", null, 1, 1,
 				IntermediateCatchEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(boundaryEventEClass, BoundaryEvent.class, "BoundaryEvent", !IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getBoundaryEvent_EventType(), this.getIntermediateEventType(), "eventType", null, 1, 1,
-				BoundaryEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
-				!IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBoundaryEvent_EventType(), this.getEventType(), "eventType", null, 1, 1, BoundaryEvent.class,
+				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBoundaryEvent_CancelActivity(), ecorePackage.getEBoolean(), "cancelActivity", null, 1, 1,
 				BoundaryEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
@@ -881,7 +914,7 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 
 		initEClass(intermediateThrowEventEClass, IntermediateThrowEvent.class, "IntermediateThrowEvent", !IS_ABSTRACT,
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getIntermediateThrowEvent_EventType(), this.getIntermediateEventType(), "eventType", null, 1, 1,
+		initEAttribute(getIntermediateThrowEvent_EventType(), this.getEventType(), "eventType", null, 1, 1,
 				IntermediateThrowEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -899,6 +932,9 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 		initEReference(getSubprocess_ProcessRef(), this.getProcess(), null, "processRef", null, 1, 1, Subprocess.class,
 				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSubprocess_IsMultiInstance(), ecorePackage.getEBoolean(), "isMultiInstance", null, 1, 1,
+				Subprocess.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(gatewayDirectionEEnum, GatewayDirection.class, "GatewayDirection");
@@ -907,9 +943,9 @@ public class SimplifiedbpmnPackageImpl extends EPackageImpl implements Simplifie
 		addEEnumLiteral(gatewayDirectionEEnum, GatewayDirection.DIVERGING);
 		addEEnumLiteral(gatewayDirectionEEnum, GatewayDirection.MIXED);
 
-		initEEnum(intermediateEventTypeEEnum, IntermediateEventType.class, "IntermediateEventType");
-		addEEnumLiteral(intermediateEventTypeEEnum, IntermediateEventType.MESSAGE);
-		addEEnumLiteral(intermediateEventTypeEEnum, IntermediateEventType.SIGNAL);
+		initEEnum(eventTypeEEnum, EventType.class, "EventType");
+		addEEnumLiteral(eventTypeEEnum, EventType.MESSAGE);
+		addEEnumLiteral(eventTypeEEnum, EventType.SIGNAL);
 
 		// Create resource
 		createResource(eNS_URI);
