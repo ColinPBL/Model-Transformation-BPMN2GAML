@@ -22,7 +22,10 @@ import org.eclipse.emf.common.util.BasicMonitor;
 import org.eclipse.emf.common.util.Monitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+
+import simplifiedbpmn.SimplifiedbpmnPackage;
 
 /**
  * Entry point of the 'Generate' generation module.
@@ -335,11 +338,12 @@ public class Generate extends AbstractAcceleoGenerator {
      * 
      * @param resourceSet
      *            The resource set which registry has to be updated.
-     * @generated
+     * @generated NOT
      */
     @Override
     public void registerPackages(ResourceSet resourceSet) {
         super.registerPackages(resourceSet);
+        EPackage.Registry.INSTANCE.put(SimplifiedbpmnPackage.eNS_URI, SimplifiedbpmnPackage.eINSTANCE);
         
         /*
          * If you want to change the content of this method, do NOT forget to change the "@generated"
