@@ -200,7 +200,6 @@ public class BPMN4GAMAActionBarContributor
 		//
 		submenuManager.addMenuListener
 			(new IMenuListener() {
-				 @Override
 				 public void menuAboutToShow(IMenuManager menuManager) {
 					 menuManager.updateAll(true);
 				 }

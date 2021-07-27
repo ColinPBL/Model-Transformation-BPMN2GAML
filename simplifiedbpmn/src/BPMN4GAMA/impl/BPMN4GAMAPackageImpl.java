@@ -263,7 +263,6 @@ public class BPMN4GAMAPackageImpl extends EPackageImpl implements BPMN4GAMAPacka
 		EValidator.Registry.INSTANCE.put
 			(theBPMN4GAMAPackage,
 			 new EValidator.Descriptor() {
-				 @Override
 				 public EValidator getEValidator() {
 					 return BPMN4GAMAValidator.INSTANCE;
 				 }
