@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: irit.crizinnov.transformation.bpmn4gama.edit;singleton:=true
+Automatic-Module-Name: irit.crizinnov.transformation.bpmn4gama.edit
+Bundle-Version: 1.0.0.qualifier
+Bundle-ClassPath: .
+Bundle-Activator: BPMN4GAMA.provider.BPMN4GAMAEditPlugin$Implementation
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: BPMN4GAMA.provider
+Require-Bundle: org.eclipse.core.runtime,
+ irit.crizinnov.transformation.bpmn4gama;visibility:=reexport,
+ org.eclipse.emf.edit;visibility:=reexport
+Bundle-ActivationPolicy: lazy

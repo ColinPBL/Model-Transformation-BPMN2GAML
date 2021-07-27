@@ -11,7 +11,15 @@
       <package
             uri="http://www.cpoubel.org/simplifiedbpmn"
             class="simplifiedbpmn.SimplifiedbpmnPackage"
-            genModel="model/simplifiedbpmn.genmodel"/>
+            genModel="model/BPMN4GAMA.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated BPMN4GAMA -->
+      <package
+            uri="http://www.cpoubel.org/BPMN4GAMA"
+            class="BPMN4GAMA.BPMN4GAMAPackage"
+            genModel="model/BPMN4GAMA.genmodel"/>
    </extension>
 
 </plugin>

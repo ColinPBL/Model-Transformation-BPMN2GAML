@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated BPMN4GAMA -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="BPMN4GAMA.presentation.BPMN4GAMAModelWizardID"
+            name="%_UI_BPMN4GAMAModelWizard_label"
+            class="BPMN4GAMA.presentation.BPMN4GAMAModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/BPMN4GAMAModelFile.gif">
+         <description>%_UI_BPMN4GAMAModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated BPMN4GAMA -->
+      <editor
+            id="BPMN4GAMA.presentation.BPMN4GAMAEditorID"
+            name="%_UI_BPMN4GAMAEditor_label"
+            icon="icons/full/obj16/BPMN4GAMAModelFile.gif"
+            extensions="bpmn4gama"
+            class="BPMN4GAMA.presentation.BPMN4GAMAEditor"
+            contributorClass="BPMN4GAMA.presentation.BPMN4GAMAActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BPMN4GAMA:ResourceRole
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:BPMN4GAMA="http://www.cpoubel.org/BPMN4GAMA"
+    xsi:schemaLocation="http://www.cpoubel.org/BPMN4GAMA ../../irit.crizinnov.transformation.bpmn4gama/model/BPMN4GAMA.ecore"
+    name="Example actor">
+  <processes
+      xsi:type="BPMN4GAMA:Process"
+      href="../../irit.crizinnov.transformation.bpmn2bpmn4gama/output/example.xmi#/"/>
+</BPMN4GAMA:ResourceRole>

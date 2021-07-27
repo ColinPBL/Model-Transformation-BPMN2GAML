@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<simplifiedbpmn:ResourceRole xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:simplifiedbpmn="http://www.cpoubel.org/simplifiedbpmn" xsi:schemaLocation="http://www.cpoubel.org/simplifiedbpmn ../model/simplifiedbpmn.ecore" name="Boat Rescuer">
-  <processes xsi:type="simplifiedbpmn:Process" href="../../BPMN2SimplifiedBPMN/output/testOR.xmi#/"/>
-</simplifiedbpmn:ResourceRole>

@@ -7,6 +7,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="lib" path="/simplifiedbpmn"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/irit.crizinnov.transformation.bpmn4gama"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
