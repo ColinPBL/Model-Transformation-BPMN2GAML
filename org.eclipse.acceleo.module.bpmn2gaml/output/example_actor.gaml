@@ -29,11 +29,11 @@ species example_actor skills: [messaging] {
 		//TODO
 		return false;
 	}
-	bool action_task_b {
+	bool action_task_2 {
 		//TODO
 		return false;
 	}
-	bool action_task_c {
+	bool action_task_3 {
 		//TODO
 		return false;
 	}
@@ -53,14 +53,14 @@ species example_actor skills: [messaging] {
 			remove message_received from: mailbox;
 			self_case_id <- case_id;
 			case_id <- case_id + 1;
-			current_process <- "example_process";
+			current_process <- "default_process";
 			if(not ("task_a" in tasks)) {
 				add "task_a" to: tasks;
 			}
 		}
 	}
 
-	reflex example_process when: (current_process = "example_process") {
+	reflex default_process when: (current_process = "default_process") {
 		list<string> next_tasks <- [];
 		
 		if ("task_a" in tasks) {
@@ -69,44 +69,44 @@ species example_actor skills: [messaging] {
 				remove "task_a" from: tasks;
 				//Writing activity execution to log
 				save ["example_actor", self_case_id, "Task A", current_process, name] to: "event_log.csv" type: csv rewrite: false;
-				//Generated from b_or_c
+				//Generated from exclusive_gateway_1
 				if(true) {
-					if(not ("task_b" in tasks) and not ("task_b" in next_tasks)) {
-						add "task_b" to: next_tasks;
+					if(not ("task_2" in tasks) and not ("task_2" in next_tasks)) {
+						add "task_2" to: next_tasks;
 					}
 				}
 				else if(true) {
-					if(not ("task_c" in tasks) and not ("task_c" in next_tasks)) {
-						add "task_c" to: next_tasks;
+					if(not ("task_3" in tasks) and not ("task_3" in next_tasks)) {
+						add "task_3" to: next_tasks;
 					}
 				}
 			}
 		}
 		
-		if ("task_b" in tasks) {
-			bool result <- action_task_b();
+		if ("task_2" in tasks) {
+			bool result <- action_task_2();
 			if(result) {
-				remove "task_b" from: tasks;
+				remove "task_2" from: tasks;
 				//Writing activity execution to log
-				save ["example_actor", self_case_id, "Task B", current_process, name] to: "event_log.csv" type: csv rewrite: false;
-				if(not ("merge_b_or_c" in tasks)  and not ("merge_b_or_c" in next_tasks)) {
-					add "merge_b_or_c" to: next_tasks;
+				save ["example_actor", self_case_id, "Task 2", current_process, name] to: "event_log.csv" type: csv rewrite: false;
+				if(not ("exclusive_gateway_2" in tasks)  and not ("exclusive_gateway_2" in next_tasks)) {
+					add "exclusive_gateway_2" to: next_tasks;
 				}
 			}
 		}
-		if ("task_c" in tasks) {
-			bool result <- action_task_c();
+		if ("task_3" in tasks) {
+			bool result <- action_task_3();
 			if(result) {
-				remove "task_c" from: tasks;
+				remove "task_3" from: tasks;
 				//Writing activity execution to log
-				save ["example_actor", self_case_id, "Task C", current_process, name] to: "event_log.csv" type: csv rewrite: false;
-				if(not ("merge_b_or_c" in tasks)  and not ("merge_b_or_c" in next_tasks)) {
-					add "merge_b_or_c" to: next_tasks;
+				save ["example_actor", self_case_id, "Task 3", current_process, name] to: "event_log.csv" type: csv rewrite: false;
+				if(not ("exclusive_gateway_2" in tasks)  and not ("exclusive_gateway_2" in next_tasks)) {
+					add "exclusive_gateway_2" to: next_tasks;
 				}
 			}
 		}
-		if (("merge_b_or_c" in tasks) and not ("task_c" in tasks) and not ("task_b" in tasks)) {
-			remove "merge_b_or_c" from: tasks;
+		if (("exclusive_gateway_2" in tasks) and not ("task_3" in tasks) and not ("task_2" in tasks)) {
+			remove "exclusive_gateway_2" from: tasks;
 			
 		}
 		tasks <- tasks + next_tasks;
