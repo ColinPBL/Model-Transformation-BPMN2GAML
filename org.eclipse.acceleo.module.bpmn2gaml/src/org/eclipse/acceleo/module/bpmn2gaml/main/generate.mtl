@@ -98,8 +98,8 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 	//This list is used to keep track of which task(s) the agent is currently doing
 	list<string> tasks <- ['['/][']'/];
 	[comment The idle reflex is called when an agent has no active process, and is used to start new processes
-	Additionally, if this ResourceRole has a subroutine, we do not want subroutines to keep creating processes
-	after they finished theirs, so we add a condition/]
+	Additionally, if this ResourceRole has a subroutine, we do not want them to keep creating processes
+	after they finished theirs, so we add a check to ensure they never call that reflex/]
 	reflex idle when: (current_process = nil)[if aResource.hasSubroutine()] and not is_subroutine[/if] {
 		/**
 		* This is where the agent will look at its environment and decide which process to use
@@ -132,7 +132,6 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 	[for (process : FlowElementContainer | aResource.processes)]
 	reflex [process.name.normaliseString()/] when: (current_process = "[process.name.normaliseString()/]") {
 		list<string> next_tasks <- ['['/][']'/];
-		[comment We can ignore the warning since the selection only returns FlowNodes/]
 		[for (element : FlowNode | process.flowElements->select(e | e.oclIsKindOf(FlowNode) and not e.oclIsTypeOf(StartEvent)))]
 		[element.generateTasks(aResource)/]
 		[/for]
@@ -144,7 +143,7 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 	[/for]
 }
 
-	[comment If a ResourceRole has a subroutine, we need to create a subspecies that will be used to execute it/]
+	[comment If a ResourceRole has a subroutine, we need to create a subspecies that will be used to run it/]
 	[if (aResource.hasSubroutine())]
 species subroutine_[aResource.name.normaliseString()/] parent: [aResource.name.normaliseString()/]{
 	bool is_subroutine <- true;
@@ -164,7 +163,7 @@ species subroutine_[aResource.name.normaliseString()/] parent: [aResource.name.n
 [query public getTasks(p : FlowElementContainer) : Set(Task) =
 	p.flowElements->select(e | e.oclIsTypeOf(Task))
 /]
-[comment Returns the start event of the process/]
+[comment Returns the start event of a process/]
 [query public getStartEvent(p : FlowElementContainer) : StartEvent =
 	p.flowElements->any(oclIsTypeOf(StartEvent))
 /]
@@ -177,7 +176,7 @@ species subroutine_[aResource.name.normaliseString()/] parent: [aResource.name.n
 	p.flowElements->select(e | (e.oclIsTypeOf(IntermediateCatchEvent) and e.oclAsType(IntermediateCatchEvent).eventType = EventType::Signal) or (e.oclIsTypeOf(BoundaryEvent) and e.oclAsType(BoundaryEvent).eventType = EventType::Signal))
 /]
 
-[comment Returns the set of subprocesses that are internal to this resource/]
+[comment Returns the set of subprocesses that are referencing a process internal to the resource/]
 [query public getSubroutines(p : FlowElementContainer) : Set(Subprocess) =
 	p.flowElements->select(e | e.oclIsTypeOf(Subprocess) and not e.oclAsType(Subprocess).processRef.oclIsUndefined() and e.oclAsType(Subprocess).processRef.resource = p.resource)
 /]
