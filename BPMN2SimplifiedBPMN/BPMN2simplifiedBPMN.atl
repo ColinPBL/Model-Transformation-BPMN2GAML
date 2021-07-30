@@ -80,7 +80,8 @@ rule StartEvent2StartEvent {
 		out_start: SimplifiedBPMN!StartEvent (
 			name <- in_start.name,
 			outgoing <- in_start.outgoing,
-			incoming <- in_start.incoming
+			incoming <- in_start.incoming,
+			eventType <- #Unspecified
 		)
 }
 

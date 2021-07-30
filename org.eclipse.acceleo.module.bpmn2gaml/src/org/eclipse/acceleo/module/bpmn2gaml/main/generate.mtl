@@ -103,7 +103,7 @@ species [aResource.name.normaliseString()/][if (aResource.hasMessageEvent())] sk
 	reflex idle when: (current_process = nil)[if aResource.hasSubroutine()] and not is_subroutine[/if] {
 		/**
 		* This is where the agent will look at its environment and decide which process to use
-		* For each process, replace "true" by the corresponding condition
+		* For each process, you can modify the condition that is after the "current_process = nil" to suit your needs
 		*/
 	[for (process : FlowElementContainer | aResource.processes)]
 		[let start : StartEvent = process.getStartEvent()]
@@ -305,6 +305,9 @@ if (("[f.getMixedBlockName()/]" in tasks)) {
 
 [template public generateTasks(subprocess : Subprocess, resourceRole : ResourceRole)]
 [comment First, we check if the subprocess refers to another agent's process or if it is internal/]
+[if (subprocess.processRef.resource.oclIsUndefined())]
+ERROR : THE PROCESS THAT IS REFERENCED BY THIS SUBPROCESS HAS NO LINKED RESOURCE, THIS WILL CAUSE AN ERROR
+[/if]
 if ("[subprocess.name.normaliseString()/]" in tasks) {
 [let processRef : Process = subprocess.processRef]
 	if(not started_subprocess_[subprocess.name.normaliseString()/]) {

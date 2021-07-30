@@ -14,8 +14,9 @@
     <eLiterals name="Mixed" value="3"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="EventType">
-    <eLiterals name="Message"/>
-    <eLiterals name="Signal" value="1"/>
+    <eLiterals name="Unspecified"/>
+    <eLiterals name="Message" value="1"/>
+    <eLiterals name="Signal" value="2"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FlowElement" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="FlowElementContainer" abstract="true">
